@@ -1,0 +1,595 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CreateRunRequest",
+  "description": "Request body for `POST /api/v1/runs`.",
+  "type": "object",
+  "properties": {
+    "agent": {
+      "$ref": "#/$defs/AgentDefinition"
+    },
+    "correlation_id": {
+      "description": "Shared parent/child correlation id. Defaults to the parent run id.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "defer_start": {
+      "description": "Persist the run without spawning an executor. Used for coordinators waiting on children.",
+      "type": "boolean",
+      "default": false
+    },
+    "goal": {
+      "$ref": "#/$defs/GoalDefinition"
+    },
+    "has_state_provider": {
+      "description": "Whether the worker can serve `state.snapshot` requests.",
+      "type": "boolean",
+      "default": false
+    },
+    "idempotency_key": {
+      "description": "Client-supplied key to make run creation idempotent.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "input": {
+      "description": "Initial user input / task context handed to the model.",
+      "default": null
+    },
+    "metadata": {
+      "default": null
+    },
+    "parent_run_id": {
+      "description": "Parent run when this run is a delegated child task.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "project_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "source_framework": {
+      "description": "Framework that produced this definition, e.g. `axiom-python`.",
+      "type": "string",
+      "default": "axiom"
+    },
+    "task_id": {
+      "description": "Unique id of the delegated task (distinct from `run.id`).",
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "trace_id": {
+      "description": "When set, reuse this trace instead of minting a new one (child tasks share the parent trace).",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "agent",
+    "goal"
+  ],
+  "$defs": {
+    "AgentDefinition": {
+      "type": "object",
+      "properties": {
+        "context_policy": {
+          "default": null
+        },
+        "description": {
+          "type": "string",
+          "default": ""
+        },
+        "execution_limits": {
+          "$ref": "#/$defs/ExecutionLimits",
+          "default": {
+            "deadline_seconds": 300,
+            "external_wait_seconds": 30,
+            "max_replans": 2,
+            "max_steps": 10,
+            "max_tool_result_bytes": 65536
+          }
+        },
+        "instructions": {
+          "type": "string",
+          "default": ""
+        },
+        "metadata": {
+          "default": null
+        },
+        "model": {
+          "description": "Provider-qualified model identifier, e.g. `mock/deterministic`, `openai/<model>`.",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "permissions": {
+          "description": "Permissions granted to this agent; tools requiring other permissions are rejected.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "retry_policy": {
+          "$ref": "#/$defs/RetryPolicy",
+          "default": {
+            "backoff_multiplier": 2.0,
+            "initial_backoff_ms": 200,
+            "max_attempts": 2
+          }
+        },
+        "tools": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ToolSpec"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "model"
+      ]
+    },
+    "EffectCategory": {
+      "description": "Effect category of an action. Drives retry safety (see ADR-003).",
+      "type": "string",
+      "enum": [
+        "READ_ONLY",
+        "REVERSIBLE",
+        "IDEMPOTENT_WRITE",
+        "NON_IDEMPOTENT_WRITE",
+        "IRREVERSIBLE"
+      ]
+    },
+    "EvidenceCoverageContract": {
+      "type": "object",
+      "properties": {
+        "on_missing": {
+          "$ref": "#/$defs/MissingEvidenceBehavior",
+          "default": "block"
+        },
+        "required": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RequiredEvidence"
+          }
+        },
+        "required_authorization": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_invariants": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "risk": {
+          "$ref": "#/$defs/RiskLevel",
+          "default": "low"
+        }
+      }
+    },
+    "ExecutionLimits": {
+      "type": "object",
+      "properties": {
+        "deadline_seconds": {
+          "description": "Wall-clock deadline for the whole run, in seconds.",
+          "type": "integer",
+          "format": "uint64",
+          "default": 300,
+          "minimum": 0
+        },
+        "external_wait_seconds": {
+          "description": "Bound on waiting for external settlement without burning model steps.",
+          "type": "integer",
+          "format": "uint64",
+          "default": 30,
+          "minimum": 0
+        },
+        "max_cost_usd": {
+          "description": "Estimated cost budget in USD, enforced only when pricing is known.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "max_replans": {
+          "description": "Maximum consecutive replans after the model claims completion but the goal is unmet.",
+          "type": "integer",
+          "format": "uint32",
+          "default": 2,
+          "minimum": 0
+        },
+        "max_steps": {
+          "type": "integer",
+          "format": "uint32",
+          "default": 10,
+          "minimum": 0
+        },
+        "max_tool_result_bytes": {
+          "description": "Maximum serialized size of a tool result accepted into context, in bytes.",
+          "type": "integer",
+          "format": "uint",
+          "default": 65536,
+          "minimum": 0
+        },
+        "max_total_tokens": {
+          "description": "Total token budget (input + output) across all model calls, when usage is reported.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        }
+      }
+    },
+    "GoalBudget": {
+      "type": "object",
+      "properties": {
+        "max_cost_usd": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "max_total_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        }
+      }
+    },
+    "GoalDefinition": {
+      "type": "object",
+      "properties": {
+        "budget": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GoalBudget"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deadline_seconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        },
+        "description": {
+          "type": "string"
+        },
+        "external_wait_seconds": {
+          "description": "Bound on waiting for external settlement (seconds). Min'd with agent limits.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        },
+        "invariants": {
+          "description": "Names of invariants implemented by the worker.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "max_steps": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint32",
+          "minimum": 0
+        },
+        "metadata": {
+          "default": null
+        },
+        "success_predicate": {
+          "description": "Name of the success predicate implemented by the worker, if any.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification_policy": {
+          "$ref": "#/$defs/VerificationPolicy",
+          "default": "required"
+        }
+      },
+      "required": [
+        "description"
+      ]
+    },
+    "MissingEvidenceBehavior": {
+      "type": "string",
+      "enum": [
+        "block",
+        "warn",
+        "allow"
+      ]
+    },
+    "RequiredEvidence": {
+      "description": "One declared requirement. Not an assertion that no other facts matter.",
+      "type": "object",
+      "properties": {
+        "authorization": {
+          "description": "This item is authorization evidence (approval token, authority record).",
+          "type": "boolean",
+          "default": false
+        },
+        "key": {
+          "description": "Logical name, e.g. `policy.coverage` or `policy:POL-1`.",
+          "type": "string"
+        },
+        "max_age_secs": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        },
+        "min_trust": {
+          "$ref": "#/$defs/TrustClassification",
+          "default": "authoritative"
+        },
+        "require_version": {
+          "type": "boolean",
+          "default": true
+        },
+        "resource_family": {
+          "description": "Prefix match, e.g. `policy` matches `policy:POL-1`.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "resource_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_system": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification_method": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "key"
+      ]
+    },
+    "RetryPolicy": {
+      "type": "object",
+      "properties": {
+        "backoff_multiplier": {
+          "type": "number",
+          "format": "double",
+          "default": 2.0
+        },
+        "initial_backoff_ms": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 200,
+          "minimum": 0
+        },
+        "max_attempts": {
+          "description": "Maximum attempts including the first one.",
+          "type": "integer",
+          "format": "uint32",
+          "default": 2,
+          "minimum": 0
+        }
+      }
+    },
+    "RevalidationPolicy": {
+      "description": "How the executor revalidates before a sensitive write.\nDistinct from [`crate::VerificationPolicy`] (goal verification).",
+      "oneOf": [
+        {
+          "description": "Walk declared evidence edges only (`compute_impact`).",
+          "type": "string",
+          "const": "SELECTIVE"
+        },
+        {
+          "description": "Recheck every declared decision/action/approval after any registered hit.",
+          "type": "string",
+          "const": "FULL_DECLARED"
+        },
+        {
+          "description": "Selective walk plus conventional action `resource_id` version check.",
+          "type": "string",
+          "const": "SELECTIVE_PLUS_PREWRITE"
+        },
+        {
+          "description": "Declared evidence coverage + selective walk + authoritative prewrite + risk gates.",
+          "type": "string",
+          "const": "STRICT_CONTRACT"
+        }
+      ]
+    },
+    "RiskLevel": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "ToolSpec": {
+      "description": "Action contract registered with the runtime for a tool exposed by the SDK worker.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "default": ""
+        },
+        "effect": {
+          "$ref": "#/$defs/EffectCategory",
+          "default": "READ_ONLY"
+        },
+        "evidence_coverage": {
+          "description": "Declared evidence requirements. Completeness of this list is not completeness of reality.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceCoverageContract"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "has_verifier": {
+          "description": "The SDK registered an outcome verifier for this action.",
+          "type": "boolean",
+          "default": false
+        },
+        "idempotent": {
+          "description": "The tool/API honors the `idempotency_key` passed by the runtime.",
+          "type": "boolean",
+          "default": false
+        },
+        "input_schema": {
+          "description": "JSON Schema (draft 2020-12 or draft-07) for the arguments object."
+        },
+        "name": {
+          "type": "string"
+        },
+        "output_schema": true,
+        "preconditions": {
+          "description": "Names of preconditions evaluated by the worker before execution (informational;\nevaluated by the SDK, reported in `tool.validated`).",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_permissions": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "requires_approval": {
+          "type": "boolean",
+          "default": false
+        },
+        "retry_policy": {
+          "$ref": "#/$defs/RetryPolicy",
+          "default": {
+            "backoff_multiplier": 2.0,
+            "initial_backoff_ms": 200,
+            "max_attempts": 2
+          }
+        },
+        "revalidation_policy": {
+          "description": "How this tool is revalidated before a write. Default preserves v0.3 selective behavior.",
+          "$ref": "#/$defs/RevalidationPolicy",
+          "default": "SELECTIVE"
+        },
+        "risk": {
+          "$ref": "#/$defs/RiskLevel",
+          "default": "low"
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 30000,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "input_schema"
+      ]
+    },
+    "TrustClassification": {
+      "description": "How much the runtime should trust an evidence record.",
+      "oneOf": [
+        {
+          "description": "Retrieved from the declared source of truth.",
+          "type": "string",
+          "const": "authoritative"
+        },
+        {
+          "description": "Derived from authoritative evidence (a decision, a computed field).",
+          "type": "string",
+          "const": "derived"
+        },
+        {
+          "description": "Operator or test injected; not used to authorize writes.",
+          "type": "string",
+          "const": "untrusted"
+        },
+        {
+          "description": "The source could not be read; dependents become inconclusive.",
+          "type": "string",
+          "const": "inaccessible"
+        }
+      ]
+    },
+    "VerificationPolicy": {
+      "description": "Whether the goal requires authoritative verification to count as completed.",
+      "oneOf": [
+        {
+          "description": "A run can only reach `COMPLETED` if the success predicate holds against a state\nsnapshot. Without a state provider the run ends `UNVERIFIED`.",
+          "type": "string",
+          "const": "required"
+        },
+        {
+          "description": "Verify when a provider exists; otherwise end `UNVERIFIED`.",
+          "type": "string",
+          "const": "optional"
+        },
+        {
+          "description": "No verification attempted; the run always ends `UNVERIFIED` when the model stops.",
+          "type": "string",
+          "const": "none"
+        }
+      ]
+    }
+  }
+}

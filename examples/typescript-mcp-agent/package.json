@@ -1,0 +1,13 @@
+{
+  "name": "typescript-mcp-agent",
+  "private": true,
+  "version": "0.1.0-alpha",
+  "type": "module",
+  "scripts": {
+    "start": "bun run main.ts",
+    "dev": "bun run main.ts"
+  },
+  "dependencies": {
+    "@axiom-ai/sdk": "workspace:*"
+  }
+}

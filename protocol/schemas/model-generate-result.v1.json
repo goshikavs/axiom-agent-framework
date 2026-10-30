@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ModelGenerateResult",
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "finish_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "latency_ms": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int64"
+    },
+    "model": {
+      "description": "Model identifier actually used (may differ from requested, e.g. provider alias).",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provider_response_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tool_calls": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ToolCall"
+      }
+    },
+    "usage": {
+      "description": "`None` when the provider did not report usage.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TokenUsage"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "TokenUsage": {
+      "type": "object",
+      "properties": {
+        "cached_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        },
+        "input_tokens": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "output_tokens": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        }
+      }
+    },
+    "ToolCall": {
+      "description": "A tool call proposed by the model. Treated as an untrusted suggestion.",
+      "type": "object",
+      "properties": {
+        "arguments": {
+          "default": null
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    }
+  }
+}

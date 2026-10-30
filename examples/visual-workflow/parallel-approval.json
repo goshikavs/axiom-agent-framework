@@ -1,0 +1,39 @@
+{
+  "name": "parallel-approval",
+  "description": "Parallel inspection and eligibility, then human approval and JSON verification.",
+  "version": 1,
+  "max_steps": 20,
+  "input_schema": { "type": "object" },
+  "output_schema": { "type": "object" },
+  "error_policy": { "on_error": "fail_fast" },
+  "timeouts": { "run_seconds": 120 },
+  "retry_policy": { "max_attempts": 1, "backoff_ms": 250 },
+  "required_permissions": [],
+  "goal": {
+    "description": "Both branches complete and a human approves",
+    "verification_policy": "json_predicate",
+    "path": "/approved",
+    "equals": true,
+    "required": true
+  },
+  "nodes": [
+    { "id": "start", "kind": "start", "label": "Start", "config": {} },
+    { "id": "fork", "kind": "parallel", "label": "Fork", "config": {} },
+    { "id": "inspect", "kind": "agent", "label": "Inspect", "config": { "agent": "return-inspection", "role": "inspection", "goal": "Inspect the return" } },
+    { "id": "eligible", "kind": "agent", "label": "Eligibility", "config": { "agent": "order-eligibility", "role": "eligibility", "goal": "Check eligibility" } },
+    { "id": "join", "kind": "join", "label": "Join", "config": { "join": "all" } },
+    { "id": "approve", "kind": "approval", "label": "Approve payout", "config": { "policy": "required", "action": "authorize_payout" } },
+    { "id": "verify", "kind": "verify", "label": "Verify", "config": { "verification_policy": "json_predicate", "path": "/approved", "equals": true } },
+    { "id": "end", "kind": "end", "label": "End", "config": {} }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start", "target": "fork" },
+    { "id": "e2", "source": "fork", "target": "inspect" },
+    { "id": "e3", "source": "fork", "target": "eligible" },
+    { "id": "e4", "source": "inspect", "target": "join" },
+    { "id": "e5", "source": "eligible", "target": "join" },
+    { "id": "e6", "source": "join", "target": "approve" },
+    { "id": "e7", "source": "approve", "target": "verify" },
+    { "id": "e8", "source": "verify", "target": "end" }
+  ]
+}

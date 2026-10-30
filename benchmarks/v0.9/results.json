@@ -1,0 +1,36 @@
+{
+  "hardware": {
+    "os": "nt",
+    "cpu_count": 12
+  },
+  "notes": "Health probes measure framework HTTP overhead only. Echo workflows use native handlers (no model).",
+  "levels": {
+    "1": {
+      "concurrency": 1,
+      "ok": 1,
+      "errors": 0,
+      "wall_s": 0.20664469990879297,
+      "throughput_per_s": 4.839224042239512,
+      "p50_ms": 182.19150009099394,
+      "p95_ms": 182.19150009099394,
+      "p99_ms": 182.19150009099394
+    },
+    "10": {
+      "concurrency": 10,
+      "ok": 10,
+      "errors": 0,
+      "wall_s": 1.2094962000846863,
+      "throughput_per_s": 8.267905264439708,
+      "p50_ms": 1046.009299927391,
+      "p95_ms": 1173.5199999529868,
+      "p99_ms": 1173.5199999529868
+    }
+  },
+  "health_ms": {
+    "n": 50,
+    "p50": 1.0019000619649887,
+    "p95": 1.9468000391498208,
+    "p99": 2.393100061453879,
+    "mean": 1.1157459951937199
+  }
+}

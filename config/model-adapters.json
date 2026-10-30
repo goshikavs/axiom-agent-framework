@@ -1,0 +1,57 @@
+{
+  "manifest_version": "1",
+  "note": "Capability flags of the model adapters shipped with the SDKs. The Python SDK test-suite asserts these match the adapter implementations (sdk/python/tests/test_adapters.py).",
+  "adapters": [
+    {
+      "id": "mock",
+      "provider": "mock",
+      "package": "axiom_ai.models.mock",
+      "status": "available",
+      "model_prefix": "mock/",
+      "capabilities": {
+        "streaming": false,
+        "tool_calling": true,
+        "structured_output": true,
+        "multimodal_input": false,
+        "response_usage": true,
+        "prompt_caching": false,
+        "reasoning_controls": false
+      }
+    },
+    {
+      "id": "openai",
+      "provider": "openai",
+      "package": "axiom_ai.models.openai",
+      "status": "experimental",
+      "model_prefix": "openai/",
+      "requires_env": ["OPENAI_API_KEY"],
+      "capabilities": {
+        "streaming": false,
+        "tool_calling": true,
+        "structured_output": false,
+        "multimodal_input": false,
+        "response_usage": true,
+        "prompt_caching": true,
+        "reasoning_controls": false
+      }
+    },
+    {
+      "id": "anthropic",
+      "provider": "anthropic",
+      "package": "axiom_ai.models.anthropic",
+      "status": "experimental",
+      "model_prefix": "anthropic/",
+      "requires_env": ["ANTHROPIC_API_KEY"],
+      "capabilities": {
+        "streaming": false,
+        "tool_calling": true,
+        "structured_output": false,
+        "multimodal_input": false,
+        "response_usage": true,
+        "prompt_caching": true,
+        "reasoning_controls": false
+      }
+    }
+  ],
+  "planned": ["google-gemini", "aws-bedrock", "azure-openai", "openai-compatible", "ollama"]
+}

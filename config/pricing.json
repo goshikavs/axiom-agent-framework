@@ -1,0 +1,10 @@
+{
+  "version": "2026-10-27-local",
+  "models": {
+    "mock/*": {
+      "input_per_million": 0.0,
+      "output_per_million": 0.0,
+      "note": "Deterministic mock adapter: no provider cost. Reported usage is synthetic token counts."
+    }
+  }
+}

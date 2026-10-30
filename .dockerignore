@@ -1,0 +1,13 @@
+.git
+target
+.axiom
+.env
+**/.env
+**/node_modules
+**/dist
+**/.next
+**/__pycache__
+**/*.pyc
+sdk/python/.venv
+benchmarks
+docs/site/.vitepress/dist

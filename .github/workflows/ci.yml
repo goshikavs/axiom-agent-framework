@@ -1,0 +1,254 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# No repository secrets are required for the jobs below.
+# Optional future secrets (not wired): OIDC_ISSUER, OIDC_JWKS_URL for a hosted IdP job.
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Test workspace
+        run: cargo test --workspace --all-targets
+      - name: Evidence baseline bench (small, deterministic)
+        run: cargo run -p axiom-bench -- --sizes 10,100 --trials 3 --seed 42 --out /tmp/evidence-bench.json
+      - name: Export OpenAPI
+        run: cargo run -q -p axiom-server -- --export-openapi docs/api/openapi.json
+
+  python-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install, test, lint, pack
+        working-directory: sdk/python
+        run: |
+          python -m pip install -e ".[dev]"
+          pytest
+          ruff check src tests
+          python -m build --wheel
+      - name: Example unit tests
+        run: |
+          python -m pip install -e sdk/python
+          python -m pytest examples/hello-agent examples/tool-agent examples/retail-refund -q
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2.21"
+      - name: SDK tests and pack
+        working-directory: sdk/typescript
+        run: |
+          bun install
+          bun test
+          bun run typecheck
+          bun pm pack
+
+  studio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2.21"
+      - name: Typecheck and production build
+        working-directory: apps/studio
+        run: |
+          bun install
+          bun run typecheck
+          bun run build
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2.21"
+      - name: Documentation site
+        working-directory: docs/site
+        run: |
+          bun install
+          bun run build
+
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: axiom
+          POSTGRES_DB: axiom
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d axiom"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:axiom@127.0.0.1:5432/axiom
+      AXIOM_AUTH_MODE: none
+      AXIOM_BIND: 127.0.0.1:7400
+      AXIOM_RUNTIME_URL: http://127.0.0.1:7400
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build runtime
+        run: cargo build -p axiom-server
+      - name: Python deps
+        run: |
+          python -m pip install -e "sdk/python[dev]"
+          python -m pip install httpx cryptography pytest
+      - name: Start axiom-server
+        run: |
+          ./target/debug/axiom-server &
+          for i in $(seq 1 60); do curl -fsS http://127.0.0.1:7400/ready && exit 0; sleep 1; done
+          echo "axiom-server did not become ready" >&2
+          exit 1
+      - name: Security, crash, evidence, multi-agent, workflow, OTEL, retention
+        run: |
+          python -m pytest tests/security tests/isolation tests/crash tests/evidence tests/multi_agent tests/workflows tests/otel tests/reliability tests/protocol -q
+
+  packaging:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: axiom
+          POSTGRES_DB: axiom
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d axiom"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:axiom@127.0.0.1:5432/axiom
+      AXIOM_AUTH_MODE: none
+      AXIOM_BIND: 127.0.0.1:7400
+      AXIOM_RUNTIME_URL: http://127.0.0.1:7400
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2.21"
+      - run: cargo build -p axiom-server
+      - run: python -m pip install httpx pytest build hatchling
+      - name: Start axiom-server
+        run: |
+          ./target/debug/axiom-server &
+          for i in $(seq 1 60); do curl -fsS http://127.0.0.1:7400/ready && exit 0; sleep 1; done
+          echo "axiom-server did not become ready" >&2
+          exit 1
+      - name: Isolated SDK installs
+        run: python -m pytest tests/packaging -q
+
+  playwright:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: axiom
+          POSTGRES_DB: axiom
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d axiom"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:axiom@127.0.0.1:5432/axiom
+      AXIOM_AUTH_MODE: none
+      AXIOM_BIND: 127.0.0.1:7400
+      AXIOM_RUNTIME_URL: http://127.0.0.1:7400
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2.21"
+      - run: cargo build -p axiom-server
+      - name: Start axiom-server
+        run: |
+          ./target/debug/axiom-server &
+          for i in $(seq 1 60); do curl -fsS http://127.0.0.1:7400/ready && exit 0; sleep 1; done
+          echo "axiom-server did not become ready" >&2
+          exit 1
+      - name: Playwright
+        working-directory: apps/studio
+        run: |
+          bun install
+          bunx playwright install --with-deps chromium
+          bun run test:e2e
+
+  docker-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compose smoke
+        run: bash scripts/docker-smoke.sh
+      - name: Record
+        run: echo "docker-smoke ran on GitHub-hosted ubuntu-latest. Local Windows authoring host has no Docker CLI and must not claim this job."
+
+  security-scans:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2.21"
+      - name: Gitleaks (no extra credentials)
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz | tar -xz
+          ./gitleaks detect --no-git --source . --verbose
+      - name: cargo-audit
+        run: |
+          cargo install cargo-audit --locked
+          cargo audit
+      - name: pip-audit
+        run: |
+          python -m pip install pip-audit
+          python -m pip install -e sdk/python
+          pip-audit
+      - name: bun audit (Studio + TS SDK)
+        continue-on-error: true
+        run: |
+          (cd sdk/typescript && bun install && bun audit)
+          (cd apps/studio && bun install && bun audit)

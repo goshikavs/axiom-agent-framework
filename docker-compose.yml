@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: axiom
+      POSTGRES_PASSWORD: axiom
+      POSTGRES_DB: axiom
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - axiom-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U axiom -d axiom"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  runtime:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://axiom:axiom@postgres:5432/axiom
+      AXIOM_BIND: 0.0.0.0:7400
+      AXIOM_AUTH_MODE: ${AXIOM_AUTH_MODE:-oidc}
+      AXIOM_OIDC_ISSUER: ${AXIOM_OIDC_ISSUER:-}
+      AXIOM_OIDC_AUDIENCE: ${AXIOM_OIDC_AUDIENCE:-axiom}
+      AXIOM_OIDC_JWKS_URL: ${AXIOM_OIDC_JWKS_URL:-}
+      AXIOM_LOG_FORMAT: json
+      AXIOM_CORS_ORIGINS: ${AXIOM_CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      AXIOM_ALLOW_INSECURE_BIND: ${AXIOM_ALLOW_INSECURE_BIND:-false}
+      AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT: ${AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT:-}
+    ports:
+      - "127.0.0.1:7400:7400"
+    profiles: ["runtime"]
+
+  studio:
+    build:
+      context: .
+      dockerfile: apps/studio/Dockerfile
+    depends_on:
+      runtime:
+        condition: service_started
+    environment:
+      AXIOM_STUDIO_RUNTIME_URL: http://runtime:7400
+      AXIOM_RUNTIME_URL: http://runtime:7400
+    ports:
+      - "127.0.0.1:3000:3000"
+    profiles: ["studio"]
+
+volumes:
+  axiom-pg:

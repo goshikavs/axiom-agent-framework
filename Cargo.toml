@@ -1,0 +1,65 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/axiom-protocol",
+    "crates/axiom-core",
+    "crates/axiom-storage",
+    "crates/axiom-runtime",
+    "crates/axiom-server",
+    "crates/axiom-bench",
+    "apps/cli",
+]
+
+[workspace.package]
+version = "0.1.0-alpha"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/goshikavs/axiom-agent-framework"
+homepage = "https://github.com/goshikavs/axiom-agent-framework"
+authors = ["Venkatesh Goshika"]
+
+[workspace.dependencies]
+axiom-protocol = { path = "crates/axiom-protocol" }
+axiom-core = { path = "crates/axiom-core" }
+axiom-storage = { path = "crates/axiom-storage" }
+axiom-runtime = { path = "crates/axiom-runtime" }
+
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+tokio-stream = { version = "0.1", features = ["sync"] }
+futures = "0.3"
+async-stream = "0.3"
+axum = { version = "0.8", features = ["json", "query", "macros"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors", "trace", "limit", "timeout"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+schemars = { version = "1", features = ["uuid1", "chrono04"] }
+jsonschema = { version = "0.60", default-features = false }
+sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "uuid", "chrono", "json", "migrate", "rust_decimal"] }
+rust_decimal = { version = "1", features = ["serde-with-str"] }
+uuid = { version = "1", features = ["v4", "v5", "v7", "serde"] }
+prost = "0.13"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "2"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+utoipa = { version = "5", features = ["axum_extras", "chrono", "uuid", "decimal"] }
+utoipa-axum = "0.2"
+dotenvy = "0.15"
+clap = { version = "4", features = ["derive", "env"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+sha2 = "0.10"
+hex = "0.4"
+regex = "1"
+dashmap = "6"
+postgresql_embedded = { version = "0.20.4", default-features = false, features = ["tokio", "theseus", "rustls"] }
+rand = "0.8"
+rand_chacha = "0.3"
+jsonwebtoken = "9"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

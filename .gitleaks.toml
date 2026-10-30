@@ -1,0 +1,15 @@
+title = "Axiom"
+
+[allowlist]
+description = "Test HMAC secrets and documentation examples"
+paths = [
+  '''tests/.*''',
+  '''docs/.*''',
+  '''crates/axiom-core/src/redaction\.rs''',
+  '''\.gitleaks\.toml''',
+]
+regexes = [
+  '''v09-test-hmac-secret''',
+  '''test-hmac-secret-at-least-32''',
+  '''sk-1234567890abcdefghij''',
+]

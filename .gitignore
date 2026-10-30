@@ -1,0 +1,54 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Rust
+/target
+**/target
+Cargo.lock.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# JavaScript / Bun / Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.turbo/
+coverage/
+playwright-report/
+test-results/
+
+# Packaged SDKs (rebuild; never commit)
+*.tgz
+*.whl
+sdk/python/dist/
+sdk/typescript/axiom-ai-sdk-*.tgz
+
+# Local data
+/.axiom/
+/data/
+*.log
+*.sqlite
+dump.sql
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

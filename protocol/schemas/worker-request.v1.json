@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorkerRequest",
+  "description": "Typed request kinds, serialized as `{\"kind\": \"...\", \"payload\": {...}}`.",
+  "type": "object",
+  "properties": {
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "run_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "timeout_ms": {
+      "description": "Deadline after which the runtime stops waiting for this request.",
+      "type": "integer",
+      "format": "uint64",
+      "minimum": 0
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "model.generate"
+        },
+        "payload": {
+          "$ref": "#/$defs/ModelGenerateRequest"
+        }
+      },
+      "required": [
+        "kind",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "tool.execute"
+        },
+        "payload": {
+          "$ref": "#/$defs/ToolExecuteRequest"
+        }
+      },
+      "required": [
+        "kind",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "state.snapshot"
+        },
+        "payload": {
+          "$ref": "#/$defs/StateSnapshotRequest"
+        }
+      },
+      "required": [
+        "kind",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "goal.evaluate"
+        },
+        "payload": {
+          "$ref": "#/$defs/GoalEvaluateRequest"
+        }
+      },
+      "required": [
+        "kind",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "action.verify"
+        },
+        "payload": {
+          "$ref": "#/$defs/ActionVerifyRequest"
+        }
+      },
+      "required": [
+        "kind",
+        "payload"
+      ]
+    }
+  ],
+  "required": [
+    "request_id",
+    "run_id",
+    "issued_at",
+    "timeout_ms"
+  ],
+  "$defs": {
+    "ActionVerifyRequest": {
+      "type": "object",
+      "properties": {
+        "arguments": true,
+        "invocation_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "output": true,
+        "state": true,
+        "state_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tool_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "invocation_id",
+        "tool_name",
+        "arguments",
+        "state"
+      ]
+    },
+    "GoalEvaluateRequest": {
+      "type": "object",
+      "properties": {
+        "evaluate_success": {
+          "type": "boolean"
+        },
+        "phase": {
+          "description": "`initial` (invariants only), `progress`, or `final`.",
+          "type": "string"
+        },
+        "state": true,
+        "state_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "phase",
+        "evaluate_success"
+      ]
+    },
+    "ModelGenerateRequest": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "default": null
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ModelMessage"
+          }
+        },
+        "model": {
+          "type": "string"
+        },
+        "step": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ModelToolSchema"
+          }
+        }
+      },
+      "required": [
+        "model",
+        "messages",
+        "tools",
+        "step"
+      ]
+    },
+    "ModelMessage": {
+      "description": "Normalized chat message exchanged with model adapters.",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "role": {
+          "description": "`system` | `user` | `assistant` | `tool`",
+          "type": "string"
+        },
+        "tool_call_id": {
+          "description": "For `tool` role messages: the id of the tool call being answered.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tool_calls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ToolCall"
+          }
+        }
+      },
+      "required": [
+        "role"
+      ]
+    },
+    "ModelToolSchema": {
+      "description": "Tool schema as presented to the model (name/description/parameters only).",
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parameters": true
+      },
+      "required": [
+        "name",
+        "description",
+        "parameters"
+      ]
+    },
+    "StateSnapshotRequest": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "description": "Why the snapshot is taken: `initial`, `post_action`, `pre_approved_action`, `reconcile`, `final`.",
+          "type": "string"
+        },
+        "step": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint32",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "reason"
+      ]
+    },
+    "ToolCall": {
+      "description": "A tool call proposed by the model. Treated as an untrusted suggestion.",
+      "type": "object",
+      "properties": {
+        "arguments": {
+          "default": null
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "ToolExecuteRequest": {
+      "type": "object",
+      "properties": {
+        "arguments": true,
+        "attempt": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "idempotency_key": {
+          "description": "Stable key for this logical action; identical across retries of the same call.",
+          "type": "string"
+        },
+        "invocation_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "tool_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "invocation_id",
+        "tool_name",
+        "arguments",
+        "idempotency_key",
+        "attempt",
+        "timeout_ms"
+      ]
+    }
+  }
+}

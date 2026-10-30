@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CoordinationPolicy",
+  "description": "Bounds and scheduling for an `AgentGroup`. Stored on the parent run's metadata\nand enforced by the runtime when creating child tasks.",
+  "type": "object",
+  "properties": {
+    "failure_mode": {
+      "$ref": "#/$defs/FailureMode",
+      "default": "fail_fast"
+    },
+    "max_child_retries": {
+      "description": "Bounded retries of a failed child task (not of uncertain external writes).",
+      "type": "integer",
+      "format": "uint32",
+      "default": 0,
+      "minimum": 0
+    },
+    "max_delegations": {
+      "description": "Maximum children created from one parent (default 16).",
+      "type": "integer",
+      "format": "uint32",
+      "default": 16,
+      "minimum": 0
+    },
+    "max_depth": {
+      "description": "Maximum parent→child nesting, inclusive of the first child (default 4).",
+      "type": "integer",
+      "format": "uint32",
+      "default": 4,
+      "minimum": 0
+    },
+    "mode": {
+      "$ref": "#/$defs/CoordinationMode",
+      "default": "supervisor"
+    },
+    "prevent_cycles": {
+      "description": "Reject a child whose agent name already appears in the ancestor chain.",
+      "type": "boolean",
+      "default": true
+    },
+    "require_parent_verification": {
+      "description": "Parent goal is verified independently of child execution status.",
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "$defs": {
+    "CoordinationMode": {
+      "description": "How a coordinator schedules child tasks.",
+      "type": "string",
+      "enum": [
+        "sequential",
+        "parallel",
+        "supervisor"
+      ]
+    },
+    "FailureMode": {
+      "description": "Failure handling after a child ends unsuccessfully.",
+      "type": "string",
+      "enum": [
+        "fail_fast",
+        "partial"
+      ]
+    }
+  }
+}

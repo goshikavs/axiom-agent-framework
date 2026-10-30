@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StateSnapshotResult",
+  "type": "object",
+  "properties": {
+    "captured_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "source": {
+      "description": "Identifier of the authoritative source (e.g. `orders-db`, `payments-api`).",
+      "type": "string",
+      "default": ""
+    },
+    "state": true,
+    "version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "state"
+  ]
+}

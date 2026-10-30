@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorkerResponse",
+  "description": "Body of `POST /runs/{id}/worker/respond`.",
+  "type": "object",
+  "properties": {
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WorkerError"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "result": true
+  },
+  "required": [
+    "request_id",
+    "ok"
+  ],
+  "$defs": {
+    "WorkerError": {
+      "description": "Structured error returned by a worker for any request kind.",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Stable machine-readable code, e.g. `tool_error`, `timeout`, `validation_error`,\n`provider_error`, `connection_error`, `not_implemented`.",
+          "type": "string"
+        },
+        "details": true,
+        "message": {
+          "type": "string"
+        },
+        "retryable": {
+          "description": "The worker asserts the operation did not take effect and may be retried.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    }
+  }
+}

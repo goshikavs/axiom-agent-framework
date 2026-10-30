@@ -1,0 +1,9 @@
+{
+  "name": "axiom-mcp-inventory-server",
+  "private": true,
+  "version": "0.1.0-alpha",
+  "type": "module",
+  "scripts": {
+    "start": "bun run server.ts"
+  }
+}

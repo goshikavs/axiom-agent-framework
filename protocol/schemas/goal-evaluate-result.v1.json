@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GoalEvaluateResult",
+  "type": "object",
+  "properties": {
+    "evidence": {
+      "description": "Structured evidence: expected/actual values and their source.",
+      "default": null
+    },
+    "invariants": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/InvariantResult"
+      }
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "success": {
+      "description": "`None` when no success predicate was evaluated.",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "InvariantResult": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "satisfied": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "satisfied"
+      ]
+    }
+  }
+}

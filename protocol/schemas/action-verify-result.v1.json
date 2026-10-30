@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ActionVerifyResult",
+  "type": "object",
+  "properties": {
+    "actual": true,
+    "business_operation_status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BusinessOperationStatus"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected": true,
+    "method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "poll_after_ms": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint64",
+      "minimum": 0
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "$ref": "#/$defs/VerificationStatus"
+    },
+    "wait": {
+      "description": "When true the write was accepted but settlement is pending; do not re-dispatch.",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "status"
+  ],
+  "$defs": {
+    "BusinessOperationStatus": {
+      "description": "Authoritative external business-operation status. Never inferred from model text.",
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "REQUESTED",
+        "ACCEPTED",
+        "PENDING_SETTLEMENT",
+        "SETTLED",
+        "REJECTED"
+      ]
+    },
+    "VerificationStatus": {
+      "description": "Outcome verification status for a goal or an action.\nDistinct from execution status, tool status, and business-operation status.",
+      "type": "string",
+      "enum": [
+        "VERIFIED",
+        "FAILED",
+        "INCONCLUSIVE",
+        "NOT_EVALUATED"
+      ]
+    }
+  }
+}

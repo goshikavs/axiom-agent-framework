@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "axiom-ai"
+version = "0.1.0a1"
+description = "Python SDK for Axiom, the outcome-driven AI agent framework"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [{ name = "Venkatesh Goshika" }]
+keywords = ["ai", "agents", "llm", "observability", "verification"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
+]
+dependencies = [
+    "httpx>=0.27",
+    "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.40"]
+anthropic = ["anthropic>=0.34"]
+dev = ["pytest>=8", "mypy>=1.10", "ruff>=0.5", "build>=1.2"]
+
+[project.urls]
+Homepage = "https://github.com/goshikavs/axiom-agent-framework"
+Repository = "https://github.com/goshikavs/axiom-agent-framework"
+Documentation = "https://github.com/goshikavs/axiom-agent-framework/tree/main/docs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/axiom_ai"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src/axiom_ai" = "axiom_ai"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/axiom_ai", "README.md", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["axiom_ai"]
+mypy_path = "src"
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

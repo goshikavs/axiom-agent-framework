@@ -1,0 +1,31 @@
+{
+  "label": "v0.7 multi-agent overhead",
+  "summary": {
+    "single_create_ms": {
+      "n": 8,
+      "mean_ms": 12.935,
+      "max_ms": 48.708
+    },
+    "child_delegate_ms": {
+      "n": 8,
+      "mean_ms": 17.792,
+      "max_ms": 32.349
+    },
+    "shared_put_ms": {
+      "n": 8,
+      "mean_ms": 7.992,
+      "max_ms": 14.506
+    },
+    "hierarchy_ms": {
+      "n": 8,
+      "mean_ms": 5.139,
+      "max_ms": 7.585
+    },
+    "a2a_send_ms": {
+      "n": 8,
+      "mean_ms": 9.018,
+      "max_ms": 16.708
+    }
+  },
+  "note": "Not a claim that multi-agent is faster or more accurate."
+}

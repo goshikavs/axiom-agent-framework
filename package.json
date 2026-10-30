@@ -1,0 +1,22 @@
+{
+  "name": "axiom-agent-framework",
+  "private": true,
+  "version": "0.1.0-alpha",
+  "description": "Axiom monorepo JavaScript workspace (Studio + TypeScript SDK)",
+  "workspaces": [
+    "apps/studio",
+    "sdk/typescript",
+    "examples/typescript-refund-agent",
+    "examples/typescript-mcp-agent",
+    "examples/mcp-inventory-server",
+    "templates/typescript-agent",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun --filter @axiom-ai/studio dev",
+    "studio": "bun --filter @axiom-ai/studio dev",
+    "test": "bun --filter @axiom-ai/sdk test",
+    "typecheck": "bun --filter @axiom-ai/sdk typecheck",
+    "build": "bun --filter @axiom-ai/sdk typecheck"
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EventBatch",
+  "description": "Batch ingestion request for external frameworks and SDK-side emitters.",
+  "type": "object",
+  "properties": {
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ExecutionEvent"
+      }
+    }
+  },
+  "required": [
+    "events"
+  ],
+  "$defs": {
+    "EventStatus": {
+      "description": "Coarse status attached to an event. Interpretation depends on the event type.",
+      "type": "string",
+      "enum": [
+        "info",
+        "requested",
+        "validated",
+        "started",
+        "running",
+        "succeeded",
+        "failed",
+        "timed_out",
+        "cancelled",
+        "passed",
+        "inconclusive",
+        "not_evaluated",
+        "pending",
+        "granted",
+        "denied",
+        "unverified"
+      ]
+    },
+    "EventType": {
+      "description": "Closed list of event types for protocol schema version 1.x.\n\nUnknown types are rejected at ingestion with a descriptive error; readers of a newer\nminor version must ignore types they do not understand.",
+      "type": "string",
+      "enum": [
+        "run.created",
+        "run.started",
+        "run.paused",
+        "run.resumed",
+        "run.completed",
+        "run.failed",
+        "run.cancelled",
+        "run.status_changed",
+        "model.requested",
+        "model.stream_started",
+        "model.completed",
+        "model.failed",
+        "model.usage_reported",
+        "tool.requested",
+        "tool.validated",
+        "tool.started",
+        "tool.completed",
+        "tool.failed",
+        "tool.timed_out",
+        "goal.created",
+        "goal.evaluated",
+        "goal.satisfied",
+        "goal.failed",
+        "verification.started",
+        "verification.passed",
+        "verification.failed",
+        "verification.inconclusive",
+        "state.snapshot",
+        "state.changed",
+        "state.conflict_detected",
+        "approval.requested",
+        "approval.granted",
+        "approval.denied",
+        "approval.invalidated",
+        "evidence.recorded",
+        "evidence.changed",
+        "decision.created",
+        "decision.revalidation_required",
+        "decision.revalidated",
+        "impact.computed",
+        "evidence.coverage_evaluated",
+        "action.gated",
+        "recovery.started",
+        "recovery.completed",
+        "agent.delegated",
+        "agent.message_sent",
+        "agent.message_received",
+        "agent.handoff_completed"
+      ]
+    },
+    "ExecutionEvent": {
+      "description": "The framework-neutral execution event envelope (protocol 1.0).",
+      "type": "object",
+      "properties": {
+        "agent_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "duration_ms": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int64"
+        },
+        "event_id": {
+          "description": "Globally unique event identifier; deduplication key for ingestion.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "metadata": {
+          "default": null
+        },
+        "parent_span_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "payload": {
+          "default": null
+        },
+        "run_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "schema_version": {
+          "description": "Protocol schema version, currently `1.0`.",
+          "type": "string"
+        },
+        "sequence": {
+          "description": "Per-run monotonic sequence. Allocated by the runtime for native runs and by the\ncollector (arrival order) for external runs.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "source_framework": {
+          "description": "e.g. `axiom`, `langgraph`, `openai-agents`, `otel`.",
+          "type": "string"
+        },
+        "span_id": {
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventStatus"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "step_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "timestamp": {
+          "description": "Source timestamp (UTC). Ingestion time is stored separately by the collector.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "trace_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "event_id",
+        "run_id",
+        "trace_id",
+        "span_id",
+        "sequence",
+        "event_type",
+        "timestamp",
+        "source_framework"
+      ]
+    }
+  }
+}
