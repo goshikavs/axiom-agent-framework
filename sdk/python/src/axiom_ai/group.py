@@ -16,7 +16,6 @@ from .goal import Goal
 from .result import RunResult
 from .runtime import Runtime
 from .state import StateProvider
-from .worker import Worker
 
 CoordinationMode = Literal["sequential", "parallel", "supervisor"]
 FailureMode = Literal["fail_fast", "partial"]

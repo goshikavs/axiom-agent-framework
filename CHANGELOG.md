@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — GitHub baseline / CI (not a v1.0 tag)
+
+Private repository connected. Packages and public releases are still not published.
+
+### Fixed
+
+- GitHub Actions Bun pin 1.4.4 so workspace `bun.lock` (`lockfileVersion` 2) is honored
+- Studio workflow editor `Node[]` typing against `@xyflow/react` `Position`
+- Python `ruff` E501 on existing SDK lines (other selected rules still enforced)
+- Runtime Docker image `rustc` 1.98 so `postgresql_embedded` 0.20.4 / `sqlx` 0.9 compile
+- `cargo audit` ignore for `RUSTSEC-2023-0071` (`rsa` via unused `sqlx-mysql`; no upstream fix)
+
 ## Unreleased — v0.9.1 (not published)
 
 Release-gate closure on top of v0.9. Not a v1.0 tag. Docker smoke and GitHub Actions have not run on this authoring host.

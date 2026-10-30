@@ -4,6 +4,7 @@ import {
   Background,
   Controls,
   MiniMap,
+  Position,
   ReactFlow,
   ReactFlowProvider,
   addEdge,
@@ -82,13 +83,13 @@ function emptyDef(): Definition {
 }
 
 function toFlow(def: Definition): { nodes: Node[]; edges: Edge[] } {
-  const nodes = def.nodes.map((n, i) => ({
+  const nodes: Node[] = def.nodes.map((n, i) => ({
     id: n.id,
     position: { x: 80 + (i % 4) * 220, y: 80 + Math.floor(i / 4) * 140 },
     data: { label: `${n.label || n.id}\n${n.kind}`, kind: n.kind },
     style: { borderColor: COLORS[n.kind] ?? "#64748b", borderWidth: 2, background: "#121821", color: "#e7ecf3", padding: 8, borderRadius: 8, minWidth: 140, fontSize: 12 },
-    sourcePosition: "right" as const,
-    targetPosition: "left" as const,
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
   }));
   const edges = def.edges.map((e) => ({
     id: e.id,

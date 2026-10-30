@@ -1,7 +1,7 @@
 # Production image for axiom-server. Build from the repository root.
 # Never bake development credentials into this image.
 
-FROM rust:1.85-bookworm AS build
+FROM rust:1.98-bookworm AS build
 WORKDIR /src
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates

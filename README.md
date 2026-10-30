@@ -92,9 +92,9 @@ OTLP/HTTP (protobuf and JSON) ingestion is available. MCP tools are wrapped with
 
 ### Versions used in development
 
-- Rust stable (CI: `dtolnay/rust-toolchain@stable`; this machine also has 1.98/1.99)
+- Rust 1.98.0 (CI and the runtime Docker image pin this channel; local Windows ARM64 hosts keep using `stable-x86_64-pc-windows-msvc`)
 - Python 3.11–3.14
-- Bun 1.2+ (1.4.4 used locally)
+- Bun 1.4+ (CI pins 1.4.4; `bun.lock` is lockfileVersion 2)
 - Node is not required if Bun is installed
 
 ## Prerequisites

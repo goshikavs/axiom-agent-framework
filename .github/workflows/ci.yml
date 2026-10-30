@@ -21,6 +21,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.98.0
       - name: Test workspace
         run: cargo test --workspace --all-targets
       - name: Evidence baseline bench (small, deterministic)
@@ -53,14 +55,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.21"
+          bun-version: "1.4.4"
       - name: SDK tests and pack
-        working-directory: sdk/typescript
         run: |
-          bun install
-          bun test
-          bun run typecheck
-          bun pm pack
+          bun install --frozen-lockfile
+          bun --filter @axiom-ai/sdk test
+          bun --filter @axiom-ai/sdk typecheck
+          (cd sdk/typescript && bun pm pack)
 
   studio:
     runs-on: ubuntu-latest
@@ -68,13 +69,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.21"
+          bun-version: "1.4.4"
       - name: Typecheck and production build
-        working-directory: apps/studio
         run: |
-          bun install
-          bun run typecheck
-          bun run build
+          bun install --frozen-lockfile
+          bun --filter @axiom-ai/studio typecheck
+          bun --filter @axiom-ai/studio build
 
   docs:
     runs-on: ubuntu-latest
@@ -82,11 +82,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.21"
+          bun-version: "1.4.4"
       - name: Documentation site
         working-directory: docs/site
         run: |
-          bun install
+          bun install --frozen-lockfile
           bun run build
 
   integration:
@@ -113,6 +113,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.98.0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -156,12 +158,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.98.0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.21"
+          bun-version: "1.4.4"
       - run: cargo build -p axiom-server
       - run: python -m pip install httpx pytest build hatchling
       - name: Start axiom-server
@@ -197,9 +201,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.98.0
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.21"
+          bun-version: "1.4.4"
       - run: cargo build -p axiom-server
       - name: Start axiom-server
         run: |
@@ -208,11 +214,9 @@ jobs:
           echo "axiom-server did not become ready" >&2
           exit 1
       - name: Playwright
-        working-directory: apps/studio
         run: |
-          bun install
-          bunx playwright install --with-deps chromium
-          bun run test:e2e
+          bun install --frozen-lockfile
+          (cd apps/studio && bunx playwright install --with-deps chromium && bun run test:e2e)
 
   docker-smoke:
     runs-on: ubuntu-latest
@@ -228,12 +232,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.98.0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.21"
+          bun-version: "1.4.4"
       - name: Gitleaks (no extra credentials)
         run: |
           curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz | tar -xz
@@ -250,5 +256,5 @@ jobs:
       - name: bun audit (Studio + TS SDK)
         continue-on-error: true
         run: |
-          (cd sdk/typescript && bun install && bun audit)
-          (cd apps/studio && bun install && bun audit)
+          bun install --frozen-lockfile
+          bun audit
