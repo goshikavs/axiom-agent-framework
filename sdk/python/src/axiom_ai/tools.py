@@ -6,7 +6,7 @@ import asyncio
 import inspect
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any, TypeVar, get_type_hints, overload
 
 from pydantic import BaseModel, ConfigDict, ValidationError, create_model
@@ -15,7 +15,7 @@ from .errors import ConfigurationError, ToolError
 from .state import StateSnapshot
 
 
-class Effect(str, Enum):
+class Effect(StrEnum):
     READ_ONLY = "READ_ONLY"
     REVERSIBLE = "REVERSIBLE"
     IDEMPOTENT_WRITE = "IDEMPOTENT_WRITE"
@@ -29,7 +29,7 @@ class Effect(str, Enum):
         return cls(value.strip().upper())
 
 
-class Risk(str, Enum):
+class Risk(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"

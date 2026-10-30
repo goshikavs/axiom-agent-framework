@@ -45,8 +45,9 @@ async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     if let Some(path) = cli.export_openapi {
-        // Generating the document does not need a database.
-        let config = Config::from_env().unwrap_or_else(|_| offline_config());
+        // Generating the document does not need a database or a real DATABASE_URL
+        // (the default `embedded` is not a parseable postgres URL).
+        let config = offline_config();
         let db = Db::from_pool(sqlx_lazy_pool(&config.database_url)?);
         let runtime = Runtime::new(db.clone(), RuntimeConfig::default());
         let otlp = Arc::new(crate::otlp_limit::OtlpLimiter::new(config.otlp_rate_per_minute));

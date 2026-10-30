@@ -34,13 +34,17 @@ curl -fsS http://127.0.0.1:7400/health
 curl -fsS http://127.0.0.1:7400/ready | grep -q ready
 
 echo "==> up studio"
-docker compose --profile studio up -d studio
+docker compose --profile runtime --profile studio up -d studio
 for i in $(seq 1 40); do
   if curl -fsS -o /dev/null http://127.0.0.1:3000/; then
     break
   fi
   sleep 2
 done
+if ! curl -fsS -o /dev/null http://127.0.0.1:3000/; then
+  echo "studio did not become ready" >&2
+  exit 1
+fi
 
 echo "==> native agent via isolated python in compose network is host-side"
 python3 - <<'PY'

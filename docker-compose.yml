@@ -35,7 +35,7 @@ services:
       AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT: ${AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT:-}
     ports:
       - "127.0.0.1:7400:7400"
-    profiles: ["runtime"]
+    profiles: ["runtime", "studio"]
 
   studio:
     build:

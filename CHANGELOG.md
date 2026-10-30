@@ -11,6 +11,9 @@ Private repository connected. Packages and public releases are still not publish
 - Python `ruff` E501 on existing SDK lines (other selected rules still enforced)
 - Runtime Docker image `rustc` 1.98 so `postgresql_embedded` 0.20.4 / `sqlx` 0.9 compile
 - `cargo audit` ignore for `RUSTSEC-2023-0071` (`rsa` via unused `sqlx-mysql`; no upstream fix)
+- OpenAPI export no longer parses `DATABASE_URL=embedded`
+- Compose `studio` profile includes `runtime` so `depends_on` resolves
+- Python `Verification`/`Effect`/`Risk` use `StrEnum` (ruff UP042)
 
 ## Unreleased — v0.9.1 (not published)
 

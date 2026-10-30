@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from .errors import ConfigurationError
@@ -24,7 +24,7 @@ class InvariantOutcome:
     actual: Any = None
 
 
-class Verification(str, Enum):
+class Verification(StrEnum):
     REQUIRED = "required"
     OPTIONAL = "optional"
     NONE = "none"
