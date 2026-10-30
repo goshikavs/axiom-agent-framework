@@ -14,6 +14,7 @@ Private repository connected. Packages and public releases are still not publish
 - OpenAPI export no longer parses `DATABASE_URL=embedded`
 - Compose `studio` profile includes `runtime` so `depends_on` resolves
 - Python `Verification`/`Effect`/`Risk` use `StrEnum` (ruff UP042)
+- Example pytest jobs run per directory so `main` imports do not collide
 
 ## Unreleased — v0.9.1 (not published)
 
