@@ -47,9 +47,7 @@ jobs:
       - name: Example unit tests
         run: |
           python -m pip install -e sdk/python
-          python -m pytest examples/hello-agent -q
-          python -m pytest examples/tool-agent -q
-          python -m pytest examples/retail-refund -q
+          python -m pytest examples/hello-agent examples/tool-agent examples/retail-refund -q
 
   typescript:
     runs-on: ubuntu-latest
