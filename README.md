@@ -1,8 +1,12 @@
-# Axiom — Outcome-Driven AI Agent Framework
-
+# Axiom — Outcome-Driven AI Agent Framework Where AI Actions Become Verified Outcomes.
 Axiom is an open-source framework for building, executing, observing, and verifying AI agents. It combines a Rust execution runtime, goal and action contracts, a Python SDK (and a TypeScript client), and **Axiom Studio**, a developer console for executions—not a chatbot.
 
-A model can *claim* that a refund succeeded. Axiom only marks a goal **VERIFIED** when a `StateProvider` snapshot satisfies the declared success predicate and invariants. A successful tool HTTP response is not, by itself, a completed goal.
+AXIOM — Agent eXecution, Intelligence, Orchestration & Monitoring
+- A — Agent: AI agents and multi-agent collaboration
+- X — eXecution: Durable, reliable execution and recovery
+- I — Intelligence: Evidence-aware reasoning and decision verification
+- O — Orchestration: Workflow coordination, tools, and integrations
+- M — Monitoring: Observability, tracing, and outcome verification
 
 **Status:** `0.1.0-alpha` (**v0.9.1** in tree). APIs will change. This is **not** a published v1.0: packages and GitHub Releases are unpublished. Private CI on `main` is green (Rust, SDKs, Studio, docs, Postgres integration, Playwright, Docker smoke, gitleaks, cargo-audit, pip-audit) at `e7d5b70`. Not SOC 2 / HIPAA / PCI certified.
 
