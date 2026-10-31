@@ -15,6 +15,7 @@ Private repository connected. Required GitHub Actions jobs are green on `main` a
 - Compose `studio` profile includes `runtime` so `depends_on` resolves
 - Python `Verification`/`Effect`/`Risk` use `StrEnum` (ruff UP042)
 - Example pytest jobs run per directory so `main` imports do not collide
+- Pin TypeScript `zod` to 4.6.7 (GHSA-mrhx-c7xc-m3w5) and point Dependabot npm at the workspace `bun.lock`
 
 ## Unreleased — v0.9.1 (not published)
 

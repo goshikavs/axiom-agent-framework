@@ -15,12 +15,7 @@ updates:
     schedule:
       interval: weekly
   - package-ecosystem: npm
-    directory: /apps/studio
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-  - package-ecosystem: npm
-    directory: /sdk/typescript
+    directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
@@ -28,3 +23,4 @@ updates:
     directory: /docs/site
     schedule:
       interval: weekly
+    open-pull-requests-limit: 5

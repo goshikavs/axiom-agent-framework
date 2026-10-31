@@ -97,7 +97,7 @@ export class McpClient {
   }
 
   private wrap(discovered: DiscoveredMcpTool): Tool<any, any> {
-    const schema = z.record(z.unknown()) as ZodType<Record<string, unknown>>;
+    const schema = z.record(z.string(), z.unknown()) as ZodType<Record<string, unknown>>;
     const policy: McpToolPolicy = { ...this.policy, ...this.toolPolicies[discovered.name], allowlist: this.policy.allowlist };
     const client = this;
     const serverId = this.id;
