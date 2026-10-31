@@ -4,7 +4,7 @@ Axiom is an open-source framework for building, executing, observing, and verify
 
 A model can *claim* that a refund succeeded. Axiom only marks a goal **VERIFIED** when a `StateProvider` snapshot satisfies the declared success predicate and invariants. A successful tool HTTP response is not, by itself, a completed goal.
 
-**Status:** `0.1.0-alpha` (**v0.9.1** in tree). APIs will change. This is **not** a v1.0 release: Docker smoke and GitHub Actions have not run on a real engine/remote. Not SOC 2 / HIPAA / PCI certified.
+**Status:** `0.1.0-alpha` (**v0.9.1** in tree). APIs will change. This is **not** a published v1.0: packages and GitHub Releases are unpublished. Private CI on `main` is green (Rust, SDKs, Studio, docs, Postgres integration, Playwright, Docker smoke, gitleaks, cargo-audit, pip-audit) at `e7d5b70`. Not SOC 2 / HIPAA / PCI certified.
 
 - Languages: Rust (runtime), Python 3.11+ (SDK), TypeScript (Studio + native SDK worker)
 - Runtime: `axiom-server` on `http://127.0.0.1:7400`

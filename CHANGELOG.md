@@ -2,7 +2,7 @@
 
 ## Unreleased — GitHub baseline / CI (not a v1.0 tag)
 
-Private repository connected. Packages and public releases are still not published.
+Private repository connected. Required GitHub Actions jobs are green on `main` at `e7d5b70`. Packages and public releases are still not published.
 
 ### Fixed
 
