@@ -1,6 +1,11 @@
+---
+title: Contributing
+description: How to contribute to the Goshikq AI agent framework without adding AI authorship, and where to update implementation status.
+---
+
 # Contributing
 
-See the repository [CONTRIBUTING.md](../CONTRIBUTING.md).
+See the repository [CONTRIBUTING.md](https://github.com/goshikavs/goshikq-agent-framework/blob/main/CONTRIBUTING.md).
 
 Maintainer: [goshikavs](https://github.com/goshikavs). Do not add AI assistants as authors or co-authors.
 

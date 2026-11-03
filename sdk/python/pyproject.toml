@@ -33,9 +33,9 @@ anthropic = ["anthropic>=0.34"]
 dev = ["pytest>=8", "mypy>=1.10", "ruff>=0.5", "build>=1.2"]
 
 [project.urls]
-Homepage = "https://github.com/goshikavs/axiom-agent-framework"
-Repository = "https://github.com/goshikavs/axiom-agent-framework"
-Documentation = "https://github.com/goshikavs/axiom-agent-framework/tree/main/docs"
+Homepage = "https://github.com/goshikavs/goshikq-agent-framework"
+Repository = "https://github.com/goshikavs/goshikq-agent-framework"
+Documentation = "https://goshikavs.github.io/goshikq-agent-framework/"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/goshikq_ai"]

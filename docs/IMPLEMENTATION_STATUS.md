@@ -202,7 +202,7 @@ D does not detect hidden edges (recall below 1). B covers those node ids by rech
 - LLM-based verification planner (deterministic rules only in v0.3)
 - Inferring dependencies the model considered but never registered
 - Studio tools/goals catalogs, evaluations, regression UI, benchmark UI
-- Public GitHub release under a renamed remote (the current remote stays `goshikavs/axiom-agent-framework` until the owner authorizes a GitHub rename)
+- Public GitHub release under `goshikavs/goshikq-agent-framework` (renamed from `axiom-agent-framework`; GitHub redirects the old URL)
 
 ## Blockers (this machine)
 

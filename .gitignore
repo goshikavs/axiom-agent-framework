@@ -28,6 +28,8 @@ htmlcov/
 node_modules/
 .next/
 out/
+docs/site/.vitepress/dist/
+docs/site/.vitepress/cache/
 *.tsbuildinfo
 .turbo/
 coverage/

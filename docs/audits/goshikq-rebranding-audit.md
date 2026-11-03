@@ -2,7 +2,8 @@
 
 **Date:** 2026-11-03  
 **Branch:** `refactor/rebrand-goshikq`  
-**Remote repository (unchanged):** https://github.com/goshikavs/axiom-agent-framework  
+**Remote repository (at audit time):** https://github.com/goshikavs/axiom-agent-framework  
+**Later rename:** the GitHub repository was renamed to https://github.com/goshikavs/goshikq-agent-framework on 2026-11-03. Statements below that say the remote name was unchanged describe the audit-time state.  
 **Tagline:** Build Agents. Verify Outcomes.  
 **Positioning:** Open-source AI agent execution and verification framework.
 
