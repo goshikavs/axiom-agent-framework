@@ -19,7 +19,7 @@ jobs:
   rust:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.98.0
@@ -33,7 +33,7 @@ jobs:
   python-sdk:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -52,7 +52,7 @@ jobs:
   typescript:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.4"
@@ -66,7 +66,7 @@ jobs:
   studio:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.4"
@@ -79,7 +79,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.4"
@@ -111,7 +111,7 @@ jobs:
       GOSHIKQ_BIND: 127.0.0.1:7400
       GOSHIKQ_RUNTIME_URL: http://127.0.0.1:7400
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.98.0
@@ -156,7 +156,7 @@ jobs:
       GOSHIKQ_BIND: 127.0.0.1:7400
       GOSHIKQ_RUNTIME_URL: http://127.0.0.1:7400
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.98.0
@@ -199,7 +199,7 @@ jobs:
       GOSHIKQ_BIND: 127.0.0.1:7400
       GOSHIKQ_RUNTIME_URL: http://127.0.0.1:7400
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.98.0
@@ -221,7 +221,7 @@ jobs:
   docker-smoke:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Compose smoke
         run: bash scripts/docker-smoke.sh
       - name: Record
@@ -230,7 +230,7 @@ jobs:
   security-scans:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.98.0
