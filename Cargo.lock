@@ -1011,7 +1011,7 @@ dependencies = [
  "clap",
  "goshikq-core",
  "goshikq-protocol",
- "rand 0.8.8",
+ "rand 0.10.3",
  "rand_chacha 0.3.1",
  "serde",
  "serde_json",
