@@ -46,7 +46,7 @@ thiserror = "2"
 anyhow = "1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-utoipa = { version = "5", features = ["axum_extras", "chrono", "uuid", "decimal"] }
+utoipa = { version = "6", features = ["axum_extras", "chrono", "uuid", "decimal"] }
 utoipa-axum = "0.2"
 dotenvy = "0.15"
 clap = { version = "4", features = ["derive", "env"] }
