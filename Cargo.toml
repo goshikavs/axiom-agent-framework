@@ -58,7 +58,7 @@ dashmap = "6"
 postgresql_embedded = { version = "0.20.4", default-features = false, features = ["tokio", "theseus", "rustls"] }
 rand = "0.8"
 rand_chacha = "0.3"
-jsonwebtoken = "9"
+jsonwebtoken = "11"
 
 [profile.release]
 lto = "thin"
