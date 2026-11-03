@@ -1,6 +1,11 @@
+---
+title: Architecture
+description: How the Goshikq AI agent framework splits a Rust execution runtime from Python and TypeScript SDKs, and how goal verification uses authoritative state.
+---
+
 # Goshikq architecture
 
-Goshikq is an outcome-driven agent framework. A **model suggestion is never treated as a business result**. The Rust runtime owns the execution lifecycle; Python and TypeScript SDKs declare agents, tools, models, and predicates; Goshikq Studio observes persisted events.
+Goshikq is an open-source AI agent framework. A **model suggestion is never treated as a business result**. The Rust runtime owns durable execution; Python and TypeScript SDKs declare agents, tools, models, and predicates; Goshikq Studio observes persisted events.
 
 ## Package graph
 

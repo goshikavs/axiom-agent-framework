@@ -1,11 +1,12 @@
-# Goshikq — Outcome-Driven AI Agent Framework Where AI Actions Become Verified Outcomes.
-Goshikq is an open-source framework for building, executing, observing, and verifying AI agents. It combines a Rust execution runtime, goal and action contracts, a Python SDK (and a TypeScript client), and **Goshikq Studio**, a developer console for executions—not a chatbot.
+# Goshikq
+
+Goshikq is an open-source **AI agent framework** with a **Rust runtime** for **durable execution**, **multi-agent orchestration**, and **verified outcomes**. Python and TypeScript SDKs declare agents, tools, and goals; the runtime owns retries, checkpoints, evidence, and goal verification. **Goshikq Studio** is a developer console for executions—not a chatbot.
 
 **Build Agents. Verify Outcomes.**
 
-Open-source AI agent execution and verification framework. Source repository (name unchanged): [goshikavs/axiom-agent-framework](https://github.com/goshikavs/axiom-agent-framework).
+Source: [goshikavs/goshikq-agent-framework](https://github.com/goshikavs/goshikq-agent-framework). Docs (GitHub Pages, after the docs workflow runs on `main`): [goshikavs.github.io/goshikq-agent-framework](https://goshikavs.github.io/goshikq-agent-framework/).
 
-**Status:** `0.1.0-alpha` (**v0.9.1** in tree). APIs will change. This is **not** a published v1.0: packages and GitHub Releases are unpublished. Private CI on `main` is green (Rust, SDKs, Studio, docs, Postgres integration, Playwright, Docker smoke, gitleaks, cargo-audit, pip-audit) at `e7d5b70`. Not SOC 2 / HIPAA / PCI certified.
+**Status:** `0.1.0-alpha` (**v0.9.1** in tree). APIs will change. This is **not** a published v1.0: packages and GitHub Releases are unpublished. Not SOC 2 / HIPAA / PCI certified.
 
 - Languages: Rust (runtime), Python 3.11+ (SDK), TypeScript (Studio + native SDK worker)
 - Runtime: `goshikq-server` on `http://127.0.0.1:7400`
@@ -288,7 +289,7 @@ See [`docs/release/platform-matrix.md`](docs/release/platform-matrix.md). Window
 
 - v1.0 is **not** ready (`docs/release/v1.0-readiness.md`).
 - Docker images exist in-tree; this authoring host has no Docker CLI, so compose smoke is CI-only and has not run.
-- GitHub Actions have never executed (no remote, no commits).
+- GitHub Actions workflows live in `.github/workflows/`. CI success is not a production-readiness claim.
 - HMAC OIDC is loopback test mode only. Production uses JWKS.
 - JWT access tokens cannot be revoked by Goshikq; remove membership or rotate API keys.
 - Automatic retention sweeping is deferred; use the owner purge endpoint.

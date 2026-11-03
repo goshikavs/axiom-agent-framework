@@ -1,9 +1,11 @@
 ---
 layout: home
+title: Goshikq Docs
+description: Documentation for Goshikq, an open-source AI agent framework with a Rust runtime for durable execution, multi-agent orchestration, and verified outcomes.
 hero:
   name: Goshikq
-  text: Outcome-driven agent runtime
-  tagline: Rust execution, Python and TypeScript SDKs, Studio, executable workflows.
+  text: AI agent framework with verified outcomes
+  tagline: Rust runtime, durable execution, multi-agent orchestration, Python and TypeScript SDKs, and Goshikq Studio.
   actions:
     - theme: brand
       text: Quickstart

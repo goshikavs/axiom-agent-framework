@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://goshikavs.github.io/goshikq-agent-framework/sitemap.xml

@@ -1,6 +1,6 @@
 # goshikq-ai (Python SDK)
 
-Python SDK for [Goshikq](https://github.com/goshikavs/axiom-agent-framework), the outcome-driven,
+Python SDK for [Goshikq](https://github.com/goshikavs/goshikq-agent-framework), the outcome-driven,
 model-independent AI agent framework. The SDK declares agents, goals, and tool contracts; the
 Goshikq Rust runtime owns execution, policy enforcement, persistence, and verification.
 

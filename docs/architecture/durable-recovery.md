@@ -26,7 +26,7 @@ On `goshikq-server` start:
 1. Active (non-wait) native runs are marked `RECOVERY_REQUIRED`. In-flight `RUNNING` tool rows become `DISPATCH_UNCERTAIN`.
 2. Durable waits (`WAITING_FOR_APPROVAL`, `WAITING_FOR_EXTERNAL_STATE`, `PAUSED`) are left as-is.
 3. The supervisor claims each recoverable run with a fencing token (`runs.lease_generation`) and spawns an executor.
-4. The executor reconstructs the checkpoint and applies the journal policy in [`recovery.rs`](../../crates/goshikq-core/src/recovery.rs).
+4. The executor reconstructs the checkpoint and applies the journal policy in [`recovery.rs`](https://github.com/goshikavs/goshikq-agent-framework/blob/main/crates/goshikq-core/src/recovery.rs).
 5. Automatic resume of non-wait recoveries stops after `GOSHIKQ_MAX_RECOVERY_ATTEMPTS` (default 8) successful `resumed` attempts; durable waits are not counted against that budget.
 
 Two workers cannot commit as the same owner: heartbeats and fenced `transition_run_leased` reject a stale generation. A lease does **not** stop an already-running old process from having sent an HTTP request; the action journal is the additional safeguard.

@@ -15,8 +15,8 @@ version = "0.1.0-alpha"
 edition = "2021"
 rust-version = "1.94"
 license = "Apache-2.0"
-repository = "https://github.com/goshikavs/axiom-agent-framework"
-homepage = "https://github.com/goshikavs/axiom-agent-framework"
+repository = "https://github.com/goshikavs/goshikq-agent-framework"
+homepage = "https://github.com/goshikavs/goshikq-agent-framework"
 authors = ["Venkatesh Goshika"]
 
 [workspace.dependencies]

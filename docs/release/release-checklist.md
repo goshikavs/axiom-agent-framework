@@ -9,7 +9,7 @@ Nothing in this list has been performed unless the owner authorized it.
 - [ ] Owner confirms git identity (`user.name` / `user.email`) — do not change git config from tooling
 - [ ] Review `git status` for secrets (`.env`, `*.pem`, local DBs, logs)
 - [ ] Initial commit authorized by owner
-- [ ] GitHub repository remains `goshikavs/axiom-agent-framework` until the owner authorizes a remote rename
+- [x] GitHub repository renamed to `goshikavs/goshikq-agent-framework` (old `axiom-agent-framework` URL redirects)
 - [ ] `git push -u origin main` authorized
 - [ ] GitHub Actions run on `ubuntu-latest` recorded: rust, python-sdk, typescript, studio, docs, integration, packaging, playwright, docker-smoke, security-scans
 - [ ] Docker smoke log attached to the milestone
