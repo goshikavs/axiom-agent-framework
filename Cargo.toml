@@ -56,7 +56,7 @@ hex = "0.4"
 regex = "1"
 dashmap = "6"
 postgresql_embedded = { version = "0.20.4", default-features = false, features = ["tokio", "theseus", "rustls"] }
-rand = "0.8"
+rand = "0.10"
 rand_chacha = "0.3"
 jsonwebtoken = "9"
 
