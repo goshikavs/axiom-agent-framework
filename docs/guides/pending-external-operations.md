@@ -41,6 +41,6 @@ At `external_wait_seconds` (default 8 for this fault):
 
 ## Restart while waiting
 
-Kill `axiom-server` during `WAITING_FOR_EXTERNAL_STATE`, start it again, keep the Python worker (or reconnect). The wait deadline is the original UTC instant from the checkpoint, not `now() + duration`. The existing refund is rediscovered; `submit_count` must not create a second processor record for the same idempotency key.
+Kill `goshikq-server` during `WAITING_FOR_EXTERNAL_STATE`, start it again, keep the Python worker (or reconnect). The wait deadline is the original UTC instant from the checkpoint, not `now() + duration`. The existing refund is rediscovered; `submit_count` must not create a second processor record for the same idempotency key.
 
 Covered by `tests/crash/test_crash_boundaries.py` barriers `after_accept` and `during_verify`.

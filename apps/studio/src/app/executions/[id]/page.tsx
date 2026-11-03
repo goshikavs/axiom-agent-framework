@@ -123,11 +123,11 @@ export default function ExecutionDetailPage() {
           <p className="text-sm text-ink-muted">{run.goal_description}</p>
           <p className="mt-1 font-mono text-[11px] text-ink-faint" data-testid="sdk-origin">
             {sdkOrigin(run.source_framework).label} · {run.source_framework} · trace {run.trace_id}
-            {sdkOrigin(run.source_framework).controlsExecution ? "" : " · Axiom did not control this execution"}
+            {sdkOrigin(run.source_framework).controlsExecution ? "" : " · Goshikq did not control this execution"}
           </p>
           {sdkOrigin(run.source_framework).controlsExecution ? null : (
             <p className="mt-1 text-[11px] text-amber-200">
-              Verification availability: imported run.completed is UNVERIFIED unless an Axiom outcome verifier recorded evidence.
+              Verification availability: imported run.completed is UNVERIFIED unless an Goshikq outcome verifier recorded evidence.
               Adapter capabilities: see Integrations. Missing telemetry stays unknown.
             </p>
           )}

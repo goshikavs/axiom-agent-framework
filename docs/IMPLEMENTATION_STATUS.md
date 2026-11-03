@@ -7,7 +7,7 @@ Latest milestone: **v0.9.1** (`docs/milestones/v0.9.1-report.md`). v1.0 is **not
 ## Commands re-run on this host (v0.9.1)
 
 ```text
-cargo test -p axiom-server --bin axiom-server                            # 11 passed
+cargo test -p goshikq-server --bin goshikq-server                            # 11 passed
 python -m pytest tests/security tests/otel/test_runtime_export.py -q     # JWKS + retention + OTEL collector
 python -m pytest tests/packaging tests/crash tests/multi_agent tests/isolation/test_api_key_project_isolation.py -q
 # isolated Python wheel VERIFIED; crash 8/8; multi-agent 12; API-key isolation
@@ -22,8 +22,8 @@ Docker compose smoke and GitHub Actions: **not run**. Platform matrix: `docs/rel
 ## Commands re-run on this host (v0.9)
 
 ```text
-cargo test -p axiom-server --bin axiom-server     # 4 passed (OIDC + RBAC)
-cargo test --workspace --lib                      # axiom-core 71 + protocol 15 + bench 10
+cargo test -p goshikq-server --bin goshikq-server     # 4 passed (OIDC + RBAC)
+cargo test --workspace --lib                      # goshikq-core 71 + protocol 15 + bench 10
 python -m pytest tests/security tests/isolation tests/workflows/test_registered_tools.py tests/reliability -q
 # 9 passed (OIDC tenant isolation, registered tools, spawn WORKER_UNAVAILABLE, concurrent approvals)
 python -m pytest tests/workflows/test_workflow_execution.py tests/crash tests/multi_agent sdk/python/tests -q
@@ -35,7 +35,7 @@ GET /ready -> 200 ready/database ok
 GET /api/v1/runtime/metrics -> 200
 ```
 
-Live runtime after rebuild: `axiom-server` `127.0.0.1:7400`, PostgreSQL `127.0.0.1:55432`. Studio `:3000`. Auth mode `none` for local suites; OIDC tests start their own process.
+Live runtime after rebuild: `goshikq-server` `127.0.0.1:7400`, PostgreSQL `127.0.0.1:55432`. Studio `:3000`. Auth mode `none` for local suites; OIDC tests start their own process.
 
 ## Commands re-run on this host (v0.8, still valid)
 
@@ -48,16 +48,16 @@ python -m pytest tests/crash/test_crash_boundaries.py tests/workflows/test_workf
 python -m pytest sdk/python/tests -q                              # 28 passed
 cd sdk/typescript && bun test                                     # 19 passed (official MCP SDK initialize/list/call)
 apps/studio playwright studio.spec.ts + workflows.spec.ts         # 13 + 4 passed
-scripts/with-msvc.ps1 cargo +stable-x86_64-pc-windows-msvc test --package axiom-core --lib
+scripts/with-msvc.ps1 cargo +stable-x86_64-pc-windows-msvc test --package goshikq-core --lib
 # 71 passed
 cd docs/site && bun run build                                     # ok
-python -m build (sdk/python) then venv import axiom_ai            # ok
+python -m build (sdk/python) then venv import goshikq_ai            # ok
 bun pm pack (sdk/typescript) then bun add tarball                 # ok
-axiom doctor / workflows validate|publish|run / init python|typescript
+goshikq doctor / workflows validate|publish|run / init python|typescript
 python examples/multi-agent-refund/main.py                        # 01a1895e-8cb0-703b-b2ac-b9950ec20d0c VERIFIED
 ```
 
-Live runtime: `axiom-server` on `127.0.0.1:7400` (PostgreSQL 18.6.1 on `127.0.0.1:55432`) and Studio at `http://127.0.0.1:3000`. No paid model credentials.
+Live runtime: `goshikq-server` on `127.0.0.1:7400` (PostgreSQL 18.6.1 on `127.0.0.1:55432`) and Studio at `http://127.0.0.1:3000`. No paid model credentials.
 
 ```text
 python examples/hello-agent/main.py
@@ -125,9 +125,9 @@ SSE uses default `message` events (`event_type` inside JSON) plus a named `event
 
 ## Measured overhead (this host, 2026-10-28)
 
-`python tests/perf/bench_recovery.py` against live `axiom-server` + PostgreSQL on loopback. Wall-clock of the Python SDK `Runtime.run` path (checkpoint, journal, leases, events, and simulated processor I/O). Not a microbenchmark of Rust alone. 10- and 100-way runs share the demo store; numbers are latency, not isolated-order correctness.
+`python tests/perf/bench_recovery.py` against live `goshikq-server` + PostgreSQL on loopback. Wall-clock of the Python SDK `Runtime.run` path (checkpoint, journal, leases, events, and simulated processor I/O). Not a microbenchmark of Rust alone. 10- and 100-way runs share the demo store; numbers are latency, not isolated-order correctness.
 
-| Concurrency | n | p50 | p95 | batch wall | `axiom-server` RSS |
+| Concurrency | n | p50 | p95 | batch wall | `goshikq-server` RSS |
 |---|---|---|---|---|---|
 | 1 (5 sequential) | 5 | 0.889 s | 0.929 s | 4.470 s | ~70 MB |
 | 10 | 10 | 3.210 s | 4.410 s | 5.023 s | ~70 MB |
@@ -137,7 +137,7 @@ Database and worker HTTP dominate. No premature Rust micro-optimizations. Concur
 
 ## Independent evidence baselines (v0.3.1, this host)
 
-`crates/axiom-bench` — four **distinct** algorithms, seeded graphs, ground truth from the true graph (declared ∪ hidden). Not `bench_evidence.py`.
+`crates/goshikq-bench` — four **distinct** algorithms, seeded graphs, ground truth from the true graph (declared ∪ hidden). Not `bench_evidence.py`.
 
 Overall n=480 per strategy (sizes 10…10_000 × 12 families × 10 trials, seed 42, release). Full numbers: `docs/benchmarks/evidence-verification.md`.
 
@@ -152,7 +152,7 @@ D does not detect hidden edges (recall below 1). B covers those node ids by rech
 
 ## SDK latency workload (v0.3, this host)
 
-`python tests/perf/bench_evidence.py --mode A|C --concurrency 1 --repeats 5` against live `axiom-server` + PostgreSQL. Independent `ORD-BENCH-*` rows. Wall-clock of SDK `Runtime.run`. **Not** the independent A–D study.
+`python tests/perf/bench_evidence.py --mode A|C --concurrency 1 --repeats 5` against live `goshikq-server` + PostgreSQL. Independent `ORD-BENCH-*` rows. Wall-clock of SDK `Runtime.run`. **Not** the independent A–D study.
 
 | Mode | Meaning | n | p50 | p95 | stale recall | incorrect action | false-positive reval | correctly handled |
 |---|---|---|---|---|---|---|---|---|
@@ -161,7 +161,7 @@ D does not detect hidden edges (recall below 1). B covers those node ids by rech
 
 ## Available
 
-- Rust crates: `axiom-protocol`, `axiom-core`, `axiom-storage`, `axiom-runtime`, `axiom-server`
+- Rust crates: `goshikq-protocol`, `goshikq-core`, `goshikq-storage`, `goshikq-runtime`, `goshikq-server`
 - Run lifecycle with transition validation
 - Worker protocol (long-poll)
 - PostgreSQL schema + SQLx migrations (`0001`–`0006`, including `0006_workflows`)
@@ -171,7 +171,7 @@ D does not detect hidden edges (recall below 1). B covers those node ids by rech
 - Examples: `hello-agent`, `tool-agent`, `retail-refund`, `insurance-claims`, `langgraph-refund`, `openai-agents-refund`
 - Studio: overview, URL-state execution explorer (sort/pagination), execution detail (synchronized graph/timeline/inspector), recovery panel, live SSE (reconnect/pause), verification (independent outcome fields), evidence inspector / dependency graph / change impact / revalidation / snapshot diff, historical replay, run comparison, failure analysis, approvals, agents, events, traces, state inspector, settings, integrations, models, cost page, Playwright e2e
 - Versioned evidence records, explicit dependency graph, deterministic change-impact, selective revalidation, approval invalidation (`GET /api/v1/runs/{id}/evidence`)
-- Independent revalidation baselines A–D + seeded `axiom-bench` (v0.3.1)
+- Independent revalidation baselines A–D + seeded `goshikq-bench` (v0.3.1)
 - Evidence coverage contracts, risk-aware action gates, policies E/F (v0.3.2)
 - CLI: `doctor`, `init --template python|typescript`, `run`, `studio`, `runs list|inspect`, `verify`, `agents list`, `workflows validate|publish|run`
 - Executable workflows: versioned schema, validation, Rust pinned-version execution, Studio React Flow editor, node-level run status
@@ -181,9 +181,9 @@ D does not detect hidden edges (recall below 1). B covers those node ids by rech
 - Event batch ingestion `POST /api/v1/events/batch` (idempotent)
 - OTLP/HTTP protobuf and JSON trace ingest `POST /v1/traces` (mapping `otel-genai-v1`; spans are not verified outcomes)
 - Durable checkpoints (`schema_version=2`), action journal, fencing leases, recovery supervisor
-- Process-crash harness (`AXIOM_CRASH_AT`, process exit 97)
+- Process-crash harness (`GOSHIKQ_CRASH_AT`, process exit 97)
 - TypeScript SDK worker loop (same protocol as Python; Rust remains the executor)
-- MCP stdio NDJSON (official SDK 1.32.2 initialize/list/call) plus Content-Length read fallback; allowlists and Axiom contracts; Streamable HTTP/OAuth not claimed
+- MCP stdio NDJSON (official SDK 1.32.2 initialize/list/call) plus Content-Length read fallback; allowlists and Goshikq contracts; Streamable HTTP/OAuth not claimed
 - `POST/GET /api/v1/api-keys` (token shown once)
 
 ## Experimental
@@ -202,32 +202,32 @@ D does not detect hidden edges (recall below 1). B covers those node ids by rech
 - LLM-based verification planner (deterministic rules only in v0.3)
 - Inferring dependencies the model considered but never registered
 - Studio tools/goals catalogs, evaluations, regression UI, benchmark UI
-- Public GitHub release (repo is local until the owner authorizes `goshikavs/axiom-agent-framework`)
+- Public GitHub release under a renamed remote (the current remote stays `goshikavs/axiom-agent-framework` until the owner authorizes a GitHub rename)
 
 ## Blockers (this machine)
 
 - Host is Windows ARM64. Native `aarch64-pc-windows-msvc` lacks `link.exe` for ARM64; builds use `stable-x86_64-pc-windows-msvc` via Visual Studio Build Tools (`scripts/with-msvc.ps1`).
-- Docker Desktop and WSL are not installed. Local DB uses embedded PostgreSQL (`postgresql_embedded` with the `rustls` feature; first start downloads Theseus binaries from GitHub). Prefer `pg_ctl start` on `.axiom/postgres` when `DATABASE_URL=embedded` races a previous shutdown.
-- Embedded `initdb`/`pg_ctl` default timeout is 5s; Axiom overrides it to 180s (`AXIOM_EMBEDDED_PG_TIMEOUT_SECS`).
+- Docker Desktop and WSL are not installed. Local DB uses embedded PostgreSQL (`postgresql_embedded` with the `rustls` feature; first start downloads Theseus binaries from GitHub). Prefer `pg_ctl start` on `.goshikq/postgres` when `DATABASE_URL=embedded` races a previous shutdown.
+- Embedded `initdb`/`pg_ctl` default timeout is 5s; Goshikq overrides it to 180s (`GOSHIKQ_EMBEDDED_PG_TIMEOUT_SECS`).
 - `gh` is not authenticated; the GitHub remote is not created. Do not `gh repo create` until the owner confirms.
 - Bun is installed at `%USERPROFILE%\.bun\bin` and may be missing from PATH.
 - No local git commit or push has been made in this session.
 
 ## Recovery guarantees (v0.2)
 
-See [durable-recovery.md](architecture/durable-recovery.md), [action-journal.md](architecture/action-journal.md), [crash-recovery.md](guides/crash-recovery.md). Executable policy: `crates/axiom-core/src/recovery.rs`. Supervisor: `crates/axiom-runtime/src/supervisor.rs`.
+See [durable-recovery.md](architecture/durable-recovery.md), [action-journal.md](architecture/action-journal.md), [crash-recovery.md](guides/crash-recovery.md). Executable policy: `crates/goshikq-core/src/recovery.rs`. Supervisor: `crates/goshikq-runtime/src/supervisor.rs`.
 
 Supported:
 
 - Versioned checkpoints (`schema_version=2`) with absolute wait/execution deadlines, contract fingerprint, last event sequence, and last evidence version
 - Action journal (`PREPARED` … `OUTCOME_CONFIRMED` / `RECOVERY_REQUIRED`)
 - Database leases + fencing tokens (`lease_generation`); leased transitions refuse a stale generation
-- Startup supervisor resumes durable waits and safe `RECOVERY_REQUIRED` runs; auto-resume of non-wait recoveries is bounded (`AXIOM_MAX_RECOVERY_ATTEMPTS`, default 8)
+- Startup supervisor resumes durable waits and safe `RECOVERY_REQUIRED` runs; auto-resume of non-wait recoveries is bounded (`GOSHIKQ_MAX_RECOVERY_ATTEMPTS`, default 8)
 - `WAITING_FOR_APPROVAL` survives restart; approval then continues the original invocation after revalidating invariants
 - `WAITING_FOR_EXTERNAL_STATE` survives restart; the original refund is not resubmitted
 - Never-settles wait deadline → `UNVERIFIED` + `INCONCLUSIVE` (not a model/step budget failure)
 - `GET /api/v1/runs/{id}/recovery` + Studio recovery panel
-- Process-crash harness at six `AXIOM_CRASH_AT` barriers (`tests/crash/test_crash_boundaries.py`) — all six passed on this host, plus approval-after-restart, SSE reconnect, and never-settles
+- Process-crash harness at six `GOSHIKQ_CRASH_AT` barriers (`tests/crash/test_crash_boundaries.py`) — all six passed on this host, plus approval-after-restart, SSE reconnect, and never-settles
 
 Not supported / not claimed:
 

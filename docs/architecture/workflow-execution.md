@@ -7,7 +7,7 @@ Saved graphs are executed by the **existing Rust run executor**. Next.js never s
 1. `POST /api/v1/workflows` stores a draft (invalid graphs allowed when `draft: true`).
 2. `POST /api/v1/workflows/{id}/publish` validates and writes an immutable `workflow_versions` row.
 3. `POST /api/v1/workflows/{id}/run` creates a normal run whose `metadata.workflow.definition` is the **pinned snapshot**.
-4. `RunExecutor::execute` detects the pinned definition and calls `execute_workflow` in `crates/axiom-runtime/src/workflow_exec.rs`.
+4. `RunExecutor::execute` detects the pinned definition and calls `execute_workflow` in `crates/goshikq-runtime/src/workflow_exec.rs`.
 5. Node state is persisted in `workflow_node_executions` and listed at `GET /api/v1/runs/{id}/workflow-nodes`.
 6. The run appears in the standard execution explorer.
 

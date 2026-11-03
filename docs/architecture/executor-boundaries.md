@@ -1,6 +1,6 @@
 # Executor boundaries
 
-## Native Rust executor (`axiom-runtime`)
+## Native Rust executor (`goshikq-runtime`)
 
 Owns:
 
@@ -23,7 +23,7 @@ Could own: timers, multi-process activity retry, cluster membership.
 
 Must not own: goal truth, evidence invalidation, or Studio projections.
 
-## Verification kernel (`axiom-core`)
+## Verification kernel (`goshikq-core`)
 
 Owns, IO-free:
 

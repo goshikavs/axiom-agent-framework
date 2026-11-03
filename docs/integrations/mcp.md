@@ -1,11 +1,11 @@
 # MCP integration
 
-Axiom wraps MCP tools as ordinary Axiom tools. The Rust runtime still authorizes, records, and verifies them. MCP server text is **untrusted**.
+Goshikq wraps MCP tools as ordinary Goshikq tools. The Rust runtime still authorizes, records, and verifies them. MCP server text is **untrusted**.
 
 ## Client
 
 ```ts
-import { McpClient } from "@axiom-ai/sdk";
+import { McpClient } from "@goshikq/sdk";
 
 const mcp = new McpClient({
   id: "inventory-local",
@@ -29,7 +29,7 @@ const mcp = new McpClient({
   },
 });
 await mcp.connect();
-const tools = mcp.toAxiomTools();
+const tools = mcp.toGoshikqTools();
 ```
 
 Transports:
@@ -43,7 +43,7 @@ The TypeScript client speaks the documented MCP JSON-RPC methods (`initialize`, 
 
 | Control | Behavior |
 | --- | --- |
-| Allowlist | Only named tools become Axiom tools |
+| Allowlist | Only named tools become Goshikq tools |
 | Permissions / effect / risk / approval | Taken from `policy` / `toolPolicies`, never from MCP descriptions |
 | Schema | JSON Schema required fields + `additionalProperties: false` when declared |
 | Remote auth | HTTP transport refuses connections without `Authorization` |
@@ -66,12 +66,12 @@ MCP structured content is an **observation**. It is not authoritative order/refu
 
 **Unsupported / not claimed:**
 
-- Wrapping or embedding `@modelcontextprotocol/sdk` as the Axiom client (Axiom speaks the wire protocol itself)
+- Wrapping or embedding `@modelcontextprotocol/sdk` as the Goshikq client (Goshikq speaks the wire protocol itself)
 - Resources, prompts, sampling, roots, completions, logging subscriptions
 - Streamable HTTP / SSE MCP transports and OAuth
 - Treating MCP tool output as authoritative business state
 
-Do not treat passing Axiom-to-Axiom tests as full MCP specification coverage.
+Do not treat passing Goshikq-to-Goshikq tests as full MCP specification coverage.
 
 ## Examples
 

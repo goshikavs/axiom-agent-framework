@@ -2,7 +2,7 @@
 
 Automatic background purging of execution history is **deferred**. Databases grow with runs, events, evidence, and outbox rows.
 
-Default advertised window: `AXIOM_RETENTION_DAYS=30`. This is a policy hint, not a sweeper.
+Default advertised window: `GOSHIKQ_RETENTION_DAYS=30`. This is a policy hint, not a sweeper.
 
 ## What is stored
 

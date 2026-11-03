@@ -30,8 +30,8 @@ export class RuntimeClient {
   workerCapabilities: string[];
 
   constructor(opts: RuntimeClientOptions = {}) {
-    this.endpoint = (opts.endpoint || env("AXIOM_RUNTIME_URL") || DEFAULT_ENDPOINT).replace(/\/$/, "");
-    this.apiKey = opts.apiKey || env("AXIOM_API_KEY");
+    this.endpoint = (opts.endpoint || env("GOSHIKQ_RUNTIME_URL", "AXIOM_RUNTIME_URL") || DEFAULT_ENDPOINT).replace(/\/$/, "");
+    this.apiKey = opts.apiKey || env("GOSHIKQ_API_KEY", "AXIOM_API_KEY");
     this.actor = opts.actor;
     this.timeoutMs = opts.timeoutMs ?? 60_000;
     this.workerId = opts.workerId;
@@ -41,12 +41,12 @@ export class RuntimeClient {
   private headers(extra?: Record<string, string>): Record<string, string> {
     const h: Record<string, string> = {
       accept: "application/json",
-      "user-agent": `axiom-typescript/${VERSION}`,
+      "user-agent": `goshikq-typescript/${VERSION}`,
     };
     if (this.apiKey) h.authorization = `Bearer ${this.apiKey}`;
-    if (this.actor) h["x-axiom-actor"] = this.actor;
-    if (this.workerId) h["x-axiom-worker-id"] = this.workerId;
-    if (this.workerCapabilities.length) h["x-axiom-worker-capabilities"] = this.workerCapabilities.join(",");
+    if (this.actor) h["x-goshikq-actor"] = this.actor;
+    if (this.workerId) h["x-goshikq-worker-id"] = this.workerId;
+    if (this.workerCapabilities.length) h["x-goshikq-worker-capabilities"] = this.workerCapabilities.join(",");
     return { ...h, ...extra };
   }
 
@@ -91,7 +91,7 @@ export class RuntimeClient {
     } catch (e) {
       if (e instanceof RuntimeConnectionError || e instanceof RuntimeRejectedError) throw e;
       const msg = e instanceof Error ? e.message : String(e);
-      throw new RuntimeConnectionError(`cannot reach Axiom runtime at ${this.endpoint}: ${msg}`);
+      throw new RuntimeConnectionError(`cannot reach Goshikq runtime at ${this.endpoint}: ${msg}`);
     } finally {
       clearTimeout(timer);
       opts.signal?.removeEventListener("abort", onOuter);
@@ -188,10 +188,14 @@ export class RuntimeClient {
   }
 }
 
-function env(name: string): string | undefined {
+function env(...names: string[]): string | undefined {
   try {
-    const v = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.[name];
-    return v && v.length ? v : undefined;
+    const proc = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env;
+    for (const name of names) {
+      const v = proc?.[name];
+      if (v && v.length) return v;
+    }
+    return undefined;
   } catch {
     return undefined;
   }

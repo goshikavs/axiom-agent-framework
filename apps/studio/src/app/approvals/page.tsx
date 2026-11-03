@@ -26,7 +26,7 @@ export default function ApprovalsPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Approvals</h1>
-      <p className="text-sm text-ink-muted">Local mode records actor `local-user`. Production requires AXIOM_AUTH_MODE=api_key.</p>
+      <p className="text-sm text-ink-muted">Local mode records actor `local-user`. Production requires GOSHIKQ_AUTH_MODE=api_key.</p>
       {items.length === 0 ? <EmptyState title="No pending approvals" body="Zero queued actions, not missing data." /> : null}
       <ul className="space-y-3">
         {items.map((a) => (

@@ -1,6 +1,6 @@
 # Outcome verification
 
-Axiom splits five independent fields. Do not treat any one as a proxy for another.
+Goshikq splits five independent fields. Do not treat any one as a proxy for another.
 
 | Field | Owner | Example pending refund |
 |---|---|---|

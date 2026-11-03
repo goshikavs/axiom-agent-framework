@@ -1,6 +1,6 @@
 # Execution lifecycle
 
-The Rust runtime owns the run state machine (`axiom-core::state_machine`). SDKs declare work; they do not advance status.
+The Rust runtime owns the run state machine (`goshikq-core::state_machine`). SDKs declare work; they do not advance status.
 
 ## Statuses (v0.1)
 

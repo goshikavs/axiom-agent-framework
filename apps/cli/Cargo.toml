@@ -1,6 +1,6 @@
 [package]
-name = "axiom-cli"
-description = "Command-line interface for the Axiom runtime"
+name = "goshikq-cli"
+description = "Command-line interface for the Goshikq runtime"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,11 +9,11 @@ repository.workspace = true
 authors.workspace = true
 
 [[bin]]
-name = "axiom"
+name = "goshikq"
 path = "src/main.rs"
 
 [dependencies]
-axiom-protocol = { workspace = true }
+goshikq-protocol = { workspace = true }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

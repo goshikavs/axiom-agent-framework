@@ -1,6 +1,6 @@
 # Cross-language worker protocol
 
-Canonical types live in `crates/axiom-protocol/src/worker.rs` (protocol 1.0). Python (`sdk/python/src/axiom_ai/worker.py`) and TypeScript (`sdk/typescript/src/worker.ts`) implement the same HTTP loop.
+Canonical types live in `crates/goshikq-protocol/src/worker.rs` (protocol 1.0). Python (`sdk/python/src/goshikq_ai/worker.py`) and TypeScript (`sdk/typescript/src/worker.ts`) implement the same HTTP loop.
 
 ```
 SDK  POST /api/v1/runs                → run_id
@@ -12,7 +12,7 @@ SDK  POST /api/v1/runs/{id}/worker/respond
 
 ## Registration and identity
 
-On `create_run`, TypeScript sends `source_framework: axiom-typescript` and metadata:
+On `create_run`, TypeScript sends `source_framework: goshikq-typescript` and metadata:
 
 ```json
 {
@@ -26,7 +26,7 @@ On `create_run`, TypeScript sends `source_framework: axiom-typescript` and metad
 }
 ```
 
-Poll/respond also send `User-Agent: axiom-typescript/…`, `x-axiom-worker-id`, and `x-axiom-worker-capabilities`. The runtime does not require those headers to function; they identify the worker for logs and Studio.
+Poll/respond also send `User-Agent: goshikq-typescript/…`, `x-goshikq-worker-id`, and `x-goshikq-worker-capabilities`. The runtime does not require those headers to function; they identify the worker for logs and Studio.
 
 ## Request kinds
 
@@ -52,4 +52,4 @@ Supported: resume from checkpoints and the action journal, reuse idempotency key
 
 ## Shared status strings
 
-Execution, goal, verification, tool, dispatch, recovery, evidence coverage, and error codes are the protocol enums. See `sdk/typescript/src/result.ts` `TERMINAL_STATUSES` and `axiom_ai.result.TERMINAL_STATUSES`. Conformance: `tests/conformance/test_protocol_status.py`.
+Execution, goal, verification, tool, dispatch, recovery, evidence coverage, and error codes are the protocol enums. See `sdk/typescript/src/result.ts` `TERMINAL_STATUSES` and `goshikq_ai.result.TERMINAL_STATUSES`. Conformance: `tests/conformance/test_protocol_status.py`.

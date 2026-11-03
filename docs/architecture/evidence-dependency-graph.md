@@ -1,6 +1,6 @@
 # Evidence dependency graph
 
-Implemented in `axiom-core::impact` (IO-free) and persisted in `evidence_nodes` / `evidence_edges`.
+Implemented in `goshikq-core::impact` (IO-free) and persisted in `evidence_nodes` / `evidence_edges`.
 
 ## Node kinds
 
@@ -12,7 +12,7 @@ Source, Evidence, Decision, Action, Goal predicate, Invariant, Approval.
 
 ## What is stored
 
-Only **explicitly registered** relationships. Tools attach `_evidence` and `_decision`. Snapshots attach `_resources`. Axiom does not claim to recover the model’s private chain of thought. Studio labels edges as `registered` (`inferred=false`).
+Only **explicitly registered** relationships. Tools attach `_evidence` and `_decision`. Snapshots attach `_resources`. Goshikq does not claim to recover the model’s private chain of thought. Studio labels edges as `registered` (`inferred=false`).
 
 ## Example (insurance)
 

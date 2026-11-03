@@ -16,7 +16,7 @@ Database `project_members` overrides JWT role hints. API keys carry their own `r
 
 ## Tenant isolation
 
-Run-scoped queries filter by `project_id`. Guessed UUIDs return `404` for the caller's project, not another tenant's row. Claiming `X-Axiom-Project-Id` without membership is `403`. Worker poll checks project ownership before using an in-memory handle.
+Run-scoped queries filter by `project_id`. Guessed UUIDs return `404` for the caller's project, not another tenant's row. Claiming `X-Goshikq-Project-Id` without membership is `403`. Worker poll checks project ownership before using an in-memory handle.
 
 Create project copies the caller's organization and inserts the creator as `owner`.
 

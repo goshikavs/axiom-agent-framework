@@ -10,6 +10,6 @@ Traces larger than 250 nodes show the last 250 so the browser stays responsive.
 
 SSE: Studio loads `GET /events` then `EventSource /events/stream?after=<seq>`. Reconnect uses the same `after`. Pause UI queues visual updates only. Copy/download JSON uses payloads already redacted by the runtime.
 
-Non-native frameworks show **Axiom did not control this execution**. Verification availability is independent of import success.
+Non-native frameworks show **Goshikq did not control this execution**. Verification availability is independent of import success.
 
 Screenshot: `docs/studio/screenshots/execution-detail.png`.

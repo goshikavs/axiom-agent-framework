@@ -19,7 +19,7 @@ ROOT_EXAMPLES = os.path.join(os.path.dirname(__file__), "..", "..")
 def runtime():
     port = free_port()
     url = f"http://127.0.0.1:{port}"
-    proc = start_server(port, {"AXIOM_AUTH_MODE": "none", "AXIOM_RETENTION_DAYS": "30"})
+    proc = start_server(port, {"GOSHIKQ_AUTH_MODE": "none", "GOSHIKQ_RETENTION_DAYS": "30"})
     try:
         wait_ready(url)
         yield url
@@ -29,10 +29,10 @@ def runtime():
 
 def _complete_echo(url: str) -> str:
     sys.path.insert(0, os.path.join(ROOT_EXAMPLES, "sdk", "python", "src"))
-    os.environ["AXIOM_RUNTIME_URL"] = url
-    from axiom_ai import Agent, Goal, Runtime, StateSnapshot, tool
-    from axiom_ai.models import MockModel, ModelTurn
-    from axiom_ai.state import SnapshotContext
+    os.environ["GOSHIKQ_RUNTIME_URL"] = url
+    from goshikq_ai import Agent, Goal, Runtime, StateSnapshot, tool
+    from goshikq_ai.models import MockModel, ModelTurn
+    from goshikq_ai.state import SnapshotContext
 
     store = {"n": 0}
 

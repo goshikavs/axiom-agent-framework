@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 import httpx
 import pytest
 
-RUNTIME = os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
+RUNTIME = os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
 WF = {
     "version": 1,
     "nodes": [

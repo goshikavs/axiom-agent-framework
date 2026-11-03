@@ -71,7 +71,7 @@ export default function ReplayPage() {
           {current ? <JsonView value={current} /> : null}
           <p className="text-xs text-ink-muted" data-testid="replay-historical-state">
             Historical state is reconstructed only from recorded snapshot events ({snapshots.length} up to this step).
-            {snapshots.length === 0 ? " This step has no recorded snapshot; Axiom does not invent one." : ""}
+            {snapshots.length === 0 ? " This step has no recorded snapshot; Goshikq does not invent one." : ""}
           </p>
           {snapshots.length ? <JsonView value={snapshots[snapshots.length - 1]?.payload ?? snapshots[snapshots.length - 1]} /> : null}
           <details className="rounded border border-amber-900/60 p-2">

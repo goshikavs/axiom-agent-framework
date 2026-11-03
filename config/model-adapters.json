@@ -5,7 +5,7 @@
     {
       "id": "mock",
       "provider": "mock",
-      "package": "axiom_ai.models.mock",
+      "package": "goshikq_ai.models.mock",
       "status": "available",
       "model_prefix": "mock/",
       "capabilities": {
@@ -21,7 +21,7 @@
     {
       "id": "openai",
       "provider": "openai",
-      "package": "axiom_ai.models.openai",
+      "package": "goshikq_ai.models.openai",
       "status": "experimental",
       "model_prefix": "openai/",
       "requires_env": ["OPENAI_API_KEY"],
@@ -38,7 +38,7 @@
     {
       "id": "anthropic",
       "provider": "anthropic",
-      "package": "axiom_ai.models.anthropic",
+      "package": "goshikq_ai.models.anthropic",
       "status": "experimental",
       "model_prefix": "anthropic/",
       "requires_env": ["ANTHROPIC_API_KEY"],

@@ -1,6 +1,6 @@
 # Threat model (v0.9)
 
-This is a working model for external developer trials, not a certification. Axiom does **not** claim immunity to prompt injection or universal enterprise compliance.
+This is a working model for external developer trials, not a certification. Goshikq does **not** claim immunity to prompt injection or universal enterprise compliance.
 
 ## Assets
 
@@ -28,11 +28,11 @@ This is a working model for external developer trials, not a certification. Axio
 | Untrusted telemetry | OTLP/A2A cannot set `verification_status` | High-volume ingest (rate limited) |
 | Workflow import abuse | Schema validation, 128-node / 256-edge caps, body limit | Draft graphs can still be stored |
 | Privilege escalation | Role checks server-side; operator cannot approve | Mis-seeded `owner` membership |
-| Credential exposure | Hashed keys, JSON logs without Authorization, Studio proxy | Mis-set `AXIOM_CAPTURE_MODEL_IO=full` |
+| Credential exposure | Hashed keys, JSON logs without Authorization, Studio proxy | Mis-set `GOSHIKQ_CAPTURE_MODEL_IO=full` |
 | Replay | JWT `exp`/`nbf`; API key last-used; idempotency keys | Stolen unexpired JWT |
 | Uncertain external writes | Action journal `DISPATCH_UNCERTAIN`; no blind retry of non-idempotent tools | Operator reconciliation |
 | Approval misuse | `ApprovalDecide` permission; concurrent decide is idempotent | Stolen approver credential |
-| Oversized requests | `AXIOM_MAX_BODY_BYTES`, OTLP span cap, A2A text cap | Slowloris-style connections |
+| Oversized requests | `GOSHIKQ_MAX_BODY_BYTES`, OTLP span cap, A2A text cap | Slowloris-style connections |
 | Dependency vulns | Maintained crates/npm/pip; scan when publishing | Transitive CVEs |
 
 ## Dependency scanning

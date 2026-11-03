@@ -30,9 +30,9 @@ const VERIFY: Record<string, string> = {
 };
 
 const TIPS: Record<string, string> = {
-  UNVERIFIED: "The run finished without an authoritative Axiom outcome verifier. Importing a trace is not verification.",
-  VERIFIED: "An Axiom verifier matched expected vs observed authoritative state.",
-  NOT_EVALUATED: "No Axiom outcome verifier ran for this run.",
+  UNVERIFIED: "The run finished without an authoritative Goshikq outcome verifier. Importing a trace is not verification.",
+  VERIFIED: "An Goshikq verifier matched expected vs observed authoritative state.",
+  NOT_EVALUATED: "No Goshikq outcome verifier ran for this run.",
   INCONCLUSIVE: "A verifier ran but could not confirm or deny the goal from observed evidence.",
   COMPLETED: "Runtime reached a terminal success status. Independent of goal verification.",
   FAILED: "Runtime or verification recorded a failure.",

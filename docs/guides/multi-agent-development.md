@@ -1,12 +1,12 @@
 # Multi-agent development
 
-Requires `axiom-server` on `AXIOM_RUNTIME_URL` (default `http://127.0.0.1:7400`) and `PYTHONPATH=sdk/python/src` (or `pip install -e sdk/python`).
+Requires `goshikq-server` on `GOSHIKQ_RUNTIME_URL` (default `http://127.0.0.1:7400`) and `PYTHONPATH=sdk/python/src` (or `pip install -e sdk/python`).
 
 ## Python
 
 ```python
-from axiom_ai import Agent, AgentGroup, AgentTask, CoordinationPolicy, Goal
-from axiom_ai.models import MockModel, ModelTurn
+from goshikq_ai import Agent, AgentGroup, AgentTask, CoordinationPolicy, Goal
+from goshikq_ai.models import MockModel, ModelTurn
 
 group = AgentGroup(
     supervisor,
@@ -20,7 +20,7 @@ result = await group.run(parent_goal, [
 assert result.parent.verified  # parent StateProvider, not child reports
 ```
 
-TypeScript: `AgentGroup` / `AgentTask` in `@axiom-ai/sdk` (`sdk/typescript/src/group.ts`). Same worker protocol.
+TypeScript: `AgentGroup` / `AgentTask` in `@goshikq/sdk` (`sdk/typescript/src/group.ts`). Same worker protocol.
 
 ## Examples
 

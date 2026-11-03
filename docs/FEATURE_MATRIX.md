@@ -6,7 +6,7 @@ Inventory date: 2026-10-30. Claims require code plus a passing test or a live ru
 
 | Area | Feature | Status | Notes |
 |---|---|---|---|
-| Runtime | Agent execution (Rust) | IMPLEMENTED_AND_TESTED | `axiom-runtime` + `axiom-server` |
+| Runtime | Agent execution (Rust) | IMPLEMENTED_AND_TESTED | `goshikq-runtime` + `goshikq-server` |
 | Runtime | Mock model (no API key) | IMPLEMENTED_AND_TESTED | hello / tool / refund / insurance / multi-agent |
 | Runtime | Goal contracts | IMPLEMENTED_AND_TESTED | independent of dispatch/tool status |
 | Runtime | Tool contracts / journal | IMPLEMENTED_AND_TESTED | PREPARED…OUTCOME_CONFIRMED |
@@ -19,7 +19,7 @@ Inventory date: 2026-10-30. Claims require code plus a passing test or a live ru
 | Storage | PostgreSQL migrations additive | IMPLEMENTED_AND_TESTED | 0001–0008 (tenancy + retention index) |
 | Python SDK | Agent, Goal, tool, Runtime, AgentGroup | IMPLEMENTED_AND_TESTED | |
 | TypeScript SDK | Worker + AgentGroup | IMPLEMENTED_AND_TESTED | bun test 19 |
-| MCP | JSON-RPC stdio NDJSON + Content-Length read fallback | IMPLEMENTED_AND_TESTED | Axiom client + inventory server; protocol negotiate 2024-11-05…2025-11-25 |
+| MCP | JSON-RPC stdio NDJSON + Content-Length read fallback | IMPLEMENTED_AND_TESTED | Goshikq client + inventory server; protocol negotiate 2024-11-05…2025-11-25 |
 | MCP | Official `@modelcontextprotocol/sdk` 1.32.2 interop | PARTIAL | stdio initialize/list/call after NDJSON fix; Streamable HTTP/OAuth not claimed |
 | OpenAI Agents SDK | TracingProcessor ingest | PARTIAL | tracing-only; Runner.run not offline |
 | Studio | Execution + multi-agent panel | IMPLEMENTED_AND_TESTED | hierarchy from `run_tasks` |

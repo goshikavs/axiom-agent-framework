@@ -7,5 +7,5 @@ A snapshot of that document is stored in `docs/api/openapi.json` (regenerate it 
 Export without a database:
 
 ```bash
-cargo run -p axiom-server -- --export-openapi docs/api/openapi.json
+cargo run -p goshikq-server -- --export-openapi docs/api/openapi.json
 ```

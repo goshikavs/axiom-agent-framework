@@ -1,8 +1,8 @@
-# Axiom TypeScript agent template
+# Goshikq TypeScript agent template
 
 ```bash
 bun install
-# axiom-server must be listening on http://127.0.0.1:7400
+# goshikq-server must be listening on http://127.0.0.1:7400
 bun run start
 ```
 

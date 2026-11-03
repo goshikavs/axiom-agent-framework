@@ -1,5 +1,5 @@
-from axiom_ai import DecisionRef, Evidence, with_evidence
-from axiom_ai.evidence import resource_hint
+from goshikq_ai import DecisionRef, Evidence, with_evidence
+from goshikq_ai.evidence import resource_hint
 
 
 def test_evidence_omits_source_blob() -> None:

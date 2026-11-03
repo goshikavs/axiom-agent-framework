@@ -69,7 +69,7 @@ class SimulatedStore:
 
     def persist(self) -> None:
         """Atomic JSON snapshot so a worker crash does not lose processor records."""
-        path = os.environ.get("AXIOM_STORE_PATH")
+        path = os.environ.get("GOSHIKQ_STORE_PATH")
         if not path:
             return
         payload = {
@@ -129,7 +129,7 @@ class SimulatedStore:
     def snapshot(self) -> dict[str, Any]:
         self.maybe_settle_delayed()
         if self.fault == Fault.RETURN_CHANGED and self.eligibility_checked:
-            oid = self.eligibility_order_id or os.environ.get("AXIOM_REFUND_ORDER") or "ORD-2048"
+            oid = self.eligibility_order_id or os.environ.get("GOSHIKQ_REFUND_ORDER") or "ORD-2048"
             order = self.orders.get(oid)
             if order is not None and order.return_status != "rejected":
                 order.return_status = "rejected"
@@ -247,7 +247,7 @@ class SimulatedStore:
 
 
 def demo_store(fault: str = Fault.NONE) -> SimulatedStore:
-    path = os.environ.get("AXIOM_STORE_PATH")
+    path = os.environ.get("GOSHIKQ_STORE_PATH")
     if path:
         loaded = SimulatedStore.load(path)
         if loaded is not None:

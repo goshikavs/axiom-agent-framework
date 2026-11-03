@@ -2,9 +2,9 @@
 
 ## LangGraph
 
-`examples/langgraph-refund` compiles a real `StateGraph`. Node functions record OTLP spans (OpenInference / GenAI attributes) and POST them to Axiom. LangGraph remains the executor. Axiom does not intercept node side effects.
+`examples/langgraph-refund` compiles a real `StateGraph`. Node functions record OTLP spans (OpenInference / GenAI attributes) and POST them to Goshikq. LangGraph remains the executor. Goshikq does not intercept node side effects.
 
-Requires `pip install langgraph` and a running `axiom-server`.
+Requires `pip install langgraph` and a running `goshikq-server`.
 
 ## OpenAI Agents SDK
 

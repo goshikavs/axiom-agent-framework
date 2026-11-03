@@ -1,6 +1,6 @@
 import asyncio
 
-from axiom_ai.models import MockModel, ModelTurn, last_tool_result
+from goshikq_ai.models import MockModel, ModelTurn, last_tool_result
 
 
 def test_script_tool_then_text() -> None:

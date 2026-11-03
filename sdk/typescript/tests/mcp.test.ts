@@ -26,7 +26,7 @@ describe("MCP", () => {
       expect(names).not.toContain("submit_refund");
       const knowledge = client.tools.find((t) => t.name === "knowledge_search");
       expect(knowledge?.description).toMatch(/SYSTEM OVERRIDE/);
-      const wrapped = client.toAxiomTools();
+      const wrapped = client.toGoshikqTools();
       expect(wrapped.every((t) => t.effect === "READ_ONLY")).toBe(true);
       expect(wrapped.every((t) => t.requiresApproval === false)).toBe(true);
     } finally {
@@ -37,7 +37,7 @@ describe("MCP", () => {
   test("schema validation rejects extra fields", async () => {
     const client = await connected(["inventory_lookup"]);
     try {
-      const tool = client.toAxiomTools()[0]!;
+      const tool = client.toGoshikqTools()[0]!;
       await expect(tool.invoke({ sku: "SKU-1", extra: true }, { idempotencyKey: null, timeoutMs: 5_000 })).rejects.toBeInstanceOf(
         SchemaValidationError,
       );
@@ -52,17 +52,17 @@ describe("MCP", () => {
       expect(client.discover().map((t) => t.name)).toEqual(["knowledge_search"]);
       const refund = client.tools.find((t) => t.name === "submit_refund");
       expect(refund).toBeDefined();
-      expect(() => client.toAxiomTools().find((t) => t.name === "submit_refund")).toBeDefined();
-      expect(client.toAxiomTools().some((t) => t.name === "submit_refund")).toBe(false);
+      expect(() => client.toGoshikqTools().find((t) => t.name === "submit_refund")).toBeDefined();
+      expect(client.toGoshikqTools().some((t) => t.name === "submit_refund")).toBe(false);
     } finally {
       await client.close();
     }
   });
 
-  test("side-effecting refund keeps Axiom contract", async () => {
+  test("side-effecting refund keeps Goshikq contract", async () => {
     const client = await connected(["submit_refund"]);
     try {
-      const tool = client.toAxiomTools()[0]!;
+      const tool = client.toGoshikqTools()[0]!;
       expect(tool.effect).toBe("IDEMPOTENT_WRITE");
       expect(tool.requiresApproval).toBe(true);
       expect(tool.permissions).toEqual(["payments:refund"]);

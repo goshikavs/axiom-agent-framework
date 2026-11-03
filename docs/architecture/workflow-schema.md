@@ -1,6 +1,6 @@
 # Workflow schema
 
-Canonical types live in `crates/axiom-core/src/workflow.rs`. Studio, the CLI, and the runtime deserialize the same JSON.
+Canonical types live in `crates/goshikq-core/src/workflow.rs`. Studio, the CLI, and the runtime deserialize the same JSON.
 
 ## Identity
 

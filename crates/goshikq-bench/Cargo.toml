@@ -1,0 +1,23 @@
+[package]
+name = "goshikq-bench"
+description = "Seeded evidence-revalidation benchmarks with independent baselines and ground truth"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "goshikq-bench"
+path = "src/main.rs"
+
+[dependencies]
+goshikq-protocol = { workspace = true }
+goshikq-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+clap = { workspace = true }
+chrono = { workspace = true }
+rand = { workspace = true }
+rand_chacha = { workspace = true }

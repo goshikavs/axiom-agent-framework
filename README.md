@@ -1,24 +1,21 @@
-# Axiom — Outcome-Driven AI Agent Framework Where AI Actions Become Verified Outcomes.
-Axiom is an open-source framework for building, executing, observing, and verifying AI agents. It combines a Rust execution runtime, goal and action contracts, a Python SDK (and a TypeScript client), and **Axiom Studio**, a developer console for executions—not a chatbot.
+# Goshikq — Outcome-Driven AI Agent Framework Where AI Actions Become Verified Outcomes.
+Goshikq is an open-source framework for building, executing, observing, and verifying AI agents. It combines a Rust execution runtime, goal and action contracts, a Python SDK (and a TypeScript client), and **Goshikq Studio**, a developer console for executions—not a chatbot.
 
-AXIOM — Agent eXecution, Intelligence, Orchestration & Monitoring
-- A — Agent: AI agents and multi-agent collaboration
-- X — eXecution: Durable, reliable execution and recovery
-- I — Intelligence: Evidence-aware reasoning and decision verification
-- O — Orchestration: Workflow coordination, tools, and integrations
-- M — Monitoring: Observability, tracing, and outcome verification
+**Build Agents. Verify Outcomes.**
+
+Open-source AI agent execution and verification framework. Source repository (name unchanged): [goshikavs/axiom-agent-framework](https://github.com/goshikavs/axiom-agent-framework).
 
 **Status:** `0.1.0-alpha` (**v0.9.1** in tree). APIs will change. This is **not** a published v1.0: packages and GitHub Releases are unpublished. Private CI on `main` is green (Rust, SDKs, Studio, docs, Postgres integration, Playwright, Docker smoke, gitleaks, cargo-audit, pip-audit) at `e7d5b70`. Not SOC 2 / HIPAA / PCI certified.
 
 - Languages: Rust (runtime), Python 3.11+ (SDK), TypeScript (Studio + native SDK worker)
-- Runtime: `axiom-server` on `http://127.0.0.1:7400`
+- Runtime: `goshikq-server` on `http://127.0.0.1:7400`
 - Studio: Next.js on `http://127.0.0.1:3000`
 - Docs: [`docs/`](docs/) · Architecture: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · Status: [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md)
 - Maintainer: [goshikavs](https://github.com/goshikavs)
 
-## Why Axiom?
+## Why Goshikq?
 
-Existing frameworks already provide orchestration, retries, tracing, and checkpoints. Axiom’s intended difference is the *combination* of:
+Existing frameworks already provide orchestration, retries, tracing, and checkpoints. Goshikq’s intended difference is the *combination* of:
 
 1. First-class goal contracts evaluated against authoritative state
 2. Action-effect contracts that drive retry safety
@@ -26,7 +23,7 @@ Existing frameworks already provide orchestration, retries, tracing, and checkpo
 4. A framework-neutral execution event protocol
 5. Studio that correlates intent, execution, snapshots, and verification evidence
 
-Axiom does **not** claim to invent tracing, durable workflows, or verification. It does **not** publish benchmark numbers in this alpha.
+Goshikq does **not** claim to invent tracing, durable workflows, or verification. It does **not** publish benchmark numbers in this alpha.
 
 ## Core features
 
@@ -44,26 +41,26 @@ Axiom does **not** claim to invent tracing, durable workflows, or verification. 
 | Evidence coverage contracts | Declared requirements + risk gates; completeness ≠ hidden-dep detection | Available | [docs/architecture/evidence-coverage-contracts.md](docs/architecture/evidence-coverage-contracts.md) |
 | OpenAI / Anthropic | Provider adapters | Experimental | [sdk/python](sdk/python/README.md) |
 | TypeScript SDK worker | Full execution from Bun/Node via the Rust worker protocol | Available | [docs/guides/typescript-sdk.md](docs/guides/typescript-sdk.md) |
-| OTLP / LangGraph / OpenAI Agents | HTTP/protobuf ingest + examples; Axiom does not control those runtimes | Available | [docs/architecture/otlp-ingestion.md](docs/architecture/otlp-ingestion.md) |
+| OTLP / LangGraph / OpenAI Agents | HTTP/protobuf ingest + examples; Goshikq does not control those runtimes | Available | [docs/architecture/otlp-ingestion.md](docs/architecture/otlp-ingestion.md) |
 | MCP | Allowlisted MCP tools; stdio NDJSON compatible with `@modelcontextprotocol/sdk` 1.32.2 initialize | Available (stdio subset) | [docs/integrations/mcp.md](docs/integrations/mcp.md) |
 | Multi-agent | Parent/child runs, verified delegation, shared context | Available | [docs/architecture/multi-agent.md](docs/architecture/multi-agent.md) |
 | A2A | Protocol 1.0 JSON-RPC subset; remote SUCCESS ≠ VERIFIED | Available | [docs/integrations/a2a.md](docs/integrations/a2a.md) |
 | Workflows | Versioned graphs executed by the Rust runtime; Studio React Flow editor | Available | [docs/architecture/workflow-execution.md](docs/architecture/workflow-execution.md) |
 | Production auth | OIDC JWT + JWKS (RS256) + API keys, RBAC, tenant isolation | Available | [docs/security/authentication.md](docs/security/authentication.md) |
 | Registered workflow tools | TOOL nodes dispatch through the worker protocol | Available | [docs/architecture/workflow-execution.md](docs/architecture/workflow-execution.md) |
-| Runtime OTLP export | Redacted JSON OTLP/HTTP of Axiom spans; inbound ingest unchanged | Available | [docs/integrations/opentelemetry.md](docs/integrations/opentelemetry.md) |
+| Runtime OTLP export | Redacted JSON OTLP/HTTP of Goshikq spans; inbound ingest unchanged | Available | [docs/integrations/opentelemetry.md](docs/integrations/opentelemetry.md) |
 | Retention | Owner admin purge; automatic sweeper deferred | Available | [docs/operations/retention.md](docs/operations/retention.md) |
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  PY[Python SDK] -->|worker long-poll| RT[axiom-server]
+  PY[Python SDK] -->|worker long-poll| RT[goshikq-server]
   TS[TypeScript SDK] -->|worker long-poll| RT
-  CLI[axiom CLI] --> RT
-  ST[Axiom Studio] -->|proxy| RT
+  CLI[goshikq CLI] --> RT
+  ST[Goshikq Studio] -->|proxy| RT
   RT --> PG[(PostgreSQL)]
-  RT --> CORE[axiom-core]
+  RT --> CORE[goshikq-core]
   PY --> MOCK[Mock / OpenAI / Anthropic]
   PY --> TOOLS[User tools + StateProvider]
 ```
@@ -92,7 +89,7 @@ flowchart TD
 | Store | PostgreSQL 16 (Compose or embedded Theseus binaries) | Durable runs/events |
 | Protocol | Versioned JSON Schema in `protocol/schemas` | Native and future external runs |
 
-OTLP/HTTP (protobuf and JSON) ingestion is available. MCP tools are wrapped with allowlists and Axiom contracts (protocol **2024-11-05**). A2A protocol **1.0** JSON-RPC (Agent Card, SendMessage, GetTask, CancelTask) is available; remote completion is not parent-goal verification. Temporal is not a dependency. External traces are not verified business outcomes.
+OTLP/HTTP (protobuf and JSON) ingestion is available. MCP tools are wrapped with allowlists and Goshikq contracts (protocol **2024-11-05**). A2A protocol **1.0** JSON-RPC (Agent Card, SendMessage, GetTask, CancelTask) is available; remote completion is not parent-goal verification. Temporal is not a dependency. External traces are not verified business outcomes.
 
 ### Versions used in development
 
@@ -123,11 +120,11 @@ From the repository root:
 cp .env.example .env
 
 # 2. PostgreSQL — embedded (default) or Compose
-# DATABASE_URL=embedded downloads a local Postgres into .axiom/postgres
+# DATABASE_URL=embedded downloads a local Postgres into .goshikq/postgres
 # docker compose up -d postgres   # if you have Docker
 
 # 3. Runtime (Linux/macOS)
-cargo run -p axiom-server
+cargo run -p goshikq-server
 
 # 3. Runtime (Windows ARM64 / missing link.exe on PATH)
 # scripts/dev-server.ps1
@@ -141,8 +138,8 @@ python examples/hello-agent/main.py
 
 # 6. Sample TypeScript agent (optional; mock model)
 bun install
-axiom run examples/typescript-refund-agent
-# or: cargo run -p axiom-cli -- run examples/typescript-refund-agent
+goshikq run examples/typescript-refund-agent
+# or: cargo run -p goshikq-cli -- run examples/typescript-refund-agent
 
 # 7. Studio
 cd apps/studio && bun install && bun run dev
@@ -151,7 +148,7 @@ cd apps/studio && bun install && bun run dev
 
 Locate the run under **Executions**. Open it: graph, timeline, inspector, and **Verification** must show `VERIFIED` for the hello-agent happy path.
 
-`axiom doctor` (after `cargo run -p axiom-cli` / `cargo install --path apps/cli`) checks runtime reachability without printing secrets.
+`goshikq doctor` (after `cargo run -p goshikq-cli` / `cargo install --path apps/cli`) checks runtime reachability without printing secrets.
 
 ## Hello World
 
@@ -198,22 +195,22 @@ python examples/a2a-collaboration/main.py
 
 ## TypeScript / Bun
 
-Requires axiom-server on `:7400` and `bun install` at the repo root.
+Requires goshikq-server on `:7400` and `bun install` at the repo root.
 
 ```bash
 bun install
 bun test
 bun run typecheck
-axiom init --template typescript
-axiom run examples/typescript-refund-agent
-axiom studio
+goshikq init --template typescript
+goshikq run examples/typescript-refund-agent
+goshikq studio
 ```
 
-The TypeScript process registers tools and a mock model; Rust executes the loop. Happy path: `COMPLETED` / `VERIFIED`. Faults: `AXIOM_REFUND_FAULT=tool_error` and `never_settles`. Guide: [docs/guides/typescript-sdk.md](docs/guides/typescript-sdk.md).
+The TypeScript process registers tools and a mock model; Rust executes the loop. Happy path: `COMPLETED` / `VERIFIED`. Faults: `GOSHIKQ_REFUND_FAULT=tool_error` and `never_settles`. Guide: [docs/guides/typescript-sdk.md](docs/guides/typescript-sdk.md).
 
 MCP demo: `examples/typescript-mcp-agent` with `examples/mcp-inventory-server`. Descriptions cannot override allowlists. [docs/integrations/mcp.md](docs/integrations/mcp.md).
 
-## Axiom Studio
+## Goshikq Studio
 
 Implemented against live API data: Overview, Executions, Execution graph/timeline/inspector, live SSE, Verification, Evidence inspector / dependency graph / change impact, Approvals, Agents, Events, Traces, State inspector, Models, Integrations, Settings, Performance/cost.
 
@@ -230,20 +227,20 @@ Workflows: Studio → Workflows (React Flow). Graphs execute in Rust after **Pub
 ![Workflow node execution](docs/assets/studio-workflow-run.png)
 
 ```bash
-axiom workflows validate examples/visual-workflow/parallel-approval.json
-axiom workflows publish examples/visual-workflow/parallel-approval.json
-axiom workflows run <workflow-id>
+goshikq workflows validate examples/visual-workflow/parallel-approval.json
+goshikq workflows publish examples/visual-workflow/parallel-approval.json
+goshikq workflows run <workflow-id>
 ```
 
 ## Framework interoperability
 
 | Framework | Capability |
 | --- | --- |
-| Native Axiom | Full worker protocol |
+| Native Goshikq | Full worker protocol |
 | Generic HTTP event batch | `POST /api/v1/events/batch` |
 | OTLP/HTTP | `POST /v1/traces` protobuf or JSON (`otel-genai-v1`) |
-| Native TypeScript | Same worker protocol as Python (`axiom-typescript`) |
-| LangGraph / OpenAI Agents SDK | Examples export OTLP; Axiom does not control their actions |
+| Native TypeScript | Same worker protocol as Python (`goshikq-typescript`) |
+| LangGraph / OpenAI Agents SDK | Examples export OTLP; Goshikq does not control their actions |
 | MCP | Stdio/HTTP client; allowlist + schema + permissions (2024-11-05) |
 | A2A | Protocol 1.0 JSON-RPC subset; remote SUCCESS ≠ VERIFIED |
 | Google ADK, CrewAI, Microsoft Agent Framework | Planned |
@@ -277,11 +274,11 @@ Runtime: `http://127.0.0.1:7400`
 - `GET /api/v1/runs/{id}/recovery`
 - `GET /api/v1/metrics/overview`
 - `POST /v1/traces` OTLP/HTTP protobuf or JSON (inbound)
-- Outbound OTLP: set `AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT`
+- Outbound OTLP: set `GOSHIKQ_OTEL_EXPORTER_OTLP_ENDPOINT`
 - `POST /api/v1/admin/retention/purge` (owner; `dry_run` default true)
 - `GET /api/v1/openapi.json`
 
-Generate the OpenAPI file: `cargo run -p axiom-server -- --export-openapi docs/api/openapi.json`
+Generate the OpenAPI file: `cargo run -p goshikq-server -- --export-openapi docs/api/openapi.json`
 
 ## Platform support
 
@@ -293,13 +290,13 @@ See [`docs/release/platform-matrix.md`](docs/release/platform-matrix.md). Window
 - Docker images exist in-tree; this authoring host has no Docker CLI, so compose smoke is CI-only and has not run.
 - GitHub Actions have never executed (no remote, no commits).
 - HMAC OIDC is loopback test mode only. Production uses JWKS.
-- JWT access tokens cannot be revoked by Axiom; remove membership or rotate API keys.
+- JWT access tokens cannot be revoked by Goshikq; remove membership or rotate API keys.
 - Automatic retention sweeping is deferred; use the owner purge endpoint.
 - Quickstart uses `MockModel`. Paid provider keys are optional.
 
 ## Deployment
 
-Local development binds loopback and uses `AXIOM_AUTH_MODE=none`. Binding a non-loopback address requires `AXIOM_AUTH_MODE=oidc` or `api_key` (or `AXIOM_ALLOW_INSECURE_BIND=true` on isolated networks). Kubernetes manifests are not provided until they are tested. Compose: `docs/deployment/docker.md`.
+Local development binds loopback and uses `GOSHIKQ_AUTH_MODE=none`. Binding a non-loopback address requires `GOSHIKQ_AUTH_MODE=oidc` or `api_key` (or `GOSHIKQ_ALLOW_INSECURE_BIND=true` on isolated networks). Kubernetes manifests are not provided until they are tested. Compose: `docs/deployment/docker.md`.
 
 ## Troubleshooting
 
@@ -312,11 +309,11 @@ Local development binds loopback and uses `AXIOM_AUTH_MODE=none`. Binding a non-
 | Studio empty | Runtime must be up; Studio proxies `/api/runtime` → `:7400` |
 | CORS | Default origins include `http://127.0.0.1:3000` |
 | Missing events | Studio fetches `GET /events` then `GET /events/stream?after=<last sequence>`; the server also honors `Last-Event-ID` |
-| Port in use | Change `AXIOM_BIND` / Studio `--port` |
+| Port in use | Change `GOSHIKQ_BIND` / Studio `--port` |
 | No API keys | Use MockModel; keys are optional |
-| TypeScript run not VERIFIED | Confirm axiom-server is up; tools must attach evidence the way `examples/typescript-refund-agent` does |
+| TypeScript run not VERIFIED | Confirm goshikq-server is up; tools must attach evidence the way `examples/typescript-refund-agent` does |
 | MCP tool ignored | It is not on the allowlist, or schema validation failed |
-| Studio origin “External OTLP” | Native TypeScript runs use `source_framework=axiom-typescript` |
+| Studio origin “External OTLP” | Native TypeScript runs use `source_framework=goshikq-typescript` |
 
 ## Performance
 

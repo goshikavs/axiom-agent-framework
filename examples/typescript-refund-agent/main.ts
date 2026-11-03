@@ -2,15 +2,15 @@
  * TypeScript refund agent. Tools and predicates run here; the Rust runtime owns the loop.
  *
  *   bun run start
- *   AXIOM_REFUND_FAULT=tool_error bun run start
- *   AXIOM_REFUND_FAULT=never_settles bun run start
+ *   GOSHIKQ_REFUND_FAULT=tool_error bun run start
+ *   GOSHIKQ_REFUND_FAULT=never_settles bun run start
  */
-import { Agent, DecisionRef, Evidence, Goal, MockModel, Runtime, StateSnapshot, ToolError, Verifier, defineTool, lastToolResult, withEvidence } from "@axiom-ai/sdk";
+import { Agent, DecisionRef, Evidence, Goal, MockModel, Runtime, StateSnapshot, ToolError, Verifier, defineTool, lastToolResult, withEvidence } from "@goshikq/sdk";
 import { z } from "zod";
 import { demoStore, type Fault } from "./store.ts";
 
-const orderId = process.env.AXIOM_REFUND_ORDER || "ORD-2048";
-const fault = (process.env.AXIOM_REFUND_FAULT || "none") as Fault;
+const orderId = process.env.GOSHIKQ_REFUND_ORDER || "ORD-2048";
+const fault = (process.env.GOSHIKQ_REFUND_FAULT || "none") as Fault;
 const STORE = demoStore(fault);
 
 const lookupOrder = defineTool({
@@ -184,7 +184,7 @@ const runtime = new Runtime(agent, {
         source: "simulated-orders+processor",
       }),
   },
-  studioUrl: process.env.AXIOM_STUDIO_URL || "http://127.0.0.1:3000",
+  studioUrl: process.env.GOSHIKQ_STUDIO_URL || "http://127.0.0.1:3000",
 });
 
 const result = await runtime.run(goal, { input: { order_id: orderId, fault } });

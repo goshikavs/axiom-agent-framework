@@ -11,9 +11,9 @@ import asyncio
 import os
 import sys
 
-from axiom_ai import Agent, AgentGroup, AgentTask, CoordinationPolicy, Goal, Runtime, StateSnapshot, tool
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, AgentGroup, AgentTask, CoordinationPolicy, Goal, Runtime, StateSnapshot, tool
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 from store import WORLD
 
@@ -95,7 +95,7 @@ async def main() -> int:
         supervisor,
         policy=CoordinationPolicy(mode="sequential"),
         state_provider=provider,
-        endpoint=os.environ.get("AXIOM_RUNTIME_URL"),
+        endpoint=os.environ.get("GOSHIKQ_RUNTIME_URL"),
     )
     parent_goal = Goal(description="Pay CLM-77 only if the live policy still authorizes the reserve", success=payout_settled)
     created = await group.parent_runtime.create_deferred(parent_goal, input={"claim_id": "CLM-77"}, metadata={"example": "multi-agent-insurance", "coordination": group.policy.to_dict()})
@@ -107,7 +107,7 @@ async def main() -> int:
             "goal": task.goal.to_definition(),
             "input": task.input,
             "has_state_provider": True,
-            "source_framework": "axiom-python",
+            "source_framework": "goshikq-python",
             "role": task.role,
         }
         child = await group.client.create_task(parent_id, body)

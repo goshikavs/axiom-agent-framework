@@ -6,7 +6,7 @@ A decision made against policy v4 is not automatically valid against policy v5. 
 
 ## Model
 
-Explicit records only. The agent/worker **registers** evidence and dependency edges. Axiom does not claim to reconstruct the model’s private chain of thought.
+Explicit records only. The agent/worker **registers** evidence and dependency edges. Goshikq does not claim to reconstruct the model’s private chain of thought.
 
 ```
 Source (policy:POL-1 @ v4)
@@ -27,7 +27,7 @@ When `POL-1` is observed at v5, change-impact walks dependents and marks them **
 - Events: `evidence.recorded`, `evidence.changed`, `decision.created`, `decision.revalidation_required`, `decision.revalidated`, `approval.invalidated`, `impact.computed`
 - `GET /api/v1/runs/{id}/evidence`
 
-Python: `axiom_ai.evidence.Evidence`, `DecisionRef`. Tools/snapshots may attach `_evidence` / `_decision`.
+Python: `goshikq_ai.evidence.Evidence`, `DecisionRef`. Tools/snapshots may attach `_evidence` / `_decision`.
 
 ## Revalidation planner (deterministic)
 

@@ -16,10 +16,10 @@ import logging
 import os
 import sys
 
-from axiom_ai import Agent, DecisionRef, Evidence, Goal, InvariantOutcome, Runtime, StateSnapshot, tool, with_evidence
-from axiom_ai.evidence import resource_hint
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, DecisionRef, Evidence, Goal, InvariantOutcome, Runtime, StateSnapshot, tool, with_evidence
+from goshikq_ai.evidence import resource_hint
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 POLICIES = {
     "POL-1": {"id": "POL-1", "version": 4, "coverage": True, "reserve_cents": 15000},
@@ -125,7 +125,7 @@ async def mutate_after_delay(seconds: float) -> None:
 
 async def run_once(*, mutate: bool) -> int:
     reset_world()
-    os.environ["AXIOM_MUTATE_POLICY"] = "1" if mutate else "0"
+    os.environ["GOSHIKQ_MUTATE_POLICY"] = "1" if mutate else "0"
     agent = Agent(
         name="claims_agent",
         model=MockModel(
@@ -156,8 +156,8 @@ async def run_once(*, mutate: bool) -> int:
 
 
 def main() -> int:
-    logging.basicConfig(level=os.environ.get("AXIOM_LOG", "INFO"))
-    p = argparse.ArgumentParser(description="Axiom insurance claims demo")
+    logging.basicConfig(level=os.environ.get("GOSHIKQ_LOG", "INFO"))
+    p = argparse.ArgumentParser(description="Goshikq insurance claims demo")
     p.add_argument("--mutate-policy", action="store_true", help="Change POL-1 from v4 to v5 while approval is pending")
     args = p.parse_args()
     return asyncio.run(run_once(mutate=args.mutate_policy))

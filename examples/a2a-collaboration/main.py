@@ -1,7 +1,7 @@
 """Example C — two independent processes talking A2A 1.0 JSON-RPC.
 
 Process 1: standalone A2A peer (this script's subprocess).
-Process 2: this client, which also records an Axiom run for the parent goal.
+Process 2: this client, which also records an Goshikq run for the parent goal.
 
 Remote completed/SUCCESS is not parent VERIFIED. The parent goal still reads
 local simulated state.
@@ -17,9 +17,9 @@ import sys
 import time
 from pathlib import Path
 
-from axiom_ai import A2aClient, Agent, Goal, Runtime, StateSnapshot
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import A2aClient, Agent, Goal, Runtime, StateSnapshot
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 ROOT = Path(__file__).resolve().parent
 STATE = {"remote_ok": False, "remote_task_id": None, "remote_state": None}
@@ -69,7 +69,7 @@ async def run_scenario(text: str, expect_verified: bool) -> str:
         # Explicitly do not treat remote SUCCESS as verification:
         STATE["remote_ok"] = remote_state == "completed" and "FAIL" not in text.upper()
         agent = Agent(name="a2a-supervisor", model=MockModel(script=[ModelTurn(content="record remote assertion")]))
-        result = await Runtime(agent, state_provider=Provider(), endpoint=os.environ.get("AXIOM_RUNTIME_URL")).run(
+        result = await Runtime(agent, state_provider=Provider(), endpoint=os.environ.get("GOSHIKQ_RUNTIME_URL")).run(
             Goal(description="Local supervisor independently confirms the collaboration outcome", success=parent_ok),
             input={"a2a_task_id": task_id, "a2a_state": remote_state, "untrusted": True},
             metadata={"example": "a2a-collaboration", "a2a_task_id": task_id},

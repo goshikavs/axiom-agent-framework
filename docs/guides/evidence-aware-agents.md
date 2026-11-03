@@ -1,9 +1,9 @@
 # Evidence-aware agents
 
-Register what a decision depended on. Axiom will notice when that source version changes.
+Register what a decision depended on. Goshikq will notice when that source version changes.
 
 ```python
-from axiom_ai import DecisionRef, Evidence, with_evidence
+from goshikq_ai import DecisionRef, Evidence, with_evidence
 
 @tool(effect="read_only")
 def check_coverage(claim_id: str) -> dict:
@@ -39,5 +39,5 @@ Open `/executions/{run_id}/evidence` for the inspector, dependency graph, change
 ## Limitations
 
 - Dependencies the model considered but never registered are invisible.
-- External writes and Axiom’s graph are not one distributed transaction.
+- External writes and Goshikq’s graph are not one distributed transaction.
 - Concurrent source updates are detected when the snapshot carries a version/ETag; lost updates without versions are not.

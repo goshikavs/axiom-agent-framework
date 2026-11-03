@@ -1,11 +1,11 @@
 /**
- * Measure TypeScript worker round-trip against a live axiom-server.
+ * Measure TypeScript worker round-trip against a live goshikq-server.
  * Does not claim Bun is faster than Node or Python.
  */
 import { Agent, Goal, MockModel, Runtime, StateSnapshot, defineTool } from "../src/index.ts";
 import { z } from "zod";
 
-const base = (process.env.AXIOM_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
+const base = (process.env.GOSHIKQ_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
 
 async function ready(): Promise<boolean> {
   try {
@@ -47,7 +47,7 @@ async function runOnce(calls: number) {
 }
 
 if (!(await ready())) {
-  console.log(JSON.stringify({ skipped: true, reason: "axiom-server not reachable" }));
+  console.log(JSON.stringify({ skipped: true, reason: "goshikq-server not reachable" }));
   process.exit(0);
 }
 

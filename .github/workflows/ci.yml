@@ -26,9 +26,9 @@ jobs:
       - name: Test workspace
         run: cargo test --workspace --all-targets
       - name: Evidence baseline bench (small, deterministic)
-        run: cargo run -p axiom-bench -- --sizes 10,100 --trials 3 --seed 42 --out /tmp/evidence-bench.json
+        run: cargo run -p goshikq-bench -- --sizes 10,100 --trials 3 --seed 42 --out /tmp/evidence-bench.json
       - name: Export OpenAPI
-        run: cargo run -q -p axiom-server -- --export-openapi docs/api/openapi.json
+        run: cargo run -q -p goshikq-server -- --export-openapi docs/api/openapi.json
 
   python-sdk:
     runs-on: ubuntu-latest
@@ -59,8 +59,8 @@ jobs:
       - name: SDK tests and pack
         run: |
           bun install --frozen-lockfile
-          bun --filter @axiom-ai/sdk test
-          bun --filter @axiom-ai/sdk typecheck
+          bun --filter @goshikq/sdk test
+          bun --filter @goshikq/sdk typecheck
           (cd sdk/typescript && bun pm pack)
 
   studio:
@@ -73,8 +73,8 @@ jobs:
       - name: Typecheck and production build
         run: |
           bun install --frozen-lockfile
-          bun --filter @axiom-ai/studio typecheck
-          bun --filter @axiom-ai/studio build
+          bun --filter @goshikq/studio typecheck
+          bun --filter @goshikq/studio build
 
   docs:
     runs-on: ubuntu-latest
@@ -96,20 +96,20 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: axiom
-          POSTGRES_DB: axiom
+          POSTGRES_PASSWORD: goshikq
+          POSTGRES_DB: goshikq
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d axiom"
+          --health-cmd "pg_isready -U postgres -d goshikq"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
-      DATABASE_URL: postgres://postgres:axiom@127.0.0.1:5432/axiom
-      AXIOM_AUTH_MODE: none
-      AXIOM_BIND: 127.0.0.1:7400
-      AXIOM_RUNTIME_URL: http://127.0.0.1:7400
+      DATABASE_URL: postgres://postgres:goshikq@127.0.0.1:5432/goshikq
+      GOSHIKQ_AUTH_MODE: none
+      GOSHIKQ_BIND: 127.0.0.1:7400
+      GOSHIKQ_RUNTIME_URL: http://127.0.0.1:7400
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -119,16 +119,16 @@ jobs:
         with:
           python-version: "3.12"
       - name: Build runtime
-        run: cargo build -p axiom-server
+        run: cargo build -p goshikq-server
       - name: Python deps
         run: |
           python -m pip install -e "sdk/python[dev]"
           python -m pip install httpx cryptography pytest
-      - name: Start axiom-server
+      - name: Start goshikq-server
         run: |
-          ./target/debug/axiom-server &
+          ./target/debug/goshikq-server &
           for i in $(seq 1 60); do curl -fsS http://127.0.0.1:7400/ready && exit 0; sleep 1; done
-          echo "axiom-server did not become ready" >&2
+          echo "goshikq-server did not become ready" >&2
           exit 1
       - name: Security, crash, evidence, multi-agent, workflow, OTEL, retention
         run: |
@@ -141,20 +141,20 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: axiom
-          POSTGRES_DB: axiom
+          POSTGRES_PASSWORD: goshikq
+          POSTGRES_DB: goshikq
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d axiom"
+          --health-cmd "pg_isready -U postgres -d goshikq"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
-      DATABASE_URL: postgres://postgres:axiom@127.0.0.1:5432/axiom
-      AXIOM_AUTH_MODE: none
-      AXIOM_BIND: 127.0.0.1:7400
-      AXIOM_RUNTIME_URL: http://127.0.0.1:7400
+      DATABASE_URL: postgres://postgres:goshikq@127.0.0.1:5432/goshikq
+      GOSHIKQ_AUTH_MODE: none
+      GOSHIKQ_BIND: 127.0.0.1:7400
+      GOSHIKQ_RUNTIME_URL: http://127.0.0.1:7400
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -166,13 +166,13 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.4"
-      - run: cargo build -p axiom-server
+      - run: cargo build -p goshikq-server
       - run: python -m pip install httpx pytest build hatchling
-      - name: Start axiom-server
+      - name: Start goshikq-server
         run: |
-          ./target/debug/axiom-server &
+          ./target/debug/goshikq-server &
           for i in $(seq 1 60); do curl -fsS http://127.0.0.1:7400/ready && exit 0; sleep 1; done
-          echo "axiom-server did not become ready" >&2
+          echo "goshikq-server did not become ready" >&2
           exit 1
       - name: Isolated SDK installs
         run: python -m pytest tests/packaging -q
@@ -184,20 +184,20 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: axiom
-          POSTGRES_DB: axiom
+          POSTGRES_PASSWORD: goshikq
+          POSTGRES_DB: goshikq
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d axiom"
+          --health-cmd "pg_isready -U postgres -d goshikq"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
-      DATABASE_URL: postgres://postgres:axiom@127.0.0.1:5432/axiom
-      AXIOM_AUTH_MODE: none
-      AXIOM_BIND: 127.0.0.1:7400
-      AXIOM_RUNTIME_URL: http://127.0.0.1:7400
+      DATABASE_URL: postgres://postgres:goshikq@127.0.0.1:5432/goshikq
+      GOSHIKQ_AUTH_MODE: none
+      GOSHIKQ_BIND: 127.0.0.1:7400
+      GOSHIKQ_RUNTIME_URL: http://127.0.0.1:7400
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -206,12 +206,12 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.4"
-      - run: cargo build -p axiom-server
-      - name: Start axiom-server
+      - run: cargo build -p goshikq-server
+      - name: Start goshikq-server
         run: |
-          ./target/debug/axiom-server &
+          ./target/debug/goshikq-server &
           for i in $(seq 1 60); do curl -fsS http://127.0.0.1:7400/ready && exit 0; sleep 1; done
-          echo "axiom-server did not become ready" >&2
+          echo "goshikq-server did not become ready" >&2
           exit 1
       - name: Playwright
         run: |

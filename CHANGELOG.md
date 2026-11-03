@@ -25,7 +25,7 @@ Release-gate closure on top of v0.9. Not a v1.0 tag. Docker smoke and GitHub Act
 ### Added
 
 - RS256 JWKS OIDC interoperability tests (issuer, audience, expiry, signature, key rotation, alg restrictions, cross-tenant)
-- Native runtime OTLP/HTTP JSON export (`AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT`) with redaction and sampling; inbound ingest unchanged
+- Native runtime OTLP/HTTP JSON export (`GOSHIKQ_OTEL_EXPORTER_OTLP_ENDPOINT`) with redaction and sampling; inbound ingest unchanged
 - Owner-only `POST /api/v1/admin/retention/purge` (dry-run default; skips active parents)
 - Studio Dockerfile and compose `studio` profile
 - Isolated Python wheel / TypeScript tarball install tests outside the repository
@@ -35,7 +35,7 @@ Release-gate closure on top of v0.9. Not a v1.0 tag. Docker smoke and GitHub Act
 ### Changed
 
 - Unknown JWT `kid` forces a JWKS refresh (key rotation)
-- HMAC tokens rejected unless loopback `AXIOM_OIDC_ALLOW_TEST_HMAC`
+- HMAC tokens rejected unless loopback `GOSHIKQ_OIDC_ALLOW_TEST_HMAC`
 - Playwright inspector security test seeds via `pw-missing-telemetry` instead of skipping
 
 ## Unreleased — v0.9 (not published)
@@ -44,7 +44,7 @@ Production hardening on top of v0.1–v0.8. Packages, images, and GitHub release
 
 ### Added
 
-- `AXIOM_AUTH_MODE=oidc` with JWKS/issuer/audience validation; loopback HMAC test mode
+- `GOSHIKQ_AUTH_MODE=oidc` with JWKS/issuer/audience validation; loopback HMAC test mode
 - Project membership, RBAC, API key rotate/revoke/expiry, security events
 - Registered workflow TOOL dispatch through the worker protocol
 - Spawned AGENT nodes fail `WORKER_UNAVAILABLE` instead of succeeding without a worker

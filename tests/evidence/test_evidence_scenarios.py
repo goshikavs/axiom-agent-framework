@@ -1,6 +1,6 @@
-"""Live evidence-change scenarios (Axiom v0.3).
+"""Live evidence-change scenarios (Goshikq v0.3).
 
-Requires DATABASE_URL and an axiom-server binary, same as tests/crash.
+Requires DATABASE_URL and an goshikq-server binary, same as tests/crash.
 """
 
 from __future__ import annotations
@@ -23,13 +23,13 @@ sys.path.insert(0, str(ROOT / "tests" / "crash"))
 from store import Fault  # noqa: E402
 from test_crash_boundaries import find_server, free_port, start_server, wait_ready  # noqa: E402
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:axiom@127.0.0.1:55432/axiom")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:goshikq@127.0.0.1:55432/goshikq")
 
 
 @pytest.fixture
 def require_env() -> None:
     if find_server() is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
 
 
 async def wait_pending_approval(url: str, timeout: float = 30.0) -> dict:
@@ -67,7 +67,7 @@ async def _insurance_policy_change() -> None:
     try:
         await wait_ready(url)
 
-        os.environ["AXIOM_RUNTIME_URL"] = url
+        os.environ["GOSHIKQ_RUNTIME_URL"] = url
         task = asyncio.create_task(claims.run_once(mutate=False))
         approval = await wait_pending_approval(url)
         run_id = approval["run_id"]
@@ -84,7 +84,7 @@ async def _insurance_policy_change() -> None:
             dec = await client.post(
                 f"{url}/api/v1/approvals/{approval['id']}/decision",
                 json={"decision": "approve", "reason": "stale-policy-test"},
-                headers={"x-axiom-actor": "evidence-test"},
+                headers={"x-goshikq-actor": "evidence-test"},
             )
             assert dec.status_code < 300, dec.text
         code = await asyncio.wait_for(task, timeout=90)
@@ -117,7 +117,7 @@ async def _insurance_policy_change() -> None:
     finally:
         if proc.poll() is None:
             proc.kill()
-        os.environ.pop("AXIOM_RUNTIME_URL", None)
+        os.environ.pop("GOSHIKQ_RUNTIME_URL", None)
 
 
 @pytest.mark.usefixtures("require_env")
@@ -133,7 +133,7 @@ async def _retail_return_change() -> None:
     proc = start_server(port)
     try:
         await wait_ready(url)
-        os.environ["AXIOM_RUNTIME_URL"] = url
+        os.environ["GOSHIKQ_RUNTIME_URL"] = url
         code = await refund_main.run_once("ORD-2048", Fault.RETURN_CHANGED)
         assert refund_main.STORE.submit_count == 0
         assert refund_main.STORE.orders["ORD-2048"].status != "refunded"
@@ -141,7 +141,7 @@ async def _retail_return_change() -> None:
     finally:
         if proc.poll() is None:
             proc.kill()
-        os.environ.pop("AXIOM_RUNTIME_URL", None)
+        os.environ.pop("GOSHIKQ_RUNTIME_URL", None)
 
 
 @pytest.mark.usefixtures("require_env")
@@ -158,8 +158,8 @@ async def _never_settles_dispatch() -> None:
     proc = start_server(port)
     try:
         await wait_ready(url)
-        os.environ["AXIOM_RUNTIME_URL"] = url
-        os.environ["AXIOM_EXTERNAL_WAIT_SECONDS"] = "3"
+        os.environ["GOSHIKQ_RUNTIME_URL"] = url
+        os.environ["GOSHIKQ_EXTERNAL_WAIT_SECONDS"] = "3"
         await refund_main.run_once("ORD-2048", F.NEVER_SETTLES)
         async with httpx.AsyncClient(timeout=20) as client:
             runs = await client.get(f"{url}/api/v1/runs", params={"limit": 5})
@@ -188,5 +188,5 @@ async def _never_settles_dispatch() -> None:
     finally:
         if proc.poll() is None:
             proc.kill()
-        os.environ.pop("AXIOM_RUNTIME_URL", None)
-        os.environ.pop("AXIOM_EXTERNAL_WAIT_SECONDS", None)
+        os.environ.pop("GOSHIKQ_RUNTIME_URL", None)
+        os.environ.pop("GOSHIKQ_EXTERNAL_WAIT_SECONDS", None)

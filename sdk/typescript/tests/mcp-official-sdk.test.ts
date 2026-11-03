@@ -18,7 +18,7 @@ describe("official MCP SDK client ↔ inventory server", () => {
       command: process.execPath,
       args: [server],
     });
-    const client = new Client({ name: "axiom-official-sdk-test", version: "0.8" });
+    const client = new Client({ name: "goshikq-official-sdk-test", version: "0.8" });
     const connected = await Promise.race([
       client.connect(transport).then(() => true as const),
       new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 8000)),

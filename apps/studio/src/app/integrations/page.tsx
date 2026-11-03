@@ -40,7 +40,7 @@ export default function IntegrationsPage() {
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Integrations</h1>
       <p className="text-sm text-ink-muted">
-        Capability rows below are what the adapter actually supports. Unavailable controls are not shown as if they worked. Native Python and TypeScript SDKs execute through the Rust worker protocol. LangGraph and OpenAI Agents SDK contribute traces only. MCP tools are wrapped with Axiom allowlists and contracts. A2A remains planned.
+        Capability rows below are what the adapter actually supports. Unavailable controls are not shown as if they worked. Native Python and TypeScript SDKs execute through the Rust worker protocol. LangGraph and OpenAI Agents SDK contribute traces only. MCP tools are wrapped with Goshikq allowlists and contracts. A2A remains planned.
       </p>
       <ul className="grid gap-3 md:grid-cols-2">
         {items.map((i) => (

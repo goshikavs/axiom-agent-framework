@@ -5,7 +5,7 @@
 
 ## Context
 
-Axiom must be a genuine framework with its own execution lifecycle, model-independent,
+Goshikq must be a genuine framework with its own execution lifecycle, model-independent,
 and usable from Python and TypeScript. Developers write agents, tools, model adapters,
 state providers, and goal predicates in their own language. The runtime must enforce
 limits, permissions, approvals, and state transitions that model output cannot override.
@@ -21,9 +21,9 @@ Two placements were considered for the execution loop:
 
 ## Decision
 
-Option 2. The Rust runtime (`axiom-runtime`, served by `axiom-server`) owns:
+Option 2. The Rust runtime (`goshikq-runtime`, served by `goshikq-server`) owns:
 
-- Run state transitions and their validation (`axiom-core::state_machine`)
+- Run state transitions and their validation (`goshikq-core::state_machine`)
 - Step scheduling, max-step / deadline / token-budget enforcement
 - Action lifecycle (`REQUESTED → VALIDATED → … → SUCCEEDED | FAILED | TIMED_OUT | RECONCILIATION_REQUIRED | CANCELLED`)
 - Tool-argument JSON Schema validation and permission checks
@@ -32,7 +32,7 @@ Option 2. The Rust runtime (`axiom-runtime`, served by `axiom-server`) owns:
 - Checkpoints, event persistence, verification orchestration
 - The HTTP API, SSE streams, and OpenAPI document
 
-SDKs (Python `axiom_ai`, TypeScript `@axiom-ai/sdk`) own:
+SDKs (Python `goshikq_ai`, TypeScript `@goshikq/sdk`) own:
 
 - `Agent`, `Goal`, `tool` definitions and their JSON Schemas
 - Model adapters (OpenAI, Anthropic, deterministic mock, future providers)

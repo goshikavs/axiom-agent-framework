@@ -1,17 +1,17 @@
-# Axiom architecture
+# Goshikq architecture
 
-Axiom is an outcome-driven agent framework. A **model suggestion is never treated as a business result**. The Rust runtime owns the execution lifecycle; Python and TypeScript SDKs declare agents, tools, models, and predicates; Axiom Studio observes persisted events.
+Goshikq is an outcome-driven agent framework. A **model suggestion is never treated as a business result**. The Rust runtime owns the execution lifecycle; Python and TypeScript SDKs declare agents, tools, models, and predicates; Goshikq Studio observes persisted events.
 
 ## Package graph
 
 ```text
-sdk/python (axiom_ai) ──HTTP worker──► crates/axiom-server ──► crates/axiom-runtime
-sdk/typescript (@axiom-ai/sdk) ──HTTP inspect/submit──►        │
+sdk/python (goshikq_ai) ──HTTP worker──► crates/goshikq-server ──► crates/goshikq-runtime
+sdk/typescript (@goshikq/sdk) ──HTTP inspect/submit──►        │
 apps/studio (Next.js) ──proxy /api/runtime──►                  │
-apps/cli (axiom) ──HTTP──►                                     │
-                                                               ├── axiom-core (state machine, action contracts)
-                                                               ├── axiom-protocol (events + worker schemas)
-                                                               └── axiom-storage ──PostgreSQL
+apps/cli (goshikq) ──HTTP──►                                     │
+                                                               ├── goshikq-core (state machine, action contracts)
+                                                               ├── goshikq-protocol (events + worker schemas)
+                                                               └── goshikq-storage ──PostgreSQL
 ```
 
 ## Runtime vs SDK
@@ -58,4 +58,4 @@ See [ADR-003](decisions/ADR-003-state-and-recovery.md). PostgreSQL via SQLx. Loc
 
 ## Studio
 
-Next.js App Router on `127.0.0.1:3000`. The browser talks only to Studio; Studio proxies `AXIOM_STUDIO_RUNTIME_URL` (default `http://127.0.0.1:7400`). Provider API keys never leave the SDK process.
+Next.js App Router on `127.0.0.1:3000`. The browser talks only to Studio; Studio proxies `GOSHIKQ_STUDIO_RUNTIME_URL` (default `http://127.0.0.1:7400`). Provider API keys never leave the SDK process.

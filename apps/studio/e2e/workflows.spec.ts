@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const RUNTIME = (process.env.AXIOM_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
+const RUNTIME = (process.env.GOSHIKQ_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
 
 test.describe("Workflow studio", () => {
   test("palette, validate, save, publish, execute, and inspect", async ({ page, request }) => {

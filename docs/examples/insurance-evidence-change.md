@@ -10,7 +10,7 @@ Without the flag, approve in Studio as in v0.2. With the flag:
 2. The agent proposes `authorize_payout` (15000¢). The run waits for approval.
 3. After ~1.5s the simulated policy store moves POL-1 to version 5 (`reserve_cents=5000`).
 4. A human (or test) still grants the original approval.
-5. Axiom snapshots current state, computes impact, marks `dec:coverage:CLM-77` for revalidation, and **invalidates** the approval.
+5. Goshikq snapshots current state, computes impact, marks `dec:coverage:CLM-77` for revalidation, and **invalidates** the approval.
 6. The payout is not dispatched. The run ends `FAILED` with a stale-decision reason.
 7. `CLAIMS["CLM-77"]["payout_cents"]` stays 0.
 

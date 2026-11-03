@@ -22,7 +22,7 @@ from cryptography.hazmat.primitives import hashes  # noqa: E402
 from cryptography.hazmat.primitives.asymmetric import padding, rsa  # noqa: E402
 
 ISSUER = "http://127.0.0.1/idp"
-AUD = "axiom"
+AUD = "goshikq"
 
 
 def b64url(data: bytes) -> str:
@@ -112,12 +112,12 @@ def jwks_runtime():
     proc = start_server(
         port,
         {
-            "AXIOM_AUTH_MODE": "oidc",
-            "AXIOM_OIDC_ISSUER": ISSUER,
-            "AXIOM_OIDC_AUDIENCE": AUD,
-            "AXIOM_OIDC_JWKS_URL": jwks.url,
-            "AXIOM_OIDC_BOOTSTRAP_OWNER": "alice",
-            "AXIOM_OIDC_JWKS_CACHE_SECONDS": "300",
+            "GOSHIKQ_AUTH_MODE": "oidc",
+            "GOSHIKQ_OIDC_ISSUER": ISSUER,
+            "GOSHIKQ_OIDC_AUDIENCE": AUD,
+            "GOSHIKQ_OIDC_JWKS_URL": jwks.url,
+            "GOSHIKQ_OIDC_BOOTSTRAP_OWNER": "alice",
+            "GOSHIKQ_OIDC_JWKS_CACHE_SECONDS": "300",
         },
     )
     try:
@@ -255,14 +255,14 @@ def test_cross_tenant_denied(jwks_runtime):
         carol = k1.mint(carol_sub)
         r = c.get(
             f"{url}/api/v1/runs",
-            headers={**auth(carol), "X-Axiom-Project-Id": b_id},
+            headers={**auth(carol), "X-Goshikq-Project-Id": b_id},
             timeout=5,
         )
         assert r.status_code in (401, 403)
 
 
 def test_jwt_revocation_limitation_documented(jwks_runtime):
-    """OIDC access tokens cannot be revoked by Axiom; membership/API keys can.
+    """OIDC access tokens cannot be revoked by Goshikq; membership/API keys can.
 
     A still-valid JWT continues to authenticate until expiry. Operators must
     remove project membership or rotate keys to cut access immediately.

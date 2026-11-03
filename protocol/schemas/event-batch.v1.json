@@ -142,7 +142,7 @@
           "format": "int64"
         },
         "source_framework": {
-          "description": "e.g. `axiom`, `langgraph`, `openai-agents`, `otel`.",
+          "description": "e.g. `goshikq`, `langgraph`, `openai-agents`, `otel`.",
           "type": "string"
         },
         "span_id": {

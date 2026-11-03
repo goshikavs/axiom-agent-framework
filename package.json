@@ -1,8 +1,8 @@
 {
-  "name": "axiom-agent-framework",
+  "name": "goshikq-agent-framework",
   "private": true,
   "version": "0.1.0-alpha",
-  "description": "Axiom monorepo JavaScript workspace (Studio + TypeScript SDK)",
+  "description": "Goshikq monorepo JavaScript workspace (Studio + TypeScript SDK)",
   "workspaces": [
     "apps/studio",
     "sdk/typescript",
@@ -13,10 +13,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun --filter @axiom-ai/studio dev",
-    "studio": "bun --filter @axiom-ai/studio dev",
-    "test": "bun --filter @axiom-ai/sdk test",
-    "typecheck": "bun --filter @axiom-ai/sdk typecheck",
-    "build": "bun --filter @axiom-ai/sdk typecheck"
+    "dev": "bun --filter @goshikq/studio dev",
+    "studio": "bun --filter @goshikq/studio dev",
+    "test": "bun --filter @goshikq/sdk test",
+    "typecheck": "bun --filter @goshikq/sdk typecheck",
+    "build": "bun --filter @goshikq/sdk typecheck"
   }
 }

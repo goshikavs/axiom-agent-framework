@@ -1,7 +1,7 @@
 """OpenAI Agents SDK reference integration via documented tracing hooks.
 
 Falls back to a local mock agent if `openai-agents` is not installed, still emitting
-the same OTLP shape. Axiom does not execute or approve the SDK's tools.
+the same OTLP shape. Goshikq does not execute or approve the SDK's tools.
 """
 
 from __future__ import annotations
@@ -10,8 +10,8 @@ import asyncio
 import sys
 from typing import Any
 
-from axiom_ai.client import RuntimeClient
-from axiom_ai.otel import OtlpTracer
+from goshikq_ai.client import RuntimeClient
+from goshikq_ai.otel import OtlpTracer
 
 
 async def _run_with_sdk(tracer: OtlpTracer) -> dict[str, Any]:
@@ -21,7 +21,7 @@ async def _run_with_sdk(tracer: OtlpTracer) -> dict[str, Any]:
     except ImportError:
         return {}
 
-    class AxiomProcessor(TracingProcessor):  # type: ignore[misc]
+    class GoshikqProcessor(TracingProcessor):  # type: ignore[misc]
         def __init__(self) -> None:
             self._root = None
 
@@ -53,7 +53,7 @@ async def _run_with_sdk(tracer: OtlpTracer) -> dict[str, Any]:
         def force_flush(self) -> None:
             return None
 
-    add_trace_processor(AxiomProcessor())
+    add_trace_processor(GoshikqProcessor())
 
     @function_tool
     def lookup_order(order_id: str) -> dict[str, str]:
@@ -92,7 +92,7 @@ async def main() -> None:
     ingest = await tracer.flush()
     print("agent result", sdk_result)
     print("otlp ingest", ingest)
-    print("Axiom did not control OpenAI Agents SDK actions.")
+    print("Goshikq did not control OpenAI Agents SDK actions.")
     await client.aclose()
 
 

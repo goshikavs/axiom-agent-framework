@@ -1,6 +1,6 @@
-from axiom_ai import AgentGroup, AgentTask, CoordinationPolicy, Goal
-from axiom_ai.agent import Agent
-from axiom_ai.models import MockModel, ModelTurn
+from goshikq_ai import AgentGroup, AgentTask, CoordinationPolicy, Goal
+from goshikq_ai.agent import Agent
+from goshikq_ai.models import MockModel, ModelTurn
 
 
 def test_policy_dict() -> None:

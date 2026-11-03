@@ -1,0 +1,22 @@
+[package]
+name = "goshikq-core"
+description = "Execution state machine, action contracts, verification rules, and workflow schema for Goshikq"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+goshikq-protocol = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+schemars = { workspace = true }
+jsonschema = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+utoipa = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+prost = { workspace = true }

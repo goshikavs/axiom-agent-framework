@@ -8,6 +8,6 @@
     "dev": "bun run main.ts"
   },
   "dependencies": {
-    "@axiom-ai/sdk": "workspace:*"
+    "@goshikq/sdk": "workspace:*"
   }
 }

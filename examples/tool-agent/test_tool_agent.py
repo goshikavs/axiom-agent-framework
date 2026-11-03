@@ -3,12 +3,12 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
-from axiom_ai.errors import ToolError
+from goshikq_ai.errors import ToolError
 
 
 def _load_example_main():
     path = Path(__file__).resolve().parent / "main.py"
-    spec = importlib.util.spec_from_file_location("axiom_example_tool_agent_main", path)
+    spec = importlib.util.spec_from_file_location("goshikq_example_tool_agent_main", path)
     if spec is None or spec.loader is None:
         raise ImportError(f"cannot load {path}")
     module = importlib.util.module_from_spec(spec)

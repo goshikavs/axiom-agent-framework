@@ -1,4 +1,4 @@
-//! `axiom` CLI: inspect a running runtime and run local SDK examples.
+//! `goshikq` CLI: inspect a running runtime and run local SDK examples.
 //! Agent execution still happens in the Rust runtime via the worker protocol.
 
 use anyhow::{bail, Context, Result};
@@ -8,13 +8,17 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 #[derive(Parser, Debug)]
-#[command(name = "axiom", version, about = "Axiom runtime CLI")]
+#[command(name = "goshikq", version, about = "Goshikq runtime CLI")]
 struct Cli {
-    /// Runtime base URL (default AXIOM_RUNTIME_URL or http://127.0.0.1:7400).
-    #[arg(long, env = "AXIOM_RUNTIME_URL", default_value = "http://127.0.0.1:7400")]
+    /// Runtime base URL (default GOSHIKQ_RUNTIME_URL or http://127.0.0.1:7400).
+    #[arg(
+        long,
+        env = "GOSHIKQ_RUNTIME_URL",
+        default_value = "http://127.0.0.1:7400"
+    )]
     endpoint: String,
-    /// Bearer token when AXIOM_AUTH_MODE=api_key. Never printed.
-    #[arg(long, env = "AXIOM_API_KEY")]
+    /// Bearer token when GOSHIKQ_AUTH_MODE=api_key. Never printed.
+    #[arg(long, env = "GOSHIKQ_API_KEY")]
     api_key: Option<String>,
     #[command(subcommand)]
     command: Commands,
@@ -60,7 +64,9 @@ enum RunsCmd {
         #[arg(long, default_value_t = 20)]
         limit: i64,
     },
-    Inspect { run_id: String },
+    Inspect {
+        run_id: String,
+    },
 }
 
 #[derive(Subcommand, Debug)]
@@ -87,7 +93,21 @@ enum WorkflowsCmd {
 #[tokio::main]
 async fn main() -> Result<()> {
     let _ = dotenvy::dotenv();
-    let cli = Cli::parse();
+    let mut cli = Cli::parse();
+    if std::env::var("GOSHIKQ_RUNTIME_URL").is_err() {
+        if let Ok(legacy) = std::env::var("AXIOM_RUNTIME_URL") {
+            if !legacy.trim().is_empty() && cli.endpoint == "http://127.0.0.1:7400" {
+                cli.endpoint = legacy;
+            }
+        }
+    }
+    if cli.api_key.is_none() {
+        if let Ok(legacy) = std::env::var("AXIOM_API_KEY") {
+            if !legacy.trim().is_empty() {
+                cli.api_key = Some(legacy);
+            }
+        }
+    }
     let client = Client::new(&cli.endpoint, cli.api_key.as_deref());
     match cli.command {
         Commands::Doctor => doctor(&client).await,
@@ -106,7 +126,9 @@ async fn main() -> Result<()> {
             Ok(())
         }
         Commands::Verify { run_id } => {
-            let report = client.get(&format!("/api/v1/runs/{run_id}/verification")).await?;
+            let report = client
+                .get(&format!("/api/v1/runs/{run_id}/verification"))
+                .await?;
             println!("{}", serde_json::to_string_pretty(&report)?);
             Ok(())
         }
@@ -126,7 +148,11 @@ async fn main() -> Result<()> {
         Commands::Workflows(cmd) => match cmd {
             WorkflowsCmd::Validate { file } => workflows_validate(&client, &file).await,
             WorkflowsCmd::Publish { file } => workflows_publish(&client, &file).await,
-            WorkflowsCmd::Run { workflow_id, input, version } => workflows_run(&client, &workflow_id, input.as_deref(), version).await,
+            WorkflowsCmd::Run {
+                workflow_id,
+                input,
+                version,
+            } => workflows_run(&client, &workflow_id, input.as_deref(), version).await,
         },
     }
 }
@@ -139,12 +165,21 @@ struct Client {
 impl Client {
     fn new(endpoint: &str, api_key: Option<&str>) -> Self {
         let mut headers = reqwest::header::HeaderMap::new();
-        headers.insert(reqwest::header::USER_AGENT, "axiom-cli/0.1.0-alpha".parse().unwrap());
+        headers.insert(
+            reqwest::header::USER_AGENT,
+            "goshikq-cli/0.1.0-alpha".parse().unwrap(),
+        );
         if let Some(k) = api_key {
-            headers.insert(reqwest::header::AUTHORIZATION, format!("Bearer {k}").parse().unwrap());
+            headers.insert(
+                reqwest::header::AUTHORIZATION,
+                format!("Bearer {k}").parse().unwrap(),
+            );
         }
         Client {
-            http: reqwest::Client::builder().default_headers(headers).build().expect("client"),
+            http: reqwest::Client::builder()
+                .default_headers(headers)
+                .build()
+                .expect("client"),
             base: endpoint.trim_end_matches('/').to_string(),
         }
     }
@@ -185,7 +220,10 @@ impl Client {
         if !query.is_empty() {
             req = req.query(query);
         }
-        let resp = req.send().await.with_context(|| format!("connecting to {}", self.base))?;
+        let resp = req
+            .send()
+            .await
+            .with_context(|| format!("connecting to {}", self.base))?;
         self.decode(method, path, resp).await
     }
 
@@ -203,36 +241,76 @@ impl Client {
 }
 
 async fn doctor(client: &Client) -> Result<()> {
-    println!("Axiom doctor");
+    println!("Goshikq doctor");
     println!("  endpoint:     {}", client.base);
     match client.get("/health").await {
-        Ok(h) => println!("  runtime:      ok (version {})", h.get("version").and_then(|v| v.as_str()).unwrap_or("?")),
+        Ok(h) => println!(
+            "  runtime:      ok (version {})",
+            h.get("version").and_then(|v| v.as_str()).unwrap_or("?")
+        ),
         Err(e) => {
             println!("  runtime:      unreachable ({e})");
-            println!("  hint:         cargo run -p axiom-server   (DATABASE_URL=embedded)");
+            println!("  hint:         cargo run -p goshikq-server   (DATABASE_URL=embedded)");
             std::process::exit(1);
         }
     }
     match client.get("/ready").await {
         Ok(r) => {
-            println!("  database:     {}", r.get("database").and_then(|v| v.as_str()).unwrap_or("?"));
-            println!("  auth_mode:    {}", r.get("auth_mode").and_then(|v| v.as_str()).unwrap_or("?"));
-            println!("  active_runs:  {}", r.get("active_runs").unwrap_or(&Value::Null));
+            println!(
+                "  database:     {}",
+                r.get("database").and_then(|v| v.as_str()).unwrap_or("?")
+            );
+            println!(
+                "  auth_mode:    {}",
+                r.get("auth_mode").and_then(|v| v.as_str()).unwrap_or("?")
+            );
+            println!(
+                "  active_runs:  {}",
+                r.get("active_runs").unwrap_or(&Value::Null)
+            );
         }
         Err(e) => println!("  ready:        {e}"),
     }
-    println!("  rustc:        {}", command_version("rustc", &["--version"]));
-    println!("  python:       {}", command_version("python", &["--version"]));
+    println!(
+        "  rustc:        {}",
+        command_version("rustc", &["--version"])
+    );
+    println!(
+        "  python:       {}",
+        command_version("python", &["--version"])
+    );
     println!("  bun:          {}", command_version("bun", &["--version"]));
-    let openai = std::env::var("OPENAI_API_KEY").ok().filter(|s| !s.is_empty());
-    let anthropic = std::env::var("ANTHROPIC_API_KEY").ok().filter(|s| !s.is_empty());
-    println!("  OPENAI_API_KEY:     {}", if openai.is_some() { "set" } else { "absent (mock model still works)" });
-    println!("  ANTHROPIC_API_KEY:  {}", if anthropic.is_some() { "set" } else { "absent (mock model still works)" });
+    let openai = std::env::var("OPENAI_API_KEY")
+        .ok()
+        .filter(|s| !s.is_empty());
+    let anthropic = std::env::var("ANTHROPIC_API_KEY")
+        .ok()
+        .filter(|s| !s.is_empty());
+    println!(
+        "  OPENAI_API_KEY:     {}",
+        if openai.is_some() {
+            "set"
+        } else {
+            "absent (mock model still works)"
+        }
+    );
+    println!(
+        "  ANTHROPIC_API_KEY:  {}",
+        if anthropic.is_some() {
+            "set"
+        } else {
+            "absent (mock model still works)"
+        }
+    );
     Ok(())
 }
 
 fn print_runs(body: &Value) {
-    let items = body.get("items").and_then(|v| v.as_array()).cloned().unwrap_or_default();
+    let items = body
+        .get("items")
+        .and_then(|v| v.as_array())
+        .cloned()
+        .unwrap_or_default();
     if items.is_empty() {
         println!("(no runs)");
         return;
@@ -248,10 +326,20 @@ fn print_runs(body: &Value) {
             "{:<8} {:<22} {:<18} {:<16} {:>8} {}",
             r.get("status").and_then(|v| v.as_str()).unwrap_or("-"),
             short,
-            truncate(r.get("agent_name").and_then(|v| v.as_str()).unwrap_or("-"), 18),
-            r.get("verification_status").and_then(|v| v.as_str()).unwrap_or("-"),
+            truncate(
+                r.get("agent_name").and_then(|v| v.as_str()).unwrap_or("-"),
+                18
+            ),
+            r.get("verification_status")
+                .and_then(|v| v.as_str())
+                .unwrap_or("-"),
             r.get("step_count").and_then(|v| v.as_i64()).unwrap_or(0),
-            truncate(r.get("goal_description").and_then(|v| v.as_str()).unwrap_or(""), 48),
+            truncate(
+                r.get("goal_description")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or(""),
+                48
+            ),
         );
     }
 }
@@ -269,11 +357,17 @@ fn init_template(template: &str, dir: &Path) -> Result<()> {
     let (src, next) = match template {
         "typescript" => (
             root.join("templates/typescript-agent"),
-            vec!["bun install", "bun run start          # requires axiom-server on :7400"],
+            vec![
+                "bun install",
+                "bun run start          # requires goshikq-server on :7400",
+            ],
         ),
         "python" => (
             root.join("templates/python-agent"),
-            vec!["pip install -e ../../sdk/python", "python main.py          # requires axiom-server on :7400"],
+            vec![
+                "pip install -e ../../sdk/python",
+                "python main.py          # requires goshikq-server on :7400",
+            ],
         ),
         other => bail!("unsupported template `{other}` (python|typescript)"),
     };
@@ -292,7 +386,12 @@ fn init_template(template: &str, dir: &Path) -> Result<()> {
 
 async fn workflows_validate(client: &Client, file: &Path) -> Result<()> {
     let def = read_json_file(file)?;
-    let body = client.post("/api/v1/workflows/validate", &serde_json::json!({"definition": def, "draft": true})).await?;
+    let body = client
+        .post(
+            "/api/v1/workflows/validate",
+            &serde_json::json!({"definition": def, "draft": true}),
+        )
+        .await?;
     println!("{}", serde_json::to_string_pretty(&body)?);
     if body.get("valid").and_then(|v| v.as_bool()) != Some(true) {
         std::process::exit(2);
@@ -302,7 +401,13 @@ async fn workflows_validate(client: &Client, file: &Path) -> Result<()> {
 
 async fn workflows_publish(client: &Client, file: &Path) -> Result<()> {
     let def = read_json_file(file)?;
-    let created = match client.post("/api/v1/workflows", &serde_json::json!({"definition": def.clone(), "draft": true})).await {
+    let created = match client
+        .post(
+            "/api/v1/workflows",
+            &serde_json::json!({"definition": def.clone(), "draft": true}),
+        )
+        .await
+    {
         Ok(v) => v,
         Err(e) => {
             let name = def.get("name").and_then(|v| v.as_str()).unwrap_or("");
@@ -315,18 +420,38 @@ async fn workflows_publish(client: &Client, file: &Path) -> Result<()> {
                 .find(|w| w.get("name").and_then(|n| n.as_str()) == Some(name))
                 .and_then(|w| w.get("id"))
                 .and_then(|v| v.as_str())
-                .with_context(|| format!("create failed and no existing workflow named `{name}`: {e}"))?;
-            client.put(&format!("/api/v1/workflows/{id}"), &serde_json::json!({"definition": def, "draft": true})).await?;
+                .with_context(|| {
+                    format!("create failed and no existing workflow named `{name}`: {e}")
+                })?;
+            client
+                .put(
+                    &format!("/api/v1/workflows/{id}"),
+                    &serde_json::json!({"definition": def, "draft": true}),
+                )
+                .await?;
             serde_json::json!({"id": id})
         }
     };
-    let id = created.get("id").and_then(|v| v.as_str()).context("create workflow missing id")?;
-    let published = client.post(&format!("/api/v1/workflows/{id}/publish"), &Value::Object(Default::default())).await?;
+    let id = created
+        .get("id")
+        .and_then(|v| v.as_str())
+        .context("create workflow missing id")?;
+    let published = client
+        .post(
+            &format!("/api/v1/workflows/{id}/publish"),
+            &Value::Object(Default::default()),
+        )
+        .await?;
     println!("{}", serde_json::to_string_pretty(&published)?);
     Ok(())
 }
 
-async fn workflows_run(client: &Client, workflow_id: &str, input: Option<&Path>, version: Option<i32>) -> Result<()> {
+async fn workflows_run(
+    client: &Client,
+    workflow_id: &str,
+    input: Option<&Path>,
+    version: Option<i32>,
+) -> Result<()> {
     let payload = match input {
         Some(p) => read_json_file(p)?,
         None => json!({}),
@@ -335,21 +460,30 @@ async fn workflows_run(client: &Client, workflow_id: &str, input: Option<&Path>,
     if let Some(v) = version {
         body["version"] = json!(v);
     }
-    let resp = client.post(&format!("/api/v1/workflows/{workflow_id}/run"), &body).await?;
+    let resp = client
+        .post(&format!("/api/v1/workflows/{workflow_id}/run"), &body)
+        .await?;
     println!("{}", serde_json::to_string_pretty(&resp)?);
     Ok(())
 }
 
 fn read_json_file(path: &Path) -> Result<Value> {
-    let text = std::fs::read_to_string(path).with_context(|| format!("reading {}", path.display()))?;
+    let text =
+        std::fs::read_to_string(path).with_context(|| format!("reading {}", path.display()))?;
     serde_json::from_str(&text).with_context(|| format!("parsing {}", path.display()))
 }
 
 fn run_dev() -> Result<()> {
     if !Path::new("package.json").exists() {
-        bail!("no package.json in {}; run this inside a TypeScript agent or apps/studio", std::env::current_dir()?.display());
+        bail!(
+            "no package.json in {}; run this inside a TypeScript agent or apps/studio",
+            std::env::current_dir()?.display()
+        );
     }
-    let status = Command::new("bun").args(["run", "dev"]).status().context("bun not found")?;
+    let status = Command::new("bun")
+        .args(["run", "dev"])
+        .status()
+        .context("bun not found")?;
     if !status.success() {
         bail!("bun run dev exited {status}");
     }
@@ -357,16 +491,28 @@ fn run_dev() -> Result<()> {
 }
 
 fn run_example(path: &Path) -> Result<()> {
-    let target = if path.is_dir() { path.to_path_buf() } else { path.parent().unwrap_or(Path::new(".")).to_path_buf() };
+    let target = if path.is_dir() {
+        path.to_path_buf()
+    } else {
+        path.parent().unwrap_or(Path::new(".")).to_path_buf()
+    };
     if target.join("package.json").exists() {
-        let status = Command::new("bun").args(["run", "start"]).current_dir(&target).status().context("bun not found")?;
+        let status = Command::new("bun")
+            .args(["run", "start"])
+            .current_dir(&target)
+            .status()
+            .context("bun not found")?;
         if !status.success() {
             bail!("bun run start exited {status}");
         }
         return Ok(());
     }
     if target.join("main.py").exists() {
-        let status = Command::new("python").arg("main.py").current_dir(&target).status().context("python not found")?;
+        let status = Command::new("python")
+            .arg("main.py")
+            .current_dir(&target)
+            .status()
+            .context("python not found")?;
         if !status.success() {
             bail!("python main.py exited {status}");
         }
@@ -376,9 +522,10 @@ fn run_example(path: &Path) -> Result<()> {
 }
 
 async fn studio() -> Result<()> {
-    let url = std::env::var("AXIOM_STUDIO_URL").unwrap_or_else(|_| "http://127.0.0.1:3000".into());
+    let url =
+        std::env::var("GOSHIKQ_STUDIO_URL").unwrap_or_else(|_| "http://127.0.0.1:3000".into());
     if http_ok(&url).await {
-        println!("Axiom Studio is up at {url}");
+        println!("Goshikq Studio is up at {url}");
         return Ok(());
     }
     let root = find_repo_root()?;
@@ -388,7 +535,11 @@ async fn studio() -> Result<()> {
     }
     println!("Studio not reachable at {url}; starting `bun run dev` in apps/studio");
     println!("open {url} after Next.js prints Ready");
-    let status = Command::new("bun").args(["run", "dev"]).current_dir(&studio_dir).status().context("bun not found")?;
+    let status = Command::new("bun")
+        .args(["run", "dev"])
+        .current_dir(&studio_dir)
+        .status()
+        .context("bun not found")?;
     if !status.success() {
         bail!("bun run dev (studio) exited {status}");
     }
@@ -396,7 +547,12 @@ async fn studio() -> Result<()> {
 }
 
 async fn http_ok(url: &str) -> bool {
-    reqwest::Client::new().get(url).send().await.map(|r| r.status().is_success() || r.status().is_redirection()).unwrap_or(false)
+    reqwest::Client::new()
+        .get(url)
+        .send()
+        .await
+        .map(|r| r.status().is_success() || r.status().is_redirection())
+        .unwrap_or(false)
 }
 
 fn find_repo_root() -> Result<PathBuf> {
@@ -418,7 +574,7 @@ fn find_repo_root() -> Result<PathBuf> {
             }
         }
     }
-    bail!("could not find the Axiom repository root (looked for Cargo.toml + sdk/typescript)");
+    bail!("could not find the Goshikq repository root (looked for Cargo.toml + sdk/typescript)");
 }
 
 fn copy_dir(src: &Path, dst: &Path) -> Result<()> {

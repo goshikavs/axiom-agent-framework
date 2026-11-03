@@ -1,10 +1,10 @@
 # Temporal comparison (architecture review)
 
-**v0.7 decision: Temporal adapter is deferred.** It is not a dependency of `axiom-server`. Native `axiom-runtime` remains the only compiled executor.
+**v0.7 decision: Temporal adapter is deferred.** It is not a dependency of `goshikq-server`. Native `goshikq-runtime` remains the only compiled executor.
 
 ## Why defer
 
-Axiom already persists checkpoints, action journals, leases, approvals, and `WAITING_FOR_EXTERNAL_STATE`. Adding Temporal as a second authoritative state machine would split goal verification, evidence, and Studio interpretation.
+Goshikq already persists checkpoints, action journals, leases, approvals, and `WAITING_FOR_EXTERNAL_STATE`. Adding Temporal as a second authoritative state machine would split goal verification, evidence, and Studio interpretation.
 
 Windows local development also has no Temporal cluster in this repo. Introducing one for a timer/scheduler slice would not unlock parent/child verification, which is the v0.7 differentiator.
 
@@ -12,9 +12,9 @@ Windows local development also has no Temporal cluster in this repo. Introducing
 
 | Concern | Owner |
 |---|---|
-| Goal contracts, predicates, outcome contract | `axiom-core` + worker `goal.evaluate` |
+| Goal contracts, predicates, outcome contract | `goshikq-core` + worker `goal.evaluate` |
 | Action-effect / retry safety / uncertain writes | journal + `EffectCategory` |
-| Evidence graph, coverage, revalidation | existing tables + `axiom-core` |
+| Evidence graph, coverage, revalidation | existing tables + `goshikq-core` |
 | Parent/child tasks, shared context | migration `0005`, native APIs |
 | Studio event interpretation | persisted `execution_events` |
 
@@ -24,7 +24,7 @@ Windows local development also has no Temporal cluster in this repo. Introducing
 - Multi-host worker scheduling
 - Cluster-level workflow history for *scheduling*, not verification
 
-If implemented, Temporal Workflow code must not contain model calls or side effects. Those stay activities that call the existing Axiom execution protocol. One run still has one journal.
+If implemented, Temporal Workflow code must not contain model calls or side effects. Those stay activities that call the existing Goshikq execution protocol. One run still has one journal.
 
 ## Sketch (unimplemented)
 
@@ -35,7 +35,7 @@ trait StepExecutor {
     fn signal_external_settled(run, operation_id);
 }
 
-NativeExecutor: current axiom-runtime   // default, compiled
+NativeExecutor: current goshikq-runtime   // default, compiled
 TemporalExecutor: not in this tree
 ```
 

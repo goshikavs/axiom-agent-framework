@@ -16,7 +16,7 @@ import pytest
 from tests.helpers import find_server
 
 ROOT = Path(__file__).resolve().parents[2]
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:axiom@127.0.0.1:55432/axiom")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:goshikq@127.0.0.1:55432/goshikq")
 
 
 def free_port() -> int:
@@ -28,11 +28,11 @@ def free_port() -> int:
 def start_server(port: int, auth: str) -> subprocess.Popen:
     binary = find_server()
     if binary is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
     env = os.environ.copy()
     env["DATABASE_URL"] = DATABASE_URL
-    env["AXIOM_BIND"] = f"127.0.0.1:{port}"
-    env["AXIOM_AUTH_MODE"] = auth
+    env["GOSHIKQ_BIND"] = f"127.0.0.1:{port}"
+    env["GOSHIKQ_AUTH_MODE"] = auth
     env["RUST_LOG"] = env.get("RUST_LOG", "warn")
     kwargs: dict = {"env": env, "cwd": str(ROOT), "stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
     if os.name == "nt":
@@ -71,12 +71,12 @@ def otlp_body(agent: str, trace_id: str) -> dict:
                 "resource": {
                     "attributes": [
                         {"key": "service.name", "value": {"stringValue": agent}},
-                        {"key": "axiom.source_framework", "value": {"stringValue": "otel"}},
+                        {"key": "goshikq.source_framework", "value": {"stringValue": "otel"}},
                     ]
                 },
                 "scopeSpans": [
                     {
-                        "scope": {"name": "axiom.isolation", "version": "otel-genai-v1"},
+                        "scope": {"name": "goshikq.isolation", "version": "otel-genai-v1"},
                         "spans": [
                             {
                                 "traceId": trace_id,
@@ -141,7 +141,7 @@ def test_otlp_and_rest_do_not_cross_projects(paired_keys):
         assert r.status_code < 300, r.text
 
         mismatch = dict(headers_a)
-        mismatch["x-axiom-project-id"] = project_b
+        mismatch["x-goshikq-project-id"] = project_b
         denied = c.post("/v1/traces", json=otlp_body("iso-agent-cross", uuid.uuid4().hex), headers=mismatch)
         assert denied.status_code == 403
 

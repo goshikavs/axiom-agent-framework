@@ -11,9 +11,9 @@ import logging
 import os
 import sys
 
-from axiom_ai import Agent, Goal, Runtime, StateSnapshot, tool
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, Goal, Runtime, StateSnapshot, tool
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 INVENTORY = {"SKU-9": {"name": "ceramic mug", "on_hand": 12}}
 LOOKUPS: list[str] = []
@@ -54,7 +54,7 @@ goal = Goal(description="SKU-9 has been looked up in inventory", success=sku_was
 
 
 async def main() -> int:
-    logging.basicConfig(level=os.environ.get("AXIOM_LOG", "WARNING"))
+    logging.basicConfig(level=os.environ.get("GOSHIKQ_LOG", "WARNING"))
     LOOKUPS.clear()
     async with Runtime(agent, state_provider=InventoryState()) as rt:
         result = await rt.run(goal, input={"sku": "SKU-9"})

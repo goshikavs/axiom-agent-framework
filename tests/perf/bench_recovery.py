@@ -1,8 +1,8 @@
-"""Measure checkpoint / journal / recovery overhead with a live axiom-server.
+"""Measure checkpoint / journal / recovery overhead with a live goshikq-server.
 
 Reports real p50/p95 wall-clock latency and RSS. Does not fabricate numbers.
 
-Usage (PostgreSQL + axiom-server already running, or AXIOM_RUNTIME_URL set):
+Usage (PostgreSQL + goshikq-server already running, or GOSHIKQ_RUNTIME_URL set):
 
     python tests/perf/bench_recovery.py
     python tests/perf/bench_recovery.py --concurrency 10
@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "examples" / "retail-refund"))
 sys.path.insert(0, str(ROOT / "sdk" / "python" / "src"))
 
-from axiom_ai import Runtime  # noqa: E402
+from goshikq_ai import Runtime  # noqa: E402
 from store import Fault, demo_store  # noqa: E402
 
 from main import StoreProvider, build_agent, build_goal  # noqa: E402
@@ -46,9 +46,9 @@ def rss_mb() -> float | None:
 
 
 async def one_run(endpoint: str, idx: int) -> float:
-    os.environ["AXIOM_REFUND_ORDER"] = "ORD-2048"
-    os.environ["AXIOM_REFUND_FAULT"] = Fault.NONE
-    os.environ["AXIOM_EXTERNAL_WAIT_SECONDS"] = "8"
+    os.environ["GOSHIKQ_REFUND_ORDER"] = "ORD-2048"
+    os.environ["GOSHIKQ_REFUND_FAULT"] = Fault.NONE
+    os.environ["GOSHIKQ_EXTERNAL_WAIT_SECONDS"] = "8"
     import main as refund_main
 
     refund_main.STORE = demo_store(Fault.NONE)
@@ -61,7 +61,7 @@ async def one_run(endpoint: str, idx: int) -> float:
 
 
 async def bench(endpoint: str, concurrency: int, repeats: int) -> None:
-    os.environ["AXIOM_RUNTIME_URL"] = endpoint
+    os.environ["GOSHIKQ_RUNTIME_URL"] = endpoint
     latencies: list[float] = []
     rss_before = rss_mb()
     t_all = time.perf_counter()
@@ -84,7 +84,7 @@ async def bench(endpoint: str, concurrency: int, repeats: int) -> None:
 
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("--endpoint", default=os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400"))
+    p.add_argument("--endpoint", default=os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400"))
     p.add_argument("--concurrency", type=int, default=1)
     p.add_argument("--repeats", type=int, default=3)
     args = p.parse_args()

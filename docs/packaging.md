@@ -7,13 +7,13 @@ Nothing is published to PyPI, npm, or crates.io in v0.9.1.
 - `pyproject.toml` with hatchling, version `0.1.0a1`
 - Optional extras: `openai`, `anthropic`, `dev`
 - Isolated install (temp venv **outside** the repo): `python -m pytest tests/packaging/test_isolated_install.py`
-- Local smoke: `python -m build` then `pip install dist/*.whl` and `python -c "import axiom_ai"`
+- Local smoke: `python -m build` then `pip install dist/*.whl` and `python -c "import goshikq_ai"`
 
 ## TypeScript (`sdk/typescript`)
 
-- ESM package `@axiom-ai/sdk` shipping TypeScript sources for Bun
+- ESM package `@goshikq/sdk` shipping TypeScript sources for Bun
 - `engines.node: >=20`; Node consumers should use Bun or a TypeScript loader. A compiled `dist/` emit is not the supported path in this alpha
-- Local smoke: `bun pm pack` then `bun add ./axiom-ai-sdk-0.1.0-alpha.tgz`
+- Local smoke: `bun pm pack` then `bun add ./goshikq-ai-sdk-0.1.0-alpha.tgz`
 
 ## Rust runtime
 
@@ -24,5 +24,5 @@ Nothing is published to PyPI, npm, or crates.io in v0.9.1.
 ## Studio
 
 - `bun run build` in `apps/studio` for a production Next.js build
-- Runtime URL: `AXIOM_STUDIO_RUNTIME_URL` or `AXIOM_RUNTIME_URL` (default `http://127.0.0.1:7400`)
+- Runtime URL: `GOSHIKQ_STUDIO_RUNTIME_URL` or `GOSHIKQ_RUNTIME_URL` (default `http://127.0.0.1:7400`)
 - Migrations are additive (`0001`–`0006`); existing databases migrate on server start

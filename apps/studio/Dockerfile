@@ -1,5 +1,5 @@
-# Axiom Studio. Build from the repository root:
-#   docker build -f apps/studio/Dockerfile -t axiom-studio .
+# Goshikq Studio. Build from the repository root:
+#   docker build -f apps/studio/Dockerfile -t goshikq-studio .
 # Bind 0.0.0.0 inside the container; map 127.0.0.1:3000 on the host.
 
 FROM oven/bun:1.4-debian AS deps

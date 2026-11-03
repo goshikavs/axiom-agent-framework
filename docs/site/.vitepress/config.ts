@@ -6,7 +6,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const vueRoot = resolve(here, "../node_modules/vue");
 
 export default defineConfig({
-  title: "Axiom",
+  title: "Goshikq",
   description: "Outcome-driven AI agent framework",
   srcDir: "..",
   srcExclude: ["site/**"],

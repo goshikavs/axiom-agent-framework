@@ -42,7 +42,7 @@
     },
     "source_framework": {
       "type": "string",
-      "default": "axiom"
+      "default": "goshikq"
     }
   },
   "required": [

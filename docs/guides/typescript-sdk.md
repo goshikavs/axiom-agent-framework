@@ -1,6 +1,6 @@
 # TypeScript SDK
 
-The TypeScript SDK (`@axiom-ai/sdk`) defines agents, tools, goals, and a mock model. It does **not** run its own execution loop. The Rust runtime remains canonical. The SDK process answers worker requests:
+The TypeScript SDK (`@goshikq/sdk`) defines agents, tools, goals, and a mock model. It does **not** run its own execution loop. The Rust runtime remains canonical. The SDK process answers worker requests:
 
 | Kind | SDK responsibility |
 | --- | --- |
@@ -24,7 +24,7 @@ bun run typecheck
 Node.js 20+ can import the same TypeScript sources. Library code uses `fetch` and `AbortSignal`, not Bun-only APIs.
 
 ```ts
-import { Agent, Goal, MockModel, Runtime, StateSnapshot, defineTool } from "@axiom-ai/sdk";
+import { Agent, Goal, MockModel, Runtime, StateSnapshot, defineTool } from "@goshikq/sdk";
 ```
 
 ## First agent
@@ -32,8 +32,8 @@ import { Agent, Goal, MockModel, Runtime, StateSnapshot, defineTool } from "@axi
 See `templates/typescript-agent` and `examples/typescript-refund-agent`.
 
 ```bash
-# from the repo root, with axiom-server already on :7400
-axiom init --template typescript
+# from the repo root, with goshikq-server already on :7400
+goshikq init --template typescript
 bun install
 bun run start
 ```
@@ -41,7 +41,7 @@ bun run start
 Or run the refund example:
 
 ```bash
-axiom run examples/typescript-refund-agent
+goshikq run examples/typescript-refund-agent
 ```
 
 A successful refund prints `COMPLETED/VERIFIED` and a `run_id`. Open `/executions/<run_id>` in Studio. Origin shows **Native TypeScript SDK**.
@@ -62,7 +62,7 @@ const submit = defineTool({
 });
 ```
 
-`effect`, `idempotent`, and `requiresApproval` are Axiom contracts. They are not inferred from the function body or from MCP descriptions.
+`effect`, `idempotent`, and `requiresApproval` are Goshikq contracts. They are not inferred from the function body or from MCP descriptions.
 
 ## Cancellation and timeouts
 

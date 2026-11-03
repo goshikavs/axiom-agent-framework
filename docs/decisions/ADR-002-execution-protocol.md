@@ -6,13 +6,13 @@
 ## Context
 
 Studio must correlate intent, execution, actual state, and verification evidence for
-native Axiom runs and for runs produced by external frameworks (LangGraph, OpenAI Agents
+native Goshikq runs and for runs produced by external frameworks (LangGraph, OpenAI Agents
 SDK, OpenTelemetry sources, …). External events may be late, duplicated, or out of order.
 
 ## Decision
 
 A single versioned event envelope is the unit of persistence and streaming. It is defined
-in Rust (`crates/axiom-protocol`), exported as JSON Schema to
+in Rust (`crates/goshikq-protocol`), exported as JSON Schema to
 `protocol/schemas/execution-event.v1.json`, and mirrored by generated/checked types in the
 Python and TypeScript SDKs.
 
@@ -29,7 +29,7 @@ Python and TypeScript SDKs.
   "timestamp": "RFC 3339 UTC (source time)",
   "agent_id": "string | null",
   "step_id": "string | null",
-  "source_framework": "axiom | langgraph | openai-agents | otel | ...",
+  "source_framework": "goshikq | langgraph | openai-agents | otel | ...",
   "status": "succeeded | failed | ... | null",
   "duration_ms": 125,
   "payload": {},
@@ -52,7 +52,7 @@ Rules:
    events whose parent is unknown are shown attached to the run root and flagged
    `orphaned_parent` in Studio.
 5. Event type names are a closed list per schema version (see `EventType` in
-   `axiom-protocol`). Adding a type is a minor schema bump (1.x) and old readers must
+   `goshikq-protocol`). Adding a type is a minor schema bump (1.x) and old readers must
    ignore unknown types; removing or renaming is a major bump.
 6. Payload shapes for native events are documented per type in `docs/architecture/execution-protocol.md`.
    Payloads from external frameworks are stored verbatim under `payload` with

@@ -1,7 +1,7 @@
 """Measure checkpoint/journal overhead with concurrent runs.
 
 Prints real p50/p95 against a live runtime. Does not fabricate numbers.
-Requires axiom-server and PostgreSQL.
+Requires goshikq-server and PostgreSQL.
 
     python scripts/bench_recovery.py
 """
@@ -17,8 +17,8 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "sdk", "python", "src"))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "examples", "hello-agent"))
 
-from axiom_ai import Agent, Goal, Runtime  # noqa: E402
-from axiom_ai.models import MockModel, ModelTurn  # noqa: E402
+from goshikq_ai import Agent, Goal, Runtime  # noqa: E402
+from goshikq_ai.models import MockModel, ModelTurn  # noqa: E402
 
 
 async def one_run(i: int) -> float:
@@ -41,7 +41,7 @@ async def bench(n: int) -> None:
 async def main() -> None:
     for n in (1, 10):
         await bench(n)
-    if os.environ.get("AXIOM_BENCH_100") == "1":
+    if os.environ.get("GOSHIKQ_BENCH_100") == "1":
         await bench(100)
 
 

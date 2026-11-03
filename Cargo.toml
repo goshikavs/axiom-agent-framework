@@ -1,12 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/axiom-protocol",
-    "crates/axiom-core",
-    "crates/axiom-storage",
-    "crates/axiom-runtime",
-    "crates/axiom-server",
-    "crates/axiom-bench",
+    "crates/goshikq-protocol",
+    "crates/goshikq-core",
+    "crates/goshikq-storage",
+    "crates/goshikq-runtime",
+    "crates/goshikq-server",
+    "crates/goshikq-bench",
     "apps/cli",
 ]
 
@@ -20,10 +20,10 @@ homepage = "https://github.com/goshikavs/axiom-agent-framework"
 authors = ["Venkatesh Goshika"]
 
 [workspace.dependencies]
-axiom-protocol = { path = "crates/axiom-protocol" }
-axiom-core = { path = "crates/axiom-core" }
-axiom-storage = { path = "crates/axiom-storage" }
-axiom-runtime = { path = "crates/axiom-runtime" }
+goshikq-protocol = { path = "crates/goshikq-protocol" }
+goshikq-core = { path = "crates/goshikq-core" }
+goshikq-storage = { path = "crates/goshikq-storage" }
+goshikq-runtime = { path = "crates/goshikq-runtime" }
 
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
 tokio-util = { version = "0.7", features = ["rt"] }

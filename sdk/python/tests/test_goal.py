@@ -1,7 +1,7 @@
 import asyncio
 
-from axiom_ai.goal import Goal, InvariantOutcome
-from axiom_ai.state import StateSnapshot
+from goshikq_ai.goal import Goal, InvariantOutcome
+from goshikq_ai.state import StateSnapshot
 
 
 def paid(state: StateSnapshot) -> bool:

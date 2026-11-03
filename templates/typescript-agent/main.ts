@@ -1,4 +1,4 @@
-import { Agent, Goal, MockModel, Runtime, StateSnapshot, defineTool } from "@axiom-ai/sdk";
+import { Agent, Goal, MockModel, Runtime, StateSnapshot, defineTool } from "@goshikq/sdk";
 import { z } from "zod";
 
 const echo = defineTool({
@@ -32,7 +32,7 @@ const runtime = new Runtime(agent, {
   stateProvider: {
     snapshot: () => new StateSnapshot({ state: { ok: true }, version: "1", source: "template" }),
   },
-  studioUrl: process.env.AXIOM_STUDIO_URL || "http://127.0.0.1:3000",
+  studioUrl: process.env.GOSHIKQ_STUDIO_URL || "http://127.0.0.1:3000",
 });
 
 const result = await runtime.run(goal);

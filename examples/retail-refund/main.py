@@ -20,9 +20,9 @@ import logging
 import os
 import sys
 
-from axiom_ai import Agent, DecisionRef, Evidence, Goal, InvariantOutcome, Runtime, StateSnapshot, tool, with_evidence
-from axiom_ai.models import MockModel, ModelTurn, last_tool_result
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, DecisionRef, Evidence, Goal, InvariantOutcome, Runtime, StateSnapshot, tool, with_evidence
+from goshikq_ai.models import MockModel, ModelTurn, last_tool_result
+from goshikq_ai.state import SnapshotContext
 
 from store import Fault, SimulatedStore, demo_store
 
@@ -30,7 +30,7 @@ STORE: SimulatedStore = demo_store()
 
 
 def _verify_refund(arguments: dict, output, state: StateSnapshot):
-    from axiom_ai.tools import VerifierResult
+    from goshikq_ai.tools import VerifierResult
 
     order_id = arguments.get("order_id")
     order = (state.get("orders") or {}).get(order_id or "")
@@ -126,7 +126,7 @@ class StoreProvider:
 
 def refund_completed(state: StateSnapshot) -> InvariantOutcome:
     orders = state.get("orders") or {}
-    order_id = os.environ.get("AXIOM_REFUND_ORDER", "ORD-2048")
+    order_id = os.environ.get("GOSHIKQ_REFUND_ORDER", "ORD-2048")
     target = orders.get(order_id)
     if not target:
         return InvariantOutcome(False, reason=f"order {order_id} missing", expected="present", actual=None)
@@ -142,7 +142,7 @@ def refund_completed(state: StateSnapshot) -> InvariantOutcome:
 
 
 def refund_not_duplicated(state: StateSnapshot) -> InvariantOutcome:
-    order_id = os.environ.get("AXIOM_REFUND_ORDER", "ORD-2048")
+    order_id = os.environ.get("GOSHIKQ_REFUND_ORDER", "ORD-2048")
     matches = [r for r in (state.get("refunds") or {}).values() if r.get("order_id") == order_id and r.get("status") != "rejected"]
     ok = len(matches) <= 1
     return InvariantOutcome(ok, expected={"max_refunds": 1}, actual=len(matches), reason=None if ok else "duplicate refund records")
@@ -157,7 +157,7 @@ def amount_within_authorized_limit(state: StateSnapshot) -> InvariantOutcome:
 
 
 def refund_policy(messages, tools, idx: int) -> ModelTurn:
-    order_id = os.environ.get("AXIOM_REFUND_ORDER", "ORD-2048")
+    order_id = os.environ.get("GOSHIKQ_REFUND_ORDER", "ORD-2048")
     if idx == 0:
         return ModelTurn(tool_calls=[("lookup_order", {"order_id": order_id})])
     if idx == 1:
@@ -191,18 +191,18 @@ def build_agent() -> Agent:
 
 def build_goal() -> Goal:
     return Goal(
-        description=f"Resolve refund for {os.environ.get('AXIOM_REFUND_ORDER', 'ORD-2048')}",
+        description=f"Resolve refund for {os.environ.get('GOSHIKQ_REFUND_ORDER', 'ORD-2048')}",
         success=refund_completed,
         invariants=[refund_not_duplicated, amount_within_authorized_limit],
         max_steps=10,
-        external_wait_seconds=int(os.environ.get("AXIOM_EXTERNAL_WAIT_SECONDS", "8" if os.environ.get("AXIOM_REFUND_FAULT") == Fault.NEVER_SETTLES else "20")),
+        external_wait_seconds=int(os.environ.get("GOSHIKQ_EXTERNAL_WAIT_SECONDS", "8" if os.environ.get("GOSHIKQ_REFUND_FAULT") == Fault.NEVER_SETTLES else "20")),
     )
 
 
 async def run_once(order_id: str, fault: str) -> int:
     global STORE
-    os.environ["AXIOM_REFUND_ORDER"] = order_id
-    os.environ["AXIOM_REFUND_FAULT"] = fault
+    os.environ["GOSHIKQ_REFUND_ORDER"] = order_id
+    os.environ["GOSHIKQ_REFUND_FAULT"] = fault
     STORE = demo_store(fault)
     agent = build_agent()
     goal = build_goal()
@@ -216,8 +216,8 @@ async def run_once(order_id: str, fault: str) -> int:
 
 
 def main() -> int:
-    logging.basicConfig(level=os.environ.get("AXIOM_LOG", "WARNING"))
-    p = argparse.ArgumentParser(description="Axiom retail refund demo")
+    logging.basicConfig(level=os.environ.get("GOSHIKQ_LOG", "WARNING"))
+    p = argparse.ArgumentParser(description="Goshikq retail refund demo")
     p.add_argument("--order", default="ORD-2048")
     p.add_argument("--fault", default=Fault.NONE, choices=[Fault.NONE, Fault.PROCESSOR_REJECT, Fault.DELAYED_SETTLEMENT, Fault.NEVER_SETTLES, Fault.STALE_ORDER, Fault.MISSING_EVIDENCE, Fault.RETURN_CHANGED])
     args = p.parse_args()
