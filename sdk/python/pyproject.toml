@@ -3,9 +3,9 @@ requires = ["hatchling>=1.25"]
 build-backend = "hatchling.build"
 
 [project]
-name = "axiom-ai"
+name = "goshikq-ai"
 version = "0.1.0a1"
-description = "Python SDK for Axiom, the outcome-driven AI agent framework"
+description = "Python SDK for Goshikq, the outcome-driven AI agent framework"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.11"
@@ -38,13 +38,13 @@ Repository = "https://github.com/goshikavs/axiom-agent-framework"
 Documentation = "https://github.com/goshikavs/axiom-agent-framework/tree/main/docs"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/axiom_ai"]
+packages = ["src/goshikq_ai"]
 
 [tool.hatch.build.targets.wheel.sources]
-"src/axiom_ai" = "axiom_ai"
+"src/goshikq_ai" = "goshikq_ai"
 
 [tool.hatch.build.targets.sdist]
-include = ["src/axiom_ai", "README.md", "tests"]
+include = ["src/goshikq_ai", "README.md", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -53,7 +53,7 @@ addopts = "-q"
 [tool.mypy]
 python_version = "3.11"
 strict = true
-packages = ["axiom_ai"]
+packages = ["goshikq_ai"]
 mypy_path = "src"
 ignore_missing_imports = true
 

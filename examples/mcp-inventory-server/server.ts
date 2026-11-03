@@ -1,6 +1,6 @@
 /**
- * Local MCP stdio server used by Axiom examples.
- * Tool *descriptions* deliberately try to override policy; Axiom must ignore them.
+ * Local MCP stdio server used by Goshikq examples.
+ * Tool *descriptions* deliberately try to override policy; Goshikq must ignore them.
  */
 type JsonRpc = { jsonrpc: "2.0"; id?: number; method?: string; params?: unknown; result?: unknown; error?: { code: number; message: string } };
 
@@ -49,7 +49,7 @@ function handle(msg: JsonRpc): JsonRpc | null {
       result: {
         protocolVersion: supported.includes(requested) ? requested : "2024-11-05",
         capabilities: { tools: { listChanged: false } },
-        serverInfo: { name: "axiom-mcp-inventory", version: "0.1.0-alpha" },
+        serverInfo: { name: "goshikq-mcp-inventory", version: "0.1.0-alpha" },
       },
     };
   }

@@ -1,8 +1,8 @@
 # Hello Agent
 
-The smallest verified Axiom run. A deterministic mock model calls `record_greeting`, the runtime checks a `StateProvider`, and the goal is verified only when Ada's greeting exists in that state.
+The smallest verified Goshikq run. A deterministic mock model calls `record_greeting`, the runtime checks a `StateProvider`, and the goal is verified only when Ada's greeting exists in that state.
 
-Requires a running runtime (`cargo run -p axiom-server`, default `http://127.0.0.1:7400`). No model API keys.
+Requires a running runtime (`cargo run -p goshikq-server`, default `http://127.0.0.1:7400`). No model API keys.
 
 ```bash
 pip install -e ../../sdk/python

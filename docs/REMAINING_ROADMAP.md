@@ -48,7 +48,7 @@ Preserved. Not reimplemented.
 
 | Item | Status |
 |---|---|
-| Four independent strategies A–D in `axiom-core` | IMPLEMENTED_AND_TESTED |
+| Four independent strategies A–D in `goshikq-core` | IMPLEMENTED_AND_TESTED |
 | Seeded generator 10 / 100 / 1_000 / 10_000 | IMPLEMENTED_AND_TESTED (seed 42, 10 trials, 12 families) |
 | Independent ground truth (true graph, hidden edges) | IMPLEMENTED_AND_TESTED |
 | Machine-readable results | IMPLEMENTED_AND_TESTED (`benchmarks/evidence/results.json`, `summary.json`) |
@@ -65,7 +65,7 @@ Labeled metrics so full-declared 100% recall is not misread as hidden-edge detec
 
 ## v0.4 — OpenTelemetry and framework interoperability
 
-**IMPLEMENTED_AND_TESTED** (mapper + manifests + HTTP receiver compiled with workspace tests). Live LangGraph/OpenAI Agents runs against `axiom-server` are **IMPLEMENTED_UNTESTED** on this host until a server session is recorded. External traces never imply verified business outcomes. gRPC OTLP is not implemented.
+**IMPLEMENTED_AND_TESTED** (mapper + manifests + HTTP receiver compiled with workspace tests). Live LangGraph/OpenAI Agents runs against `goshikq-server` are **IMPLEMENTED_UNTESTED** on this host until a server session is recorded. External traces never imply verified business outcomes. gRPC OTLP is not implemented.
 
 Depends on: v0.3.2 gate (so Studio later can show measured, not invented, verification behavior).
 
@@ -91,7 +91,7 @@ Depends on: v0.3 evidence/goal model remaining canonical. Temporal stays optiona
 
 **IMPLEMENTED_AND_TESTED** with documented MCP/A2A limits. Report: `docs/milestones/v0.8-report.md`. Executable workflows (Rust executor), Studio React Flow editor, CLI `init`/`workflows`, VitePress docs site, local packaging smoke tests. Do not start v0.9 until v0.8 gates stay green.
 
-Depends on: working runtime (v0.3) plus enough Studio (v0.5) that `axiom studio` opens a real console.
+Depends on: working runtime (v0.3) plus enough Studio (v0.5) that `goshikq studio` opens a real console.
 
 ## v0.9 — security, reliability, production hardening
 

@@ -1,12 +1,12 @@
-"""Process-crash tests for durable recovery (Axiom v0.2).
+"""Process-crash tests for durable recovery (Goshikq v0.2).
 
-Launches a real `axiom-server` subprocess, kills it at AXIOM_CRASH_AT barriers
+Launches a real `goshikq-server` subprocess, kills it at GOSHIKQ_CRASH_AT barriers
 (exit 97), restarts it, and asserts the in-process worker resumes without
 duplicate refunds.
 
 Requires:
   DATABASE_URL pointing at a reachable PostgreSQL (not embedded)
-  an `axiom-server` binary on PATH or under target/
+  an `goshikq-server` binary on PATH or under target/
 
 Windows ARM64: the binary is the x86_64 MSVC build (`scripts/with-msvc.ps1`).
 These tests spawn that same binary; they are not excluded on ARM64 hosts.
@@ -30,13 +30,13 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "examples" / "retail-refund"))
 sys.path.insert(0, str(ROOT / "sdk" / "python" / "src"))
 
-from axiom_ai import Agent, Goal, Runtime  # noqa: E402
-from axiom_ai.models import MockModel, ModelTurn  # noqa: E402
+from goshikq_ai import Agent, Goal, Runtime  # noqa: E402
+from goshikq_ai.models import MockModel, ModelTurn  # noqa: E402
 from store import Fault, demo_store  # noqa: E402
 
 from main import StoreProvider, build_agent, build_goal  # noqa: E402
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:axiom@127.0.0.1:55432/axiom")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:goshikq@127.0.0.1:55432/goshikq")
 
 
 from tests.helpers import find_server
@@ -51,18 +51,18 @@ def free_port() -> int:
 def start_server(port: int, crash_at: str | None = None) -> subprocess.Popen:
     binary = find_server()
     if binary is None:
-        pytest.skip("axiom-server binary not found; build with scripts/with-msvc.ps1 cargo ... --bin axiom-server")
+        pytest.skip("goshikq-server binary not found; build with scripts/with-msvc.ps1 cargo ... --bin goshikq-server")
     env = os.environ.copy()
     env["DATABASE_URL"] = DATABASE_URL
-    env["AXIOM_BIND"] = f"127.0.0.1:{port}"
-    env["AXIOM_AUTH_MODE"] = "none"
-    env["AXIOM_CAPTURE_MODEL_IO"] = "full"
-    env["AXIOM_LEASE_TTL_SECS"] = "8"
+    env["GOSHIKQ_BIND"] = f"127.0.0.1:{port}"
+    env["GOSHIKQ_AUTH_MODE"] = "none"
+    env["GOSHIKQ_CAPTURE_MODEL_IO"] = "full"
+    env["GOSHIKQ_LEASE_TTL_SECS"] = "8"
     env["RUST_LOG"] = env.get("RUST_LOG", "warn")
     if crash_at:
-        env["AXIOM_CRASH_AT"] = crash_at
+        env["GOSHIKQ_CRASH_AT"] = crash_at
     else:
-        env.pop("AXIOM_CRASH_AT", None)
+        env.pop("GOSHIKQ_CRASH_AT", None)
     kwargs: dict = {"env": env, "cwd": str(ROOT), "stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
     if os.name == "nt":
         kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
@@ -111,14 +111,14 @@ def require_env() -> None:
     if not postgres_up():
         pytest.skip(f"PostgreSQL not reachable at {DATABASE_URL}")
     if find_server() is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
 
 
 async def refund_run(endpoint: str, fault: str = Fault.DELAYED_SETTLEMENT, wait_seconds: str = "25"):
-    os.environ["AXIOM_RUNTIME_URL"] = endpoint
-    os.environ["AXIOM_REFUND_ORDER"] = "ORD-2048"
-    os.environ["AXIOM_REFUND_FAULT"] = fault
-    os.environ["AXIOM_EXTERNAL_WAIT_SECONDS"] = wait_seconds
+    os.environ["GOSHIKQ_RUNTIME_URL"] = endpoint
+    os.environ["GOSHIKQ_REFUND_ORDER"] = "ORD-2048"
+    os.environ["GOSHIKQ_REFUND_FAULT"] = fault
+    os.environ["GOSHIKQ_EXTERNAL_WAIT_SECONDS"] = wait_seconds
     import main as refund_main
 
     refund_main.STORE = demo_store(fault)
@@ -169,8 +169,8 @@ def test_approval_survives_restart() -> None:
 
 
 async def _approval_survives_restart() -> None:
-    from axiom_ai import tool
-    from axiom_ai.state import SnapshotContext, StateSnapshot
+    from goshikq_ai import tool
+    from goshikq_ai.state import SnapshotContext, StateSnapshot
 
     claims = {"CLM-77": {"id": "CLM-77", "coverage": True, "reserve_cents": 15000, "status": "open", "payout_cents": 0}}
 
@@ -190,7 +190,7 @@ async def _approval_survives_restart() -> None:
 
     port = free_port()
     url = f"http://127.0.0.1:{port}"
-    # Do not set AXIOM_CRASH_AT=waiting_approval on a shared database: the
+    # Do not set GOSHIKQ_CRASH_AT=waiting_approval on a shared database: the
     # supervisor would resume leftover WAITING_FOR_APPROVAL runs and abort
     # before this test's create_run. Kill after *this* approval is pending.
     proc = start_server(port, crash_at=None)
@@ -255,7 +255,7 @@ async def _approval_survives_restart() -> None:
             dec = await client.post(
                 f"{url}/api/v1/approvals/{approval_id}/decision",
                 json={"decision": "approve", "reason": "crash-test"},
-                headers={"x-axiom-actor": "crash-test"},
+                headers={"x-goshikq-actor": "crash-test"},
             )
             assert dec.status_code < 300, dec.text
         result = await asyncio.wait_for(task, timeout=90)

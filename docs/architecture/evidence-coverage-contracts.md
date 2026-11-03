@@ -37,7 +37,7 @@ If `required_evidence` is set and `revalidation_policy` is omitted, the SDK defa
 
 ## Evaluator
 
-IO-free: `axiom_core::evaluate_coverage`. Inputs are facts, decision facts, resource changes, and `now`. Reasons name missing, stale, conflicted, and inconclusive requirement keys.
+IO-free: `goshikq_core::evaluate_coverage`. Inputs are facts, decision facts, resource changes, and `now`. Reasons name missing, stale, conflicted, and inconclusive requirement keys.
 
 ## Limitation
 

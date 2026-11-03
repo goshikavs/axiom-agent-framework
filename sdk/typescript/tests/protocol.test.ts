@@ -30,7 +30,7 @@ describe("cross-language protocol constants", () => {
   });
 
   test("source framework and protocol version", () => {
-    expect(SOURCE_FRAMEWORK).toBe("axiom-typescript");
+    expect(SOURCE_FRAMEWORK).toBe("goshikq-typescript");
     expect(PROTOCOL_VERSION).toBe("1.0");
   });
 });

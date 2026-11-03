@@ -13,7 +13,7 @@ from pathlib import Path
 import httpx
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNTIME = os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
+RUNTIME = os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
 OUT = ROOT / "benchmarks" / "v0.9" / "results.json"
 
 
@@ -65,7 +65,7 @@ def echo_workflow(client: httpx.Client) -> float:
 
 
 def main() -> None:
-    levels = [int(x) for x in os.environ.get("AXIOM_BENCH_CONCURRENCY", "1,10").split(",") if x]
+    levels = [int(x) for x in os.environ.get("GOSHIKQ_BENCH_CONCURRENCY", "1,10").split(",") if x]
     results: dict = {
         "hardware": {
             "os": os.name,

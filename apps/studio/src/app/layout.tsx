@@ -4,8 +4,8 @@ import { Providers } from "@/components/providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Axiom Studio",
-  description: "Observe, debug, and verify Axiom agent executions",
+  title: "Goshikq Studio",
+  description: "Observe, debug, and verify Goshikq agent executions",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

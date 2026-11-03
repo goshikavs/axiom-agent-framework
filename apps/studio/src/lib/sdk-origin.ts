@@ -6,12 +6,12 @@ export type SdkOrigin = {
 
 export function sdkOrigin(framework: string | null | undefined): SdkOrigin {
   switch (framework) {
-    case "axiom-python":
+    case "goshikq-python":
       return { label: "Native Python SDK", native: true, controlsExecution: true };
-    case "axiom-typescript":
+    case "goshikq-typescript":
       return { label: "Native TypeScript SDK", native: true, controlsExecution: true };
-    case "axiom":
-      return { label: "Native Axiom runtime", native: true, controlsExecution: true };
+    case "goshikq":
+      return { label: "Native Goshikq runtime", native: true, controlsExecution: true };
     case "langgraph":
       return { label: "LangGraph", native: false, controlsExecution: false };
     case "openai-agents":

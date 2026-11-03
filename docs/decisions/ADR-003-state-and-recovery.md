@@ -13,7 +13,7 @@ write, and must not promise exactly-once execution of arbitrary external APIs.
 
 ### Storage
 
-PostgreSQL via SQLx with versioned migrations in `crates/axiom-storage/migrations`.
+PostgreSQL via SQLx with versioned migrations in `crates/goshikq-storage/migrations`.
 All run-scoped tables carry `project_id` for tenant scoping; every API query filters by
 the caller's project. Local development seeds one organization/project (`default`).
 

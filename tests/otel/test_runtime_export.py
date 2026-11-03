@@ -65,10 +65,10 @@ class Collector:
 
 def _run_agent(url: str) -> str:
     sys.path.insert(0, os.path.join(ROOT, "sdk", "python", "src"))
-    os.environ["AXIOM_RUNTIME_URL"] = url
-    from axiom_ai import Agent, Goal, Runtime, StateSnapshot, tool
-    from axiom_ai.models import MockModel, ModelTurn
-    from axiom_ai.state import SnapshotContext
+    os.environ["GOSHIKQ_RUNTIME_URL"] = url
+    from goshikq_ai import Agent, Goal, Runtime, StateSnapshot, tool
+    from goshikq_ai.models import MockModel, ModelTurn
+    from goshikq_ai.state import SnapshotContext
 
     store = {"ok": False}
 
@@ -103,10 +103,10 @@ def test_runtime_exports_redacted_otlp_json():
     proc = start_server(
         port,
         {
-            "AXIOM_AUTH_MODE": "none",
-            "AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT": collector.url,
-            "OTEL_SERVICE_NAME": "axiom-runtime-test",
-            "AXIOM_OTEL_TRACES_SAMPLER_ARG": "1",
+            "GOSHIKQ_AUTH_MODE": "none",
+            "GOSHIKQ_OTEL_EXPORTER_OTLP_ENDPOINT": collector.url,
+            "OTEL_SERVICE_NAME": "goshikq-runtime-test",
+            "GOSHIKQ_OTEL_TRACES_SAMPLER_ARG": "1",
         },
     )
     try:
@@ -128,7 +128,7 @@ def test_runtime_exports_redacted_otlp_json():
             n in names
             for n in ("run.started", "run.completed", "tool.started", "tool.completed", "verification.passed", "goal.satisfied")
         ), names
-        assert "axiom-runtime-test" in text
+        assert "goshikq-runtime-test" in text
         assert run_id in text
     finally:
         stop(proc)

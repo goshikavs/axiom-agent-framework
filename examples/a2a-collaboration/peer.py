@@ -1,4 +1,4 @@
-"""Standalone A2A 1.0 JSON-RPC peer. Not an Axiom runtime.
+"""Standalone A2A 1.0 JSON-RPC peer. Not an Goshikq runtime.
 
 Completes tasks in-process. Its SUCCESS is an untrusted remote assertion.
 """
@@ -34,7 +34,7 @@ class Handler(BaseHTTPRequestHandler):
                 200,
                 {
                     "name": "standalone-a2a-peer",
-                    "description": "Independent A2A agent. Completion is not Axiom verification.",
+                    "description": "Independent A2A agent. Completion is not Goshikq verification.",
                     "version": "0.7.0",
                     "protocolVersion": PROTOCOL,
                     "capabilities": {"streaming": False, "pushNotifications": False},

@@ -1,5 +1,5 @@
-from axiom_ai.errors import ConfigurationError, ToolError
-from axiom_ai.tools import Effect, VerifierResult, tool
+from goshikq_ai.errors import ConfigurationError, ToolError
+from goshikq_ai.tools import Effect, VerifierResult, tool
 
 
 @tool(effect="read_only")

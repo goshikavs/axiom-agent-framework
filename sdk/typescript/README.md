@@ -1,6 +1,6 @@
-# @axiom-ai/sdk
+# @goshikq/sdk
 
-TypeScript SDK for Axiom. Agents, tools, goals, and the mock model live here. **Execution, retries, evidence, and verification run in the Rust runtime** over the worker protocol (`POST /api/v1/runs/{id}/worker/poll` + `respond`). This package is not a second agent engine.
+TypeScript SDK for Goshikq. Agents, tools, goals, and the mock model live here. **Execution, retries, evidence, and verification run in the Rust runtime** over the worker protocol (`POST /api/v1/runs/{id}/worker/poll` + `respond`). This package is not a second agent engine.
 
 ```bash
 bun install
@@ -11,7 +11,7 @@ bun run typecheck
 Node.js 20+ can import the same sources (`fetch`, `AbortSignal`). Do not use Bun-only APIs in library code.
 
 ```ts
-import { Agent, Goal, MockModel, Runtime, defineTool } from "@axiom-ai/sdk";
+import { Agent, Goal, MockModel, Runtime, defineTool } from "@goshikq/sdk";
 import { z } from "zod";
 
 const echo = defineTool({

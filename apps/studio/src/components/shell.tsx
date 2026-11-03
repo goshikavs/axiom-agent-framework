@@ -46,11 +46,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="flex items-center justify-between gap-2 border-b border-line px-3 py-3">
           {!collapsed ? (
             <Link href="/" className="font-semibold tracking-tight">
-              Axiom Studio
+              Goshikq Studio
             </Link>
           ) : (
-            <Link href="/" className="font-mono text-sm">
-              Ax
+            <Link href="/" className="font-mono text-sm" aria-label="Goshikq Studio">
+              GQ
             </Link>
           )}
           <button

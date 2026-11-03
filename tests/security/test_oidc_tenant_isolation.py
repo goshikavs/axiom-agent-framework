@@ -19,10 +19,10 @@ import pytest
 from tests.helpers import find_server
 
 ROOT = Path(__file__).resolve().parents[2]
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:axiom@127.0.0.1:55432/axiom")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:goshikq@127.0.0.1:55432/goshikq")
 HMAC = "v09-test-hmac-secret-at-least-32b!!"
 ISSUER = "http://127.0.0.1/idp"
-AUD = "axiom"
+AUD = "goshikq"
 
 
 def free_port() -> int:
@@ -54,18 +54,18 @@ def mint(sub: str, extra: dict | None = None) -> str:
 def start_server(port: int) -> subprocess.Popen:
     binary = find_server()
     if binary is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
     env = os.environ.copy()
     env.update(
         {
             "DATABASE_URL": DATABASE_URL,
-            "AXIOM_BIND": f"127.0.0.1:{port}",
-            "AXIOM_AUTH_MODE": "oidc",
-            "AXIOM_OIDC_ISSUER": ISSUER,
-            "AXIOM_OIDC_AUDIENCE": AUD,
-            "AXIOM_OIDC_HMAC_SECRET": HMAC,
-            "AXIOM_OIDC_ALLOW_TEST_HMAC": "true",
-            "AXIOM_OIDC_BOOTSTRAP_OWNER": "alice",
+            "GOSHIKQ_BIND": f"127.0.0.1:{port}",
+            "GOSHIKQ_AUTH_MODE": "oidc",
+            "GOSHIKQ_OIDC_ISSUER": ISSUER,
+            "GOSHIKQ_OIDC_AUDIENCE": AUD,
+            "GOSHIKQ_OIDC_HMAC_SECRET": HMAC,
+            "GOSHIKQ_OIDC_ALLOW_TEST_HMAC": "true",
+            "GOSHIKQ_OIDC_BOOTSTRAP_OWNER": "alice",
             "RUST_LOG": env.get("RUST_LOG", "warn"),
         }
     )
@@ -113,7 +113,7 @@ def oidc_runtime():
 def auth(sub: str, project: str | None = None) -> dict[str, str]:
     headers = {"authorization": f"Bearer {mint(sub)}"}
     if project:
-        headers["x-axiom-project-id"] = project
+        headers["x-goshikq-project-id"] = project
     return headers
 
 

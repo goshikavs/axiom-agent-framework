@@ -26,4 +26,4 @@ Children may themselves be `VERIFIED` against a trivial child predicate. That is
 
 ## Remote A2A
 
-`SendMessage` / peer `completed` / metadata `SUCCESS` are untrusted. `task.metadata.axiomVerificationStatus` stays `NOT_EVALUATED` unless an Axiom parent goal is evaluated independently. `markVerified` in A2A params is ignored.
+`SendMessage` / peer `completed` / metadata `SUCCESS` are untrusted. `task.metadata.goshikqVerificationStatus` stays `NOT_EVALUATED` unless an Goshikq parent goal is evaluated independently. `markVerified` in A2A params is ignored.

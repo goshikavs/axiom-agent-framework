@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@axiom-ai/docs",
+      "name": "@goshikq/docs",
       "dependencies": {
         "vue": "^3.5.44",
       },

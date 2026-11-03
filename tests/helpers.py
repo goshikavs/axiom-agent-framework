@@ -1,4 +1,4 @@
-"""Shared helpers for spawning axiom-server in integration tests."""
+"""Shared helpers for spawning goshikq-server in integration tests."""
 
 from __future__ import annotations
 
@@ -12,25 +12,28 @@ import httpx
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:axiom@127.0.0.1:55432/axiom")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:goshikq@127.0.0.1:55432/goshikq")
 
 
 def find_server() -> Path | None:
-    # Prefer the explicit MSVC x64 target even if AXIOM_SERVER_BIN points at a stale
+    # Prefer the explicit MSVC x64 target even if GOSHIKQ_SERVER_BIN points at a stale
     # `target/debug` image (common while the long-lived :7400 process holds that file).
-    x64 = ROOT / "target" / "x86_64-pc-windows-msvc" / "debug" / "axiom-server.exe"
+    x64 = ROOT / "target" / "x86_64-pc-windows-msvc" / "debug" / "goshikq-server.exe"
     if x64.exists():
         return x64
-    env = os.environ.get("AXIOM_SERVER_BIN")
+    env = os.environ.get("GOSHIKQ_SERVER_BIN") or os.environ.get("AXIOM_SERVER_BIN")
     if env and Path(env).exists():
         return Path(env)
     candidates = [
+        ROOT / "target" / "x86_64-pc-windows-msvc" / "debug" / "goshikq-server.exe",
+        ROOT / "target" / "x86_64-pc-windows-msvc" / "release" / "goshikq-server.exe",
+        ROOT / "target" / "debug" / "goshikq-server.exe",
+        ROOT / "target" / "release" / "goshikq-server.exe",
+        ROOT / "target" / "debug" / "goshikq-server",
+        ROOT / "target" / "release" / "goshikq-server",
         ROOT / "target" / "x86_64-pc-windows-msvc" / "debug" / "axiom-server.exe",
-        ROOT / "target" / "x86_64-pc-windows-msvc" / "release" / "axiom-server.exe",
         ROOT / "target" / "debug" / "axiom-server.exe",
-        ROOT / "target" / "release" / "axiom-server.exe",
         ROOT / "target" / "debug" / "axiom-server",
-        ROOT / "target" / "release" / "axiom-server",
     ]
     for p in candidates:
         if p.exists():
@@ -47,13 +50,13 @@ def free_port() -> int:
 def start_server(port: int, extra_env: dict[str, str] | None = None) -> subprocess.Popen:
     binary = find_server()
     if binary is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
     env = os.environ.copy()
     env.update(
         {
             "DATABASE_URL": DATABASE_URL,
-            "AXIOM_BIND": f"127.0.0.1:{port}",
-            "AXIOM_AUTH_MODE": "none",
+            "GOSHIKQ_BIND": f"127.0.0.1:{port}",
+            "GOSHIKQ_AUTH_MODE": "none",
             "RUST_LOG": env.get("RUST_LOG", "warn"),
         }
     )

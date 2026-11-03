@@ -1,10 +1,10 @@
-"""LangGraph controls this refund graph. Axiom only receives OTLP spans.
+"""LangGraph controls this refund graph. Goshikq only receives OTLP spans.
 
-Axiom does not intercept node writes and does not treat the trace as a verified payout.
+Goshikq does not intercept node writes and does not treat the trace as a verified payout.
 
 Usage:
     pip install langgraph
-    python main.py                 # requires axiom-server on 127.0.0.1:7400
+    python main.py                 # requires goshikq-server on 127.0.0.1:7400
 """
 
 from __future__ import annotations
@@ -13,8 +13,8 @@ import asyncio
 import sys
 from typing import Any, TypedDict
 
-from axiom_ai.client import RuntimeClient
-from axiom_ai.otel import OtlpTracer, Span
+from goshikq_ai.client import RuntimeClient
+from goshikq_ai.otel import OtlpTracer, Span
 
 try:
     from langgraph.graph import END, StateGraph
@@ -60,7 +60,7 @@ def build_graph(tracer: OtlpTracer, root: Span):
             tracer.end(span, status_code=2, error="ineligible")
             return {**state, "error": "ineligible"}
         STORE[state["order_id"]]["status"] = "refunded"
-        tracer.end(span, attributes={"axiom.state_snapshot": {"orders": {state["order_id"]: {"status": "refunded"}}}})
+        tracer.end(span, attributes={"goshikq.state_snapshot": {"orders": {state["order_id"]: {"status": "refunded"}}}})
         return {**state, "refunded": True}
 
     g = StateGraph(RefundState)
@@ -84,8 +84,8 @@ async def main() -> None:
     ingest = await tracer.flush()
     print("langgraph result", result)
     print("otlp ingest", ingest)
-    print("Axiom did not control this graph. Studio will show source_framework=langgraph.")
-    print("The run is UNVERIFIED unless you attach an Axiom goal/state provider separately.")
+    print("Goshikq did not control this graph. Studio will show source_framework=langgraph.")
+    print("The run is UNVERIFIED unless you attach an Goshikq goal/state provider separately.")
     await client.aclose()
 
 

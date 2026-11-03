@@ -4,26 +4,26 @@
 
 ```text
 DATABASE_URL=postgres://...
-AXIOM_BIND=0.0.0.0:7400
-AXIOM_AUTH_MODE=oidc
-AXIOM_OIDC_ISSUER=https://idp.example.com/...
-AXIOM_OIDC_AUDIENCE=axiom
-AXIOM_OIDC_JWKS_URL=https://idp.example.com/.../certs
-AXIOM_LOG_FORMAT=json
-AXIOM_CORS_ORIGINS=https://studio.example.com
-AXIOM_CAPTURE_MODEL_IO=redacted
+GOSHIKQ_BIND=0.0.0.0:7400
+GOSHIKQ_AUTH_MODE=oidc
+GOSHIKQ_OIDC_ISSUER=https://idp.example.com/...
+GOSHIKQ_OIDC_AUDIENCE=goshikq
+GOSHIKQ_OIDC_JWKS_URL=https://idp.example.com/.../certs
+GOSHIKQ_LOG_FORMAT=json
+GOSHIKQ_CORS_ORIGINS=https://studio.example.com
+GOSHIKQ_CAPTURE_MODEL_IO=redacted
 ```
 
-Never set `AXIOM_AUTH_MODE=none` on a non-loopback address without `AXIOM_ALLOW_INSECURE_BIND` (unsafe).
+Never set `GOSHIKQ_AUTH_MODE=none` on a non-loopback address without `GOSHIKQ_ALLOW_INSECURE_BIND` (unsafe).
 
 ## Migrations
 
 ```bash
-axiom-server --migrate-only
+goshikq-server --migrate-only
 # or start the server; it migrates on boot
 ```
 
-Additive SQL lives in `crates/axiom-storage/migrations/`. v0.9 adds `0007_tenancy.sql`.
+Additive SQL lives in `crates/goshikq-storage/migrations/`. v0.9 adds `0007_tenancy.sql`.
 
 ## Readiness
 
@@ -33,10 +33,10 @@ Additive SQL lives in `crates/axiom-storage/migrations/`. v0.9 adds `0007_tenanc
 
 ## Rollback
 
-1. Keep the previous `axiom-server` binary.
+1. Keep the previous `goshikq-server` binary.
 2. Do not reverse additive migrations unless you have a tested down-script (none ships).
 3. Restore PostgreSQL from backup if a data fix is required (`docs/deployment/backup-restore.md`).
 
 ## Resource limits
 
-`AXIOM_MAX_BODY_BYTES` (default 4 MiB), `AXIOM_DB_MAX_CONNECTIONS`, `AXIOM_OTLP_RATE_PER_MINUTE`, `AXIOM_WORKER_REQUEST_TIMEOUT_SECONDS`, `AXIOM_RETENTION_DAYS` (project default 30; enforcement of deletion is operator-run, not automatic purge in v0.9).
+`GOSHIKQ_MAX_BODY_BYTES` (default 4 MiB), `GOSHIKQ_DB_MAX_CONNECTIONS`, `GOSHIKQ_OTLP_RATE_PER_MINUTE`, `GOSHIKQ_WORKER_REQUEST_TIMEOUT_SECONDS`, `GOSHIKQ_RETENTION_DAYS` (project default 30; enforcement of deletion is operator-run, not automatic purge in v0.9).

@@ -4,7 +4,7 @@ Modes A–D here are workload presets on the retail example. They are **not**
 the four independent revalidation algorithms required by v0.3.1.
 
 Independent strategies, seeded graphs, and ground truth live in
-`crates/axiom-bench` (`cargo run -p axiom-bench`). See
+`crates/goshikq-bench` (`cargo run -p goshikq-bench`). See
 `docs/benchmarks/evidence-verification.md`.
 
     python tests/perf/bench_evidence.py --mode A --concurrency 1 --repeats 5
@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "examples" / "retail-refund"))
 sys.path.insert(0, str(ROOT / "sdk" / "python" / "src"))
 
-from axiom_ai import Runtime  # noqa: E402
+from goshikq_ai import Runtime  # noqa: E402
 from store import Fault, Order, demo_store  # noqa: E402
 
 from main import StoreProvider, build_agent, build_goal  # noqa: E402
@@ -55,8 +55,8 @@ def unique_store(idx: int, fault: str) -> None:
         return_status="received",
     )
     refund_main.STORE = store
-    os.environ["AXIOM_REFUND_ORDER"] = oid
-    os.environ["AXIOM_REFUND_FAULT"] = fault
+    os.environ["GOSHIKQ_REFUND_ORDER"] = oid
+    os.environ["GOSHIKQ_REFUND_FAULT"] = fault
 
 
 async def one_run(endpoint: str, idx: int, fault: str) -> dict:
@@ -65,10 +65,10 @@ async def one_run(endpoint: str, idx: int, fault: str) -> dict:
     goal = build_goal()
     t0 = time.perf_counter()
     async with Runtime(agent, endpoint=endpoint, state_provider=StoreProvider()) as rt:
-        result = await rt.run(goal, input={"order_id": os.environ["AXIOM_REFUND_ORDER"], "bench": idx, "fault": fault})
+        result = await rt.run(goal, input={"order_id": os.environ["GOSHIKQ_REFUND_ORDER"], "bench": idx, "fault": fault})
     elapsed = time.perf_counter() - t0
     store = refund_main.STORE
-    oid = os.environ["AXIOM_REFUND_ORDER"]
+    oid = os.environ["GOSHIKQ_REFUND_ORDER"]
     submitted = store.submit_count
     refunded = store.orders[oid].status == "refunded"
     stale = fault == Fault.RETURN_CHANGED
@@ -89,7 +89,7 @@ async def one_run(endpoint: str, idx: int, fault: str) -> dict:
 
 async def bench(endpoint: str, mode: str, concurrency: int, repeats: int) -> None:
     fault = Fault.RETURN_CHANGED if mode in {"C", "D"} else Fault.NONE
-    os.environ["AXIOM_RUNTIME_URL"] = endpoint
+    os.environ["GOSHIKQ_RUNTIME_URL"] = endpoint
     rows: list[dict] = []
     rss0 = rss_mb()
     t_all = time.perf_counter()
@@ -120,7 +120,7 @@ async def bench(endpoint: str, mode: str, concurrency: int, repeats: int) -> Non
 
 def main() -> None:
     p = argparse.ArgumentParser()
-    p.add_argument("--endpoint", default=os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400"))
+    p.add_argument("--endpoint", default=os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400"))
     p.add_argument("--mode", default="A", choices=["A", "B", "C", "D"])
     p.add_argument("--concurrency", type=int, default=1)
     p.add_argument("--repeats", type=int, default=5)

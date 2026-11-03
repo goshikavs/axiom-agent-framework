@@ -5,4 +5,4 @@ if [[ ! -f .env && -f .env.example ]]; then
   cp .env.example .env
 fi
 export DATABASE_URL="${DATABASE_URL:-embedded}"
-exec cargo run -p axiom-server
+exec cargo run -p goshikq-server

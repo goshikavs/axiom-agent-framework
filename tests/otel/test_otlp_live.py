@@ -1,6 +1,6 @@
-"""Live OTLP/HTTP ingest against a running axiom-server + PostgreSQL.
+"""Live OTLP/HTTP ingest against a running goshikq-server + PostgreSQL.
 
-Skipped unless AXIOM_RUNTIME_URL (default 127.0.0.1:7400) answers /health.
+Skipped unless GOSHIKQ_RUNTIME_URL (default 127.0.0.1:7400) answers /health.
 """
 
 from __future__ import annotations
@@ -17,9 +17,9 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "sdk" / "python" / "src"))
 
-from axiom_ai.otel import OtlpTracer, Span, spans_to_otlp_json  # noqa: E402
+from goshikq_ai.otel import OtlpTracer, Span, spans_to_otlp_json  # noqa: E402
 
-ENDPOINT = os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
+ENDPOINT = os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
 DEFAULT_PROJECT = "00000000-0000-0000-0000-000000000001"
 
 
@@ -31,7 +31,7 @@ def _health() -> bool:
         return False
 
 
-pytestmark = pytest.mark.skipif(not _health(), reason="axiom-server not reachable")
+pytestmark = pytest.mark.skipif(not _health(), reason="goshikq-server not reachable")
 
 
 def _hex(n: int) -> str:
@@ -200,12 +200,12 @@ def test_otlp_project_mismatch_forbidden():
     root = tracer.start("invoke_agent", attributes={"gen_ai.operation.name": "invoke_agent"})
     tracer.end(root)
     other = "11111111-1111-1111-1111-111111111111"
-    r = _post_json(tracer.payload(), headers={"X-Axiom-Project-Id": other})
+    r = _post_json(tracer.payload(), headers={"X-Goshikq-Project-Id": other})
     assert r.status_code in (403, 401), r.text
 
 
 def test_otlp_protobuf_roundtrip_live():
-    from axiom_ai.otel import OtlpTracer
+    from goshikq_ai.otel import OtlpTracer
 
     # Encode a tiny ExportTraceServiceRequest with one span via local prost-compatible bytes
     # produced by posting JSON first is already covered; protobuf uses the same mapper.

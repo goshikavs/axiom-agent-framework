@@ -2,15 +2,15 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: axiom
-      POSTGRES_PASSWORD: axiom
-      POSTGRES_DB: axiom
+      POSTGRES_USER: goshikq
+      POSTGRES_PASSWORD: goshikq
+      POSTGRES_DB: goshikq
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - axiom-pg:/var/lib/postgresql/data
+      - goshikq-pg:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U axiom -d axiom"]
+      test: ["CMD-SHELL", "pg_isready -U goshikq -d goshikq"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -23,16 +23,16 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://axiom:axiom@postgres:5432/axiom
-      AXIOM_BIND: 0.0.0.0:7400
-      AXIOM_AUTH_MODE: ${AXIOM_AUTH_MODE:-oidc}
-      AXIOM_OIDC_ISSUER: ${AXIOM_OIDC_ISSUER:-}
-      AXIOM_OIDC_AUDIENCE: ${AXIOM_OIDC_AUDIENCE:-axiom}
-      AXIOM_OIDC_JWKS_URL: ${AXIOM_OIDC_JWKS_URL:-}
-      AXIOM_LOG_FORMAT: json
-      AXIOM_CORS_ORIGINS: ${AXIOM_CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
-      AXIOM_ALLOW_INSECURE_BIND: ${AXIOM_ALLOW_INSECURE_BIND:-false}
-      AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT: ${AXIOM_OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      DATABASE_URL: postgres://goshikq:goshikq@postgres:5432/goshikq
+      GOSHIKQ_BIND: 0.0.0.0:7400
+      GOSHIKQ_AUTH_MODE: ${GOSHIKQ_AUTH_MODE:-oidc}
+      GOSHIKQ_OIDC_ISSUER: ${GOSHIKQ_OIDC_ISSUER:-}
+      GOSHIKQ_OIDC_AUDIENCE: ${GOSHIKQ_OIDC_AUDIENCE:-goshikq}
+      GOSHIKQ_OIDC_JWKS_URL: ${GOSHIKQ_OIDC_JWKS_URL:-}
+      GOSHIKQ_LOG_FORMAT: json
+      GOSHIKQ_CORS_ORIGINS: ${GOSHIKQ_CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      GOSHIKQ_ALLOW_INSECURE_BIND: ${GOSHIKQ_ALLOW_INSECURE_BIND:-false}
+      GOSHIKQ_OTEL_EXPORTER_OTLP_ENDPOINT: ${GOSHIKQ_OTEL_EXPORTER_OTLP_ENDPOINT:-}
     ports:
       - "127.0.0.1:7400:7400"
     profiles: ["runtime", "studio"]
@@ -45,11 +45,11 @@ services:
       runtime:
         condition: service_started
     environment:
-      AXIOM_STUDIO_RUNTIME_URL: http://runtime:7400
-      AXIOM_RUNTIME_URL: http://runtime:7400
+      GOSHIKQ_STUDIO_RUNTIME_URL: http://runtime:7400
+      GOSHIKQ_RUNTIME_URL: http://runtime:7400
     ports:
       - "127.0.0.1:3000:3000"
     profiles: ["studio"]
 
 volumes:
-  axiom-pg:
+  goshikq-pg:

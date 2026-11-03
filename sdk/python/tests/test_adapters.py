@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.models.mock import MockModel as MockImpl
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.models.mock import MockModel as MockImpl
 
 
 def test_manifest_matches_mock_capabilities() -> None:
@@ -12,7 +12,7 @@ def test_manifest_matches_mock_capabilities() -> None:
     model = MockModel(script=[ModelTurn(content="x")])
     caps = model.capabilities.to_dict()
     assert caps == mock["capabilities"]
-    assert mock["package"] == "axiom_ai.models.mock"
+    assert mock["package"] == "goshikq_ai.models.mock"
     assert isinstance(model, MockImpl)
     assert mock["status"] == "available"
 

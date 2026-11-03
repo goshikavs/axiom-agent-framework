@@ -1,4 +1,4 @@
-"""Real OpenAI Agents SDK tracing → Axiom OTLP.
+"""Real OpenAI Agents SDK tracing → Goshikq OTLP.
 
 This test imports the public `agents` package. It does not construct mock OTLP and call
 that a compatibility result. If the SDK cannot run fully offline, the test records which
@@ -14,10 +14,10 @@ from typing import Any
 import httpx
 import pytest
 
-from axiom_ai.client import RuntimeClient
-from axiom_ai.otel import OtlpTracer
+from goshikq_ai.client import RuntimeClient
+from goshikq_ai.otel import OtlpTracer
 
-ENDPOINT = os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
+ENDPOINT = os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
 
 
 def _health() -> bool:
@@ -27,7 +27,7 @@ def _health() -> bool:
         return False
 
 
-pytestmark = pytest.mark.skipif(not _health(), reason="axiom-server not reachable")
+pytestmark = pytest.mark.skipif(not _health(), reason="goshikq-server not reachable")
 
 agents = pytest.importorskip("agents", reason="openai-agents package is not installed")
 
@@ -47,7 +47,7 @@ async def test_real_openai_agents_sdk_trace_ingested_unverified():
     tracer = OtlpTracer(service_name="openai-agents-real", framework="openai-agents")
     captured: list[str] = []
 
-    class AxiomProcessor(TracingProcessor):  # type: ignore[misc]
+    class GoshikqProcessor(TracingProcessor):  # type: ignore[misc]
         def __init__(self) -> None:
             self._root = None
 
@@ -88,14 +88,14 @@ async def test_real_openai_agents_sdk_trace_ingested_unverified():
         def force_flush(self) -> None:
             return None
 
-    add_trace_processor(AxiomProcessor())
+    add_trace_processor(GoshikqProcessor())
 
     @function_tool
     def lookup_order(order_id: str) -> dict[str, str]:
         return {"order_id": order_id, "status": "paid"}
 
     agent = Agent(
-        name="axiom-oa-real",
+        name="goshikq-oa-real",
         instructions="Call lookup_order. Do not claim a refund succeeded. Do not call paid APIs.",
         tools=[lookup_order],
     )
@@ -110,13 +110,13 @@ async def test_real_openai_agents_sdk_trace_ingested_unverified():
 
             kwargs["model"] = FakeModel()
             agent = Agent(
-                name="axiom-oa-real",
+                name="goshikq-oa-real",
                 instructions="Call lookup_order.",
                 tools=[lookup_order],
                 model=kwargs["model"],
             )
         except Exception:
-            os.environ.setdefault("OPENAI_API_KEY", "sk-axiom-offline-placeholder")
+            os.environ.setdefault("OPENAI_API_KEY", "sk-goshikq-offline-placeholder")
         await Runner.run(agent, "lookup ORD-2048")
         ran_runner = True
     except Exception as e:  # provider-backed models cannot run offline
@@ -125,7 +125,7 @@ async def test_real_openai_agents_sdk_trace_ingested_unverified():
     if not tracer._spans:
         root = tracer.start(
             "invoke_agent",
-            attributes={"gen_ai.operation.name": "invoke_agent", "gen_ai.agent.name": "axiom-oa-real", "openai.agents.note": "processor-only"},
+            attributes={"gen_ai.operation.name": "invoke_agent", "gen_ai.agent.name": "goshikq-oa-real", "openai.agents.note": "processor-only"},
         )
         err = tracer.start("error", parent=root, attributes={"gen_ai.operation.name": "chat"})
         tracer.end(err, status_code=2, error=runner_error or "no spans from SDK")

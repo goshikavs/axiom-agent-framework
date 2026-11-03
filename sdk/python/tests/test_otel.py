@@ -1,4 +1,4 @@
-from axiom_ai.otel import OtlpTracer, spans_to_otlp_json
+from goshikq_ai.otel import OtlpTracer, spans_to_otlp_json
 
 
 def test_otlp_json_includes_parent_and_omits_unknown_tokens() -> None:
@@ -20,7 +20,7 @@ def test_otlp_json_includes_parent_and_omits_unknown_tokens() -> None:
 
 
 def test_spans_to_otlp_json_int_attributes() -> None:
-    from axiom_ai.otel import Span
+    from goshikq_ai.otel import Span
 
     s = Span(
         trace_id="aa" * 16,

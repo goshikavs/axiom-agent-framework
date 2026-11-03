@@ -1,7 +1,7 @@
 ---
 layout: home
 hero:
-  name: Axiom
+  name: Goshikq
   text: Outcome-driven agent runtime
   tagline: Rust execution, Python and TypeScript SDKs, Studio, and executable workflows.
   actions:

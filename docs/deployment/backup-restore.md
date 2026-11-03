@@ -1,11 +1,11 @@
 # Backup and restore
 
-Axiom state is PostgreSQL. Files under `.axiom/postgres` are an embedded instance, not a backup format.
+Goshikq state is PostgreSQL. Files under `.goshikq/postgres` are an embedded instance, not a backup format.
 
 ## Backup
 
 ```bash
-pg_dump --format=custom --file axiom.dump "$DATABASE_URL"
+pg_dump --format=custom --file goshikq.dump "$DATABASE_URL"
 ```
 
 Include all schemas. Migrations are additive; dump the whole database.
@@ -13,8 +13,8 @@ Include all schemas. Migrations are additive; dump the whole database.
 ## Restore
 
 ```bash
-pg_restore --clean --if-exists --dbname "$DATABASE_URL" axiom.dump
-axiom-server --migrate-only
+pg_restore --clean --if-exists --dbname "$DATABASE_URL" goshikq.dump
+goshikq-server --migrate-only
 ```
 
 Restore onto the same major PostgreSQL version when possible. After restore, run readiness checks (`/health`, `/ready`) before sending traffic.

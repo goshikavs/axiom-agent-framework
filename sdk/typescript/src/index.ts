@@ -1,5 +1,6 @@
 export { VERSION, PROTOCOL_VERSION, SOURCE_FRAMEWORK, WORKER_CAPABILITIES } from "./version.ts";
 export {
+  GoshikqError,
   AxiomError,
   RuntimeConnectionError,
   RuntimeRejectedError,

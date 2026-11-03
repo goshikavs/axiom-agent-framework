@@ -1,10 +1,10 @@
 """Recovery policy tests. These do not claim exactly-once external I/O.
 
-The Rust runtime owns the real policy (`axiom-core::recovery`). This file checks the
+The Rust runtime owns the real policy (`goshikq-core::recovery`). This file checks the
 simulated processor and verifier contract that the runtime relies on.
 """
 
-from axiom_ai.tools import VerifierResult
+from goshikq_ai.tools import VerifierResult
 
 
 def test_verifier_waiting_is_not_verified() -> None:
@@ -22,7 +22,7 @@ def test_verifier_waiting_is_not_verified() -> None:
 
 
 def test_six_interruption_boundaries_never_blindly_retry_non_idempotent() -> None:
-    """Documented mapping; the executable copy lives in axiom-core recovery tests.
+    """Documented mapping; the executable copy lives in goshikq-core recovery tests.
 
     1. Before tool execution → resume planning (no side effect started).
     2. After recording intent, before dispatch → hold; do not dispatch.

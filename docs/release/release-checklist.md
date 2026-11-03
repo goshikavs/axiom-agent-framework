@@ -9,7 +9,7 @@ Nothing in this list has been performed unless the owner authorized it.
 - [ ] Owner confirms git identity (`user.name` / `user.email`) — do not change git config from tooling
 - [ ] Review `git status` for secrets (`.env`, `*.pem`, local DBs, logs)
 - [ ] Initial commit authorized by owner
-- [ ] GitHub repository `goshikavs/axiom-agent-framework` created (private or public — owner choice)
+- [ ] GitHub repository remains `goshikavs/axiom-agent-framework` until the owner authorizes a remote rename
 - [ ] `git push -u origin main` authorized
 - [ ] GitHub Actions run on `ubuntu-latest` recorded: rust, python-sdk, typescript, studio, docs, integration, packaging, playwright, docker-smoke, security-scans
 - [ ] Docker smoke log attached to the milestone
@@ -24,8 +24,8 @@ Nothing in this list has been performed unless the owner authorized it.
 ## Publishing (separate authorization)
 
 - [ ] crates.io (optional)
-- [ ] PyPI `axiom-ai` (optional)
-- [ ] npm `@axiom-ai/sdk` (optional)
+- [ ] PyPI `goshikq-ai` (optional)
+- [ ] npm `@goshikq/sdk` (optional)
 - [ ] GitHub Release + source archive
 - [ ] Container registry images
 

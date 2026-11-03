@@ -1,6 +1,6 @@
 # Change-impact analysis
 
-`axiom_core::impact::compute_impact(graph, changes) -> ImpactReport`
+`goshikq_core::impact::compute_impact(graph, changes) -> ImpactReport`
 
 ## Inputs
 
@@ -29,7 +29,7 @@ An affected decision is **not** automatically incorrect.
 3. DFS along outgoing edges. Rec-stack cycle detection: a back-edge sets `cyclic` and does not recurse forever.
 4. Partition visited nodes by kind. Node ids are BTree-sorted, so two permutations of the same change set yield the same report.
 
-## Selective revalidation (`axiom_core::revalidation`)
+## Selective revalidation (`goshikq_core::revalidation`)
 
 Deterministic planner. No LLM.
 

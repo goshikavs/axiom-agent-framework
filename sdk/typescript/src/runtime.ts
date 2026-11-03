@@ -36,8 +36,8 @@ export class Runtime {
   constructor(agent: Agent, opts: RuntimeOptions = {}) {
     this.agent = agent;
     this.stateProvider = opts.stateProvider;
-    this.projectId = opts.projectId || env("AXIOM_PROJECT_ID");
-    this.studioUrl = (opts.studioUrl || env("AXIOM_STUDIO_URL") || "").replace(/\/$/, "") || undefined;
+    this.projectId = opts.projectId || env("GOSHIKQ_PROJECT_ID", "AXIOM_PROJECT_ID");
+    this.studioUrl = (opts.studioUrl || env("GOSHIKQ_STUDIO_URL", "AXIOM_STUDIO_URL") || "").replace(/\/$/, "") || undefined;
     this.pollTimeoutMs = opts.pollTimeoutMs ?? 20_000;
     this.client = new RuntimeClient({
       endpoint: opts.endpoint,
@@ -146,10 +146,14 @@ export class Runtime {
   }
 }
 
-function env(name: string): string | undefined {
+function env(...names: string[]): string | undefined {
   try {
-    const v = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.[name];
-    return v && v.length ? v : undefined;
+    const proc = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env;
+    for (const name of names) {
+      const v = proc?.[name];
+      if (v && v.length) return v;
+    }
+    return undefined;
   } catch {
     return undefined;
   }

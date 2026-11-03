@@ -1,5 +1,5 @@
 {
-  "name": "axiom-typescript-agent",
+  "name": "goshikq-typescript-agent",
   "private": true,
   "version": "0.1.0-alpha",
   "type": "module",
@@ -10,7 +10,7 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@axiom-ai/sdk": "workspace:*",
+    "@goshikq/sdk": "workspace:*",
     "zod": "4.6.7"
   }
 }

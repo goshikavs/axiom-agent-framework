@@ -1,6 +1,6 @@
 # OTLP ingestion
 
-Axiom accepts the public OTLP/HTTP trace protocol:
+Goshikq accepts the public OTLP/HTTP trace protocol:
 
 - `POST /v1/traces` (standard collector path)
 - `POST /api/v1/otlp/v1/traces` (same handler behind the API prefix)
@@ -16,7 +16,7 @@ Operator guide: [docs/integrations/opentelemetry.md](../integrations/opentelemet
 
 ## Mapping `otel-genai-v1`
 
-Implemented in `axiom_core::otel` (IO-free). Span classification:
+Implemented in `goshikq_core::otel` (IO-free). Span classification:
 
 | Signal | Event types |
 |---|---|
@@ -24,13 +24,13 @@ Implemented in `axiom_core::otel` (IO-free). Span classification:
 | GenAI chat / OpenInference LLM | `model.completed` / `model.failed` |
 | `execute_tool` / tool name | `tool.completed` / `tool.failed` |
 | Other | `run.status_changed` with `payload.unmapped_span=true` |
-| `axiom.state_snapshot` attribute | `state.snapshot` (optional, never inferred) |
+| `goshikq.state_snapshot` attribute | `state.snapshot` (optional, never inferred) |
 
 Rules:
 
 - Unknown attributes are stored (after redaction).
 - Missing token counts, models, and timestamps stay absent. They are listed under `metadata.missing_attributes`.
-- Prompts/completions are redacted unless `AXIOM_CAPTURE_MODEL_IO=full`.
+- Prompts/completions are redacted unless `GOSHIKQ_CAPTURE_MODEL_IO=full`.
 - Duplicate spans reuse deterministic `event_id` (UUID v5 of trace+span+type).
 - Out-of-order spans keep source timestamps; the collector assigns arrival `sequence`.
 - Parent span ids are preserved. Missing parents are not synthesized.
@@ -39,8 +39,8 @@ Rules:
 
 ## Security
 
-Production must set `AXIOM_AUTH_MODE=api_key`. The receiver accepts `Authorization: Bearer` or `x-api-key`. `X-Axiom-Project-Id` and resource attribute `axiom.project_id` must match the authenticated project.
+Production must set `GOSHIKQ_AUTH_MODE=api_key`. The receiver accepts `Authorization: Bearer` or `x-api-key`. `X-Goshikq-Project-Id` and resource attribute `goshikq.project_id` must match the authenticated project.
 
-Limits: `AXIOM_MAX_BODY_BYTES` (default 4 MiB), `AXIOM_OTLP_MAX_SPANS` (2000), `AXIOM_OTLP_RATE_PER_MINUTE` (600). Retention follows the project `retention_days` column; no separate OTLP store.
+Limits: `GOSHIKQ_MAX_BODY_BYTES` (default 4 MiB), `GOSHIKQ_OTLP_MAX_SPANS` (2000), `GOSHIKQ_OTLP_RATE_PER_MINUTE` (600). Retention follows the project `retention_days` column; no separate OTLP store.
 
 Unauthenticated public ingestion is refused when the server is bound off loopback (existing bind guard).

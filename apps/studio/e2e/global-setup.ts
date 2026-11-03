@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-const RUNTIME = (process.env.AXIOM_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
+const RUNTIME = (process.env.GOSHIKQ_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
 export const FIXTURE_AGENT = "pw-missing-telemetry";
 
 function otlpMissing(traceId: string) {
@@ -11,12 +11,12 @@ function otlpMissing(traceId: string) {
         resource: {
           attributes: [
             { key: "service.name", value: { stringValue: FIXTURE_AGENT } },
-            { key: "axiom.source_framework", value: { stringValue: "otel" } },
+            { key: "goshikq.source_framework", value: { stringValue: "otel" } },
           ],
         },
         scopeSpans: [
           {
-            scope: { name: "axiom.pw-fixture", version: "otel-genai-v1" },
+            scope: { name: "goshikq.pw-fixture", version: "otel-genai-v1" },
             spans: [
               {
                 traceId,

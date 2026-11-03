@@ -1,8 +1,8 @@
 /**
- * MCP tools wrapped as Axiom tools. Server descriptions cannot override allowlists,
- * permissions, effect, or approval. Refund still requires Axiom approval + contract.
+ * MCP tools wrapped as Goshikq tools. Server descriptions cannot override allowlists,
+ * permissions, effect, or approval. Refund still requires Goshikq approval + contract.
  */
-import { Agent, Goal, McpClient, MockModel, Runtime, StateSnapshot } from "@axiom-ai/sdk";
+import { Agent, Goal, McpClient, MockModel, Runtime, StateSnapshot } from "@goshikq/sdk";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -33,9 +33,9 @@ const mcp = new McpClient({
 });
 
 await mcp.connect();
-const tools = mcp.toAxiomTools();
+const tools = mcp.toGoshikqTools();
 
-const attemptRefund = process.env.AXIOM_MCP_REFUND === "1";
+const attemptRefund = process.env.GOSHIKQ_MCP_REFUND === "1";
 
 function policy(_messages: Record<string, unknown>[], _tools: Record<string, unknown>[], idx: number) {
   if (idx === 0) return { tool_calls: [["knowledge_search", { query: "refund policy" }] as [string, Record<string, unknown>]] };
@@ -55,7 +55,7 @@ const agent = new Agent({
 });
 
 const goal = new Goal({
-  description: "Retrieve policy and inventory; refund requires Axiom approval",
+  description: "Retrieve policy and inventory; refund requires Goshikq approval",
   verification: "none",
   maxSteps: 8,
 });
@@ -64,7 +64,7 @@ const runtime = new Runtime(agent, {
   stateProvider: {
     snapshot: () => new StateSnapshot({ state: { ok: true }, version: "1", source: "mcp-demo" }),
   },
-  studioUrl: process.env.AXIOM_STUDIO_URL || "http://127.0.0.1:3000",
+  studioUrl: process.env.GOSHIKQ_STUDIO_URL || "http://127.0.0.1:3000",
 });
 
 try {

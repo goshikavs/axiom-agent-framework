@@ -2,7 +2,7 @@
 
 Classifications: **TESTED** (ran on this OS/arch), **BUILD_ONLY** (compiled or CI-defined, not executed here), **EXPERIMENTAL**, **UNSUPPORTED**.
 
-| Platform | Runtime (`axiom-server`) | Python SDK | TypeScript SDK | Studio | Classification |
+| Platform | Runtime (`goshikq-server`) | Python SDK | TypeScript SDK | Studio | Classification |
 | --- | --- | --- | --- | --- | --- |
 | Windows x64 (MSVC) | Native binary via `stable-x86_64-pc-windows-msvc` | 3.11–3.14 | Bun 1.2+ | Next.js 15 | **TESTED** |
 | Windows ARM64 host compiling x64 MSVC | Same x64 binary | Same | Same | Same | **TESTED** (x64 binary on ARM64 Windows) |

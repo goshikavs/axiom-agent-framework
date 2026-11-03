@@ -11,7 +11,7 @@
 
 ## Logs
 
-`AXIOM_LOG_FORMAT=json` emits tracing-subscriber JSON. Do not log `Authorization` or raw evidence payloads. Default capture mode redacts secret-like fields.
+`GOSHIKQ_LOG_FORMAT=json` emits tracing-subscriber JSON. Do not log `Authorization` or raw evidence payloads. Default capture mode redacts secret-like fields.
 
 ## OpenTelemetry
 

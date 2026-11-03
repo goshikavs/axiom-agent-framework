@@ -1,4 +1,4 @@
-"""Restart axiom-server while a published workflow is waiting for approval.
+"""Restart goshikq-server while a published workflow is waiting for approval.
 
 Uses a dedicated subprocess so it does not depend on the long-lived :7400 runtime.
 Completed nodes must remain completed; the approval waiter must resume.
@@ -20,7 +20,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 WF = json.loads((ROOT / "examples" / "visual-workflow" / "parallel-approval.json").read_text(encoding="utf-8"))
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:axiom@127.0.0.1:55432/axiom")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:goshikq@127.0.0.1:55432/goshikq")
 
 
 from tests.helpers import find_server
@@ -46,13 +46,13 @@ def free_port() -> int:
 def start_server(port: int) -> subprocess.Popen:
     binary = find_server()
     if binary is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
     env = os.environ.copy()
     env["DATABASE_URL"] = DATABASE_URL
-    env["AXIOM_BIND"] = f"127.0.0.1:{port}"
-    env["AXIOM_AUTH_MODE"] = "none"
-    env["AXIOM_LEASE_TTL_SECS"] = "30"
-    env.pop("AXIOM_CRASH_AT", None)
+    env["GOSHIKQ_BIND"] = f"127.0.0.1:{port}"
+    env["GOSHIKQ_AUTH_MODE"] = "none"
+    env["GOSHIKQ_LEASE_TTL_SECS"] = "30"
+    env.pop("GOSHIKQ_CRASH_AT", None)
     kwargs: dict = {"env": env, "cwd": str(ROOT), "stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
     if os.name == "nt":
         kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
@@ -75,7 +75,7 @@ def wait_ready(url: str, timeout: float = 30.0) -> None:
 @pytest.mark.skipif(not postgres_up(), reason="PostgreSQL not reachable")
 def test_workflow_approval_survives_process_restart() -> None:
     if find_server() is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
     port = free_port()
     url = f"http://127.0.0.1:{port}"
     proc = start_server(port)
@@ -129,7 +129,7 @@ def test_workflow_approval_survives_process_restart() -> None:
             dec = c.post(
                 f"/api/v1/approvals/{approval_id}/decision",
                 json={"decision": "approve", "reason": "workflow-recovery"},
-                headers={"x-axiom-actor": "workflow-recovery"},
+                headers={"x-goshikq-actor": "workflow-recovery"},
             )
             assert dec.status_code < 300, dec.text
             deadline = time.monotonic() + 60

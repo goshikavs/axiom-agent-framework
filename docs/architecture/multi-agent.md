@@ -1,6 +1,6 @@
 # Native multi-agent model (v0.7)
 
-Axiom treats collaborating agents as **parent and child runs**, not as a second executor. The Rust runtime remains the authority for transitions, journals, evidence, and goal verification.
+Goshikq treats collaborating agents as **parent and child runs**, not as a second executor. The Rust runtime remains the authority for transitions, journals, evidence, and goal verification.
 
 ## Abstractions
 

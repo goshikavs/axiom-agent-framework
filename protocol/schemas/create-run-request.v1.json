@@ -57,9 +57,9 @@
       "format": "uuid"
     },
     "source_framework": {
-      "description": "Framework that produced this definition, e.g. `axiom-python`.",
+      "description": "Framework that produced this definition, e.g. `goshikq-python`.",
       "type": "string",
-      "default": "axiom"
+      "default": "goshikq"
     },
     "task_id": {
       "description": "Unique id of the delegated task (distinct from `run.id`).",

@@ -1,8 +1,8 @@
 {
-  "name": "@axiom-ai/studio",
+  "name": "@goshikq/studio",
   "version": "0.1.0-alpha",
   "private": true,
-  "description": "Axiom Studio — execution monitoring, debugging, and verification",
+  "description": "Goshikq Studio — execution monitoring, debugging, and verification",
   "scripts": {
     "dev": "next dev --port 3000 --hostname 127.0.0.1",
     "build": "next build",

@@ -12,7 +12,7 @@ import httpx
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNTIME = os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
+RUNTIME = os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400").rstrip("/")
 
 
 def wait_status(client: httpx.Client, run_id: str, wanted: set[str], timeout: float = 45.0) -> dict:

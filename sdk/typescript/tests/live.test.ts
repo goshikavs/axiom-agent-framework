@@ -4,7 +4,7 @@ import { Agent, Goal, MockModel, Runtime, StateSnapshot, defineTool } from "../s
 
 async function runtimeUp(): Promise<boolean> {
   try {
-    const base = (process.env.AXIOM_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
+    const base = (process.env.GOSHIKQ_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
     const r = await fetch(`${base}/health`, { signal: AbortSignal.timeout(1500) });
     return r.ok;
   } catch {

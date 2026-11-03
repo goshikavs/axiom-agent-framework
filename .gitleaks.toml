@@ -1,11 +1,11 @@
-title = "Axiom"
+title = "Goshikq"
 
 [allowlist]
 description = "Test HMAC secrets and documentation examples"
 paths = [
   '''tests/.*''',
   '''docs/.*''',
-  '''crates/axiom-core/src/redaction\.rs''',
+  '''crates/goshikq-core/src/redaction\.rs''',
   '''\.gitleaks\.toml''',
 ]
 regexes = [

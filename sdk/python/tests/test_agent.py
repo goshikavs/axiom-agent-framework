@@ -1,7 +1,7 @@
-from axiom_ai import Agent, ExecutionLimits
-from axiom_ai.errors import ConfigurationError
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.tools import tool
+from goshikq_ai import Agent, ExecutionLimits
+from goshikq_ai.errors import ConfigurationError
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.tools import tool
 
 
 @tool

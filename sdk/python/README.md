@@ -1,8 +1,8 @@
-# axiom-ai (Python SDK)
+# goshikq-ai (Python SDK)
 
-Python SDK for [Axiom](https://github.com/goshikavs/axiom-agent-framework), the outcome-driven,
+Python SDK for [Goshikq](https://github.com/goshikavs/axiom-agent-framework), the outcome-driven,
 model-independent AI agent framework. The SDK declares agents, goals, and tool contracts; the
-Axiom Rust runtime owns execution, policy enforcement, persistence, and verification.
+Goshikq Rust runtime owns execution, policy enforcement, persistence, and verification.
 
 Status: `0.1.0a1` (alpha). APIs may change before `0.1.0`.
 
@@ -14,13 +14,13 @@ pip install -e ".[openai]"         # optional provider adapters
 pip install -e ".[anthropic]"
 ```
 
-Requires a running Axiom runtime (default `http://127.0.0.1:7400`, override with `AXIOM_RUNTIME_URL`).
+Requires a running Goshikq runtime (default `http://127.0.0.1:7400`, override with `GOSHIKQ_RUNTIME_URL`).
 
 ## Minimal example
 
 ```python
-from axiom_ai import Agent, Goal, Runtime, StateSnapshot, tool
-from axiom_ai.models import MockModel, ModelTurn
+from goshikq_ai import Agent, Goal, Runtime, StateSnapshot, tool
+from goshikq_ai.models import MockModel, ModelTurn
 
 @tool(effect="read_only")
 def lookup_order(order_id: str) -> dict:

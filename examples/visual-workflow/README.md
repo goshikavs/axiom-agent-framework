@@ -3,9 +3,9 @@
 Pinned JSON executed by the Rust runtime, not by Studio.
 
 ```text
-axiom workflows validate examples/visual-workflow/parallel-approval.json
-axiom workflows publish examples/visual-workflow/parallel-approval.json
-axiom workflows run <workflow-id>
+goshikq workflows validate examples/visual-workflow/parallel-approval.json
+goshikq workflows publish examples/visual-workflow/parallel-approval.json
+goshikq workflows run <workflow-id>
 ```
 
 Expected:

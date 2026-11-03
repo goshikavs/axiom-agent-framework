@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Axiom Studio v0.5", () => {
+test.describe("Goshikq Studio v0.5", () => {
   test("execution list loads", async ({ page }) => {
     await page.goto("/executions");
     await expect(page.getByRole("heading", { name: "Executions" })).toBeVisible();
@@ -106,7 +106,7 @@ test.describe("Axiom Studio v0.5", () => {
   });
 
   test("multi-agent panel shows persisted parent/child", async ({ page, request }) => {
-    const runtime = (process.env.AXIOM_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
+    const runtime = (process.env.GOSHIKQ_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
     const parent = await request.post(`${runtime}/api/v1/runs`, {
       data: {
         agent: { name: "pw-supervisor", model: "mock/deterministic", tools: [], execution_limits: { max_steps: 2, deadline_seconds: 30 } },

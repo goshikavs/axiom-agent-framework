@@ -1,6 +1,6 @@
-"""Minimal Python agent template for Axiom.
+"""Minimal Python agent template for Goshikq.
 
-Requires axiom-server on AXIOM_RUNTIME_URL (default http://127.0.0.1:7400).
+Requires goshikq-server on GOSHIKQ_RUNTIME_URL (default http://127.0.0.1:7400).
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ import asyncio
 import logging
 import os
 
-from axiom_ai import Agent, Goal, Runtime, StateSnapshot, tool
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, Goal, Runtime, StateSnapshot, tool
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 STORE: dict[str, str] = {}
 
@@ -38,7 +38,7 @@ async def main() -> None:
         tools=[record_greeting],
         state_provider=GreetingState(),
     )
-    result = await Runtime(agent, url=os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400")).run(
+    result = await Runtime(agent, url=os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400")).run(
         Goal(description="Greet world", success_predicate="greeting_stored")
     )
     print(result.status, result.verification_status, result.run_id)

@@ -10,9 +10,9 @@ import asyncio
 import os
 import sys
 
-from axiom_ai import Agent, AgentGroup, AgentTask, CoordinationPolicy, Goal, StateSnapshot, tool
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, AgentGroup, AgentTask, CoordinationPolicy, Goal, StateSnapshot, tool
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 from store import STORE
 
@@ -107,7 +107,7 @@ async def main() -> int:
         supervisor,
         policy=CoordinationPolicy(mode="sequential", max_depth=4, max_delegations=8),
         state_provider=provider,
-        endpoint=os.environ.get("AXIOM_RUNTIME_URL"),
+        endpoint=os.environ.get("GOSHIKQ_RUNTIME_URL"),
     )
     child_goal = Goal(description="Complete assigned refund subtask", success=child_true)
     result = await group.run(

@@ -70,7 +70,7 @@ export class McpClient {
     const init = (await this.call("initialize", {
       protocolVersion: "2024-11-05",
       capabilities: { roots: { listChanged: false } },
-      clientInfo: { name: "axiom-typescript", version: "0.1.0-alpha" },
+      clientInfo: { name: "goshikq-typescript", version: "0.1.0-alpha" },
     })) as Record<string, unknown>;
     this.capabilities = (init.capabilities as Record<string, unknown>) ?? {};
     await this.notify("notifications/initialized", {});
@@ -92,7 +92,7 @@ export class McpClient {
     return this.tools.filter((t) => this.policy.allowlist.includes(t.name));
   }
 
-  toAxiomTools(): Tool<any, any>[] {
+  toGoshikqTools(): Tool<any, any>[] {
     return this.discover().map((t) => this.wrap(t));
   }
 

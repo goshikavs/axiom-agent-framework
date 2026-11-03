@@ -1,15 +1,18 @@
-export class AxiomError extends Error {
+export class GoshikqError extends Error {
   readonly code: string;
   readonly details?: unknown;
-  constructor(message: string, code = "axiom_error", details?: unknown) {
+  constructor(message: string, code = "goshikq_error", details?: unknown) {
     super(message);
-    this.name = "AxiomError";
+    this.name = "GoshikqError";
     this.code = code;
     this.details = details;
   }
 }
 
-export class RuntimeConnectionError extends AxiomError {
+/** @deprecated Use GoshikqError */
+export { GoshikqError as AxiomError };
+
+export class RuntimeConnectionError extends GoshikqError {
   readonly statusCode?: number;
   readonly body?: unknown;
   constructor(message: string, opts: { statusCode?: number; body?: unknown } = {}) {
@@ -20,7 +23,7 @@ export class RuntimeConnectionError extends AxiomError {
   }
 }
 
-export class RuntimeRejectedError extends AxiomError {
+export class RuntimeRejectedError extends GoshikqError {
   readonly statusCode: number;
   constructor(code: string, message: string, statusCode: number, details?: unknown) {
     super(`${code}: ${message}`, code, details);
@@ -29,7 +32,7 @@ export class RuntimeRejectedError extends AxiomError {
   }
 }
 
-export class ToolError extends AxiomError {
+export class ToolError extends GoshikqError {
   readonly retryable: boolean;
   constructor(message: string, opts: { code?: string; retryable?: boolean; details?: unknown } = {}) {
     super(message, opts.code ?? "tool_error", opts.details);
@@ -45,7 +48,7 @@ export class RetryableToolError extends ToolError {
   }
 }
 
-export class ModelAdapterError extends AxiomError {
+export class ModelAdapterError extends GoshikqError {
   readonly retryable: boolean;
   constructor(message: string, opts: { code?: string; retryable?: boolean; details?: unknown } = {}) {
     super(message, opts.code ?? "provider_error", opts.details);
@@ -54,14 +57,14 @@ export class ModelAdapterError extends AxiomError {
   }
 }
 
-export class ConfigurationError extends AxiomError {
+export class ConfigurationError extends GoshikqError {
   constructor(message: string) {
     super(message, "configuration");
     this.name = "ConfigurationError";
   }
 }
 
-export class CancellationError extends AxiomError {
+export class CancellationError extends GoshikqError {
   constructor(message = "operation cancelled") {
     super(message, "cancelled");
     this.name = "CancellationError";

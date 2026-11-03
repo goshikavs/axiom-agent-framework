@@ -27,7 +27,7 @@ def _run(cmd: list[str], cwd: Path, env: dict | None = None, timeout: int = 180)
 
 
 def test_python_wheel_isolated_install_and_runtime():
-    work = Path(tempfile.mkdtemp(prefix="axiom-py-sdk-", dir=str(OUTSIDE)))
+    work = Path(tempfile.mkdtemp(prefix="goshikq-py-sdk-", dir=str(OUTSIDE)))
     try:
         def _py(root: Path) -> Path:
             return root / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
@@ -41,24 +41,24 @@ def test_python_wheel_isolated_install_and_runtime():
         assert build.returncode == 0, build.stdout + build.stderr
         packed = _run([str(bpy), "-m", "build", "--wheel", "--outdir", str(work / "dist")], cwd=ROOT / "sdk" / "python")
         assert packed.returncode == 0, packed.stdout + packed.stderr
-        wheels = list((work / "dist").glob("axiom_ai-*.whl"))
+        wheels = list((work / "dist").glob("goshikq_ai-*.whl"))
         assert wheels, "wheel was not produced"
         inst = _run([str(py), "-m", "pip", "install", str(wheels[0])], cwd=work)
         assert inst.returncode == 0, inst.stdout + inst.stderr
         probe = r"""
-import axiom_ai
-from axiom_ai import Agent, Goal, Runtime, tool, StateSnapshot
-from axiom_ai.models import MockModel, ModelTurn
-assert axiom_ai.__version__
+import goshikq_ai
+from goshikq_ai import Agent, Goal, Runtime, tool, StateSnapshot
+from goshikq_ai.models import MockModel, ModelTurn
+assert goshikq_ai.__version__
 assert hasattr(Agent, '__init__')
 assert callable(tool)
-print('imports-ok', axiom_ai.__version__)
+print('imports-ok', goshikq_ai.__version__)
 """
         r = _run([str(py), "-c", probe], cwd=work)
         assert r.returncode == 0, r.stdout + r.stderr
         assert "imports-ok" in r.stdout
 
-        live = os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400")
+        live = os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400")
         try:
             h = httpx.get(f"{live}/health", timeout=2)
             healthy = h.status_code == 200
@@ -69,9 +69,9 @@ print('imports-ok', axiom_ai.__version__)
         script = work / "agent.py"
         script.write_text(
             f"""
-from axiom_ai import Agent, Goal, Runtime, StateSnapshot, tool
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, Goal, Runtime, StateSnapshot, tool
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 store = {{"ok": False}}
 
@@ -98,7 +98,7 @@ assert result.verified
 """,
             encoding="utf-8",
         )
-        run = _run([str(py), str(script)], cwd=work, env={"AXIOM_RUNTIME_URL": live}, timeout=120)
+        run = _run([str(py), str(script)], cwd=work, env={"GOSHIKQ_RUNTIME_URL": live}, timeout=120)
         assert run.returncode == 0, run.stdout + run.stderr
     finally:
         shutil.rmtree(work, ignore_errors=True)
@@ -111,11 +111,13 @@ def test_typescript_tarball_isolated_install():
         bun = str(home_bun)
     if bun is None:
         pytest.skip("bun not on PATH")
-    work = Path(tempfile.mkdtemp(prefix="axiom-ts-sdk-", dir=str(OUTSIDE)))
+    work = Path(tempfile.mkdtemp(prefix="goshikq-ts-sdk-", dir=str(OUTSIDE)))
     try:
         packed = _run([bun, "pm", "pack"], cwd=ROOT / "sdk" / "typescript")
         assert packed.returncode == 0, packed.stdout + packed.stderr
-        tgz = list((ROOT / "sdk" / "typescript").glob("axiom-ai-sdk-*.tgz"))
+        tgz = list((ROOT / "sdk" / "typescript").glob("goshikq-sdk-*.tgz")) + list(
+            (ROOT / "sdk" / "typescript").glob("goshikq-ai-sdk-*.tgz")
+        )
         assert tgz, "bun pm pack did not produce a tarball"
         dest = work / tgz[0].name
         shutil.move(str(tgz[0]), dest)
@@ -126,7 +128,7 @@ def test_typescript_tarball_isolated_install():
         script = work / "probe.ts"
         script.write_text(
             """
-import { Agent, Goal, Runtime, defineTool, MockModel } from "@axiom-ai/sdk";
+import { Agent, Goal, Runtime, defineTool, MockModel } from "@goshikq/sdk";
 if (typeof Agent !== "function") throw new Error("Agent export missing");
 if (typeof Goal !== "function") throw new Error("Goal export missing");
 if (typeof Runtime !== "function") throw new Error("Runtime export missing");
@@ -140,7 +142,7 @@ console.log("imports-ok");
         assert r.returncode == 0, r.stdout + r.stderr
         assert "imports-ok" in r.stdout
 
-        live = os.environ.get("AXIOM_RUNTIME_URL", "http://127.0.0.1:7400")
+        live = os.environ.get("GOSHIKQ_RUNTIME_URL", "http://127.0.0.1:7400")
         try:
             healthy = httpx.get(f"{live}/health", timeout=2).status_code == 200
         except httpx.HTTPError:
@@ -150,7 +152,7 @@ console.log("imports-ok");
         run_script = work / "agent.ts"
         run_script.write_text(
             f"""
-import {{ Agent, Goal, Runtime, defineTool, MockModel, StateSnapshot }} from "@axiom-ai/sdk";
+import {{ Agent, Goal, Runtime, defineTool, MockModel, StateSnapshot }} from "@goshikq/sdk";
 const store = {{ ok: false }};
 const mark = defineTool({{
   name: "mark",
@@ -176,7 +178,7 @@ if (String(result.verification).toUpperCase().indexOf("VERIFIED") < 0) {{
 """,
             encoding="utf-8",
         )
-        run = _run([bun, "run", str(run_script)], cwd=work, env={"AXIOM_RUNTIME_URL": live}, timeout=120)
+        run = _run([bun, "run", str(run_script)], cwd=work, env={"GOSHIKQ_RUNTIME_URL": live}, timeout=120)
         # Import/export gate already passed. Full native execution needs a Zod schema on defineTool;
         # a constructor mismatch here is not a packaging failure.
         if run.returncode != 0:

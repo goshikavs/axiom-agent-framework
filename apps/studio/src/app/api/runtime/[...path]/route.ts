@@ -4,7 +4,13 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 function target(req: NextRequest, path: string[]): string {
-  const base = (process.env.AXIOM_STUDIO_RUNTIME_URL || process.env.AXIOM_RUNTIME_URL || "http://127.0.0.1:7400").replace(/\/$/, "");
+  const base = (
+    process.env.GOSHIKQ_STUDIO_RUNTIME_URL ||
+    process.env.AXIOM_STUDIO_RUNTIME_URL ||
+    process.env.GOSHIKQ_RUNTIME_URL ||
+    process.env.AXIOM_RUNTIME_URL ||
+    "http://127.0.0.1:7400"
+  ).replace(/\/$/, "");
   const suffix = path.join("/");
   const url = new URL(req.url);
   return `${base}/${suffix}${url.search}`;
@@ -17,8 +23,10 @@ async function proxy(req: NextRequest, path: string[]) {
     "content-type",
     "accept",
     "last-event-id",
+    "x-goshikq-actor",
     "x-axiom-actor",
     "x-api-key",
+    "x-goshikq-project-id",
     "x-axiom-project-id",
   ];
   for (const h of pass) {
@@ -26,7 +34,7 @@ async function proxy(req: NextRequest, path: string[]) {
     if (v) headers.set(h, v);
   }
   if (!headers.has("authorization") && !headers.has("x-api-key")) {
-    const studioKey = process.env.AXIOM_STUDIO_API_KEY;
+    const studioKey = process.env.GOSHIKQ_STUDIO_API_KEY || process.env.AXIOM_STUDIO_API_KEY;
     if (studioKey) headers.set("authorization", `Bearer ${studioKey}`);
   }
   const init: RequestInit = {

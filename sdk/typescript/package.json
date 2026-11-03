@@ -1,7 +1,7 @@
 {
-  "name": "@axiom-ai/sdk",
+  "name": "@goshikq/sdk",
   "version": "0.1.0-alpha",
-  "description": "TypeScript SDK for the Axiom runtime",
+  "description": "TypeScript SDK for the Goshikq runtime",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./src/index.ts",

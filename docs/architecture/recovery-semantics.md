@@ -1,6 +1,6 @@
 # Recovery semantics
 
-See [ADR-003](../decisions/ADR-003-state-and-recovery.md). This page is the v0.1 **guarantee list**. Axiom does **not** claim exactly-once external side effects.
+See [ADR-003](../decisions/ADR-003-state-and-recovery.md). This page is the v0.1 **guarantee list**. Goshikq does **not** claim exactly-once external side effects.
 
 ## What is persisted
 
@@ -33,7 +33,7 @@ The original write is never automatically re-dispatched.
 | 5 | During authoritative verification | Wait if the tool already succeeded | Resume planning otherwise |
 | 6 | Waiting for human approval | Resume approval wait; do not recreate the row | same |
 
-Executable copy: `crates/axiom-core/src/recovery.rs`.
+Executable copy: `crates/goshikq-core/src/recovery.rs`.
 
 ## Worker poll after restart
 
@@ -51,5 +51,5 @@ Checkpoint `data.wait` stores `invocation_id`, `tool_name`, `poll_after_ms`. Reu
 
 - Exactly-once delivery to a payment processor
 - Automatic completion of `RECOVERY_REQUIRED`
-- Cross-process atomicity between Axiom and an external API
+- Cross-process atomicity between Goshikq and an external API
 - Replay of historical events causing tool execution (Studio replay is GET-only)

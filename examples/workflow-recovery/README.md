@@ -1,6 +1,6 @@
 # Workflow recovery after restart
 
-Same graph as `examples/visual-workflow/parallel-approval.json`. The recovery harness kills `axiom-server` while the run is `WAITING_FOR_APPROVAL`, starts it again, then approves.
+Same graph as `examples/visual-workflow/parallel-approval.json`. The recovery harness kills `goshikq-server` while the run is `WAITING_FOR_APPROVAL`, starts it again, then approves.
 
 ```text
 python -m pytest tests/workflows/test_workflow_recovery.py -q

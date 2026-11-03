@@ -2,7 +2,7 @@
 ignore = [
     # Marvin timing side-channel in RSA PKCS#1 v1.5 *decryption*.
     # Pulled by sqlx 0.8's unused MySQL backend (`sqlx-mysql`) which remains
-    # in Cargo.lock even with default-features disabled. Axiom talks only to
+    # in Cargo.lock even with default-features disabled. Goshikq talks only to
     # PostgreSQL and verifies RS256 JWTs (signature verify, not RSA decrypt).
     # No patched `rsa` 0.9 release exists. Revisit when sqlx 0.8 is gone.
     "RUSTSEC-2023-0071",

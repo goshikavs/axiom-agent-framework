@@ -1,9 +1,9 @@
-"""hello-agent: the smallest verified Axiom run.
+"""hello-agent: the smallest verified Goshikq run.
 
-Path exercised: Python SDK -> Axiom Rust runtime -> deterministic mock model -> tool
+Path exercised: Python SDK -> Goshikq Rust runtime -> deterministic mock model -> tool
 execution -> goal verification against a StateSnapshot -> PostgreSQL events.
 
-Run:   python main.py            (runtime must be listening on AXIOM_RUNTIME_URL, default 127.0.0.1:7400)
+Run:   python main.py            (runtime must be listening on GOSHIKQ_RUNTIME_URL, default 127.0.0.1:7400)
 """
 
 from __future__ import annotations
@@ -13,9 +13,9 @@ import logging
 import os
 import sys
 
-from axiom_ai import Agent, Goal, Runtime, StateSnapshot, tool
-from axiom_ai.models import MockModel, ModelTurn
-from axiom_ai.state import SnapshotContext
+from goshikq_ai import Agent, Goal, Runtime, StateSnapshot, tool
+from goshikq_ai.models import MockModel, ModelTurn
+from goshikq_ai.state import SnapshotContext
 
 # A tiny in-memory "system of record". Real apps read a DB or API here.
 GREETINGS: dict[str, str] = {}
@@ -63,7 +63,7 @@ goal = Goal(
 
 
 async def main() -> int:
-    logging.basicConfig(level=os.environ.get("AXIOM_LOG", "WARNING"))
+    logging.basicConfig(level=os.environ.get("GOSHIKQ_LOG", "WARNING"))
     async with Runtime(agent, state_provider=GreetingState()) as rt:
         result = await rt.run(goal, input={"name": "Ada"})
     print(result.summary())

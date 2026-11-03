@@ -27,7 +27,7 @@
     "os_family": "windows",
     "parallelism": 12,
     "rustc_version": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
-    "axiom_version": "0.1.0-alpha",
+    "goshikq_version": "0.1.0-alpha",
     "cpu_brand": "Snapdragon(R) X 12-core X1E80100 @ 3.40 GHz",
     "rss_bytes_after": 48672768,
     "peak_working_set_bytes": 57180160,

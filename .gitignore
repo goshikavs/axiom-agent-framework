@@ -38,9 +38,11 @@ test-results/
 *.tgz
 *.whl
 sdk/python/dist/
-sdk/typescript/axiom-ai-sdk-*.tgz
+sdk/typescript/goshikq-sdk-*.tgz
+sdk/typescript/goshikq-ai-sdk-*.tgz
 
-# Local data
+# Local data (legacy `.axiom/` kept so existing embedded Postgres is not committed)
+/.goshikq/
 /.axiom/
 /data/
 *.log

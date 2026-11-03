@@ -16,7 +16,7 @@ import pytest
 from tests.helpers import find_server
 
 ROOT = Path(__file__).resolve().parents[2]
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:axiom@127.0.0.1:55432/axiom")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgres://postgres:goshikq@127.0.0.1:55432/goshikq")
 SDK = str(ROOT / "sdk" / "python" / "src")
 
 
@@ -30,12 +30,12 @@ def free_port() -> int:
 def server():
     binary = find_server()
     if binary is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
     port = free_port()
     env = os.environ.copy()
     env["DATABASE_URL"] = DATABASE_URL
-    env["AXIOM_BIND"] = f"127.0.0.1:{port}"
-    env["AXIOM_AUTH_MODE"] = "none"
+    env["GOSHIKQ_BIND"] = f"127.0.0.1:{port}"
+    env["GOSHIKQ_AUTH_MODE"] = "none"
     env["RUST_LOG"] = "warn"
     kwargs = {"env": env, "cwd": str(ROOT), "stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
     if os.name == "nt":
@@ -265,7 +265,7 @@ def test_13_and_14_a2a_untrusted_and_not_verified(server: str):
         )
         assert sent.status_code == 200, sent.text
         task = sent.json()["result"]
-        assert task["metadata"]["axiomVerificationStatus"] != "VERIFIED"
+        assert task["metadata"]["goshikqVerificationStatus"] != "VERIFIED"
         got = c.post("/a2a", json={"jsonrpc": "2.0", "id": 2, "method": "GetTask", "params": {"id": task["id"]}}).json()["result"]
         assert got["status"]["state"] in {"submitted", "working", "completed", "input-required"}
         run = c.get(f"/api/v1/runs/{task['id']}").json()
@@ -276,10 +276,10 @@ def test_13_and_14_a2a_untrusted_and_not_verified(server: str):
 def test_20_cross_project_hierarchy_isolation():
     binary = find_server()
     if binary is None:
-        pytest.skip("axiom-server binary not found")
+        pytest.skip("goshikq-server binary not found")
     port = free_port()
     env = os.environ.copy()
-    env.update({"DATABASE_URL": DATABASE_URL, "AXIOM_BIND": f"127.0.0.1:{port}", "AXIOM_AUTH_MODE": "api_key", "RUST_LOG": "warn"})
+    env.update({"DATABASE_URL": DATABASE_URL, "GOSHIKQ_BIND": f"127.0.0.1:{port}", "GOSHIKQ_AUTH_MODE": "api_key", "RUST_LOG": "warn"})
     kwargs = {"env": env, "cwd": str(ROOT), "stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
     if os.name == "nt":
         kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
