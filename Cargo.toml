@@ -47,7 +47,7 @@ anyhow = "1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 utoipa = { version = "5", features = ["axum_extras", "chrono", "uuid", "decimal"] }
-utoipa-axum = "0.2"
+utoipa-axum = "0.3"
 dotenvy = "0.15"
 clap = { version = "4", features = ["derive", "env"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
