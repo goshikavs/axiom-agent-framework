@@ -1,0 +1,29 @@
+---
+---
+<figure class="diagram" role="img" aria-labelledby="arch-title" aria-describedby="arch-alt">
+  <svg viewBox="0 0 960 280" xmlns="http://www.w3.org/2000/svg">
+    <title id="arch-title">Goshikq architecture</title>
+    <rect x="16" y="88" width="170" height="88" rx="12" fill="#141c24" stroke="#2a3846"/>
+    <text x="101" y="128" text-anchor="middle" fill="#e8eef4" font-size="16">Python SDK</text>
+    <text x="101" y="150" text-anchor="middle" fill="#8b9aab" font-size="12">TypeScript SDK</text>
+    <path d="M186 132h70" stroke="#3ddc97" stroke-width="2" marker-end="url(#gk-arrow)"/>
+    <rect x="256" y="88" width="170" height="88" rx="12" fill="#141c24" stroke="#2a3846"/>
+    <text x="341" y="128" text-anchor="middle" fill="#e8eef4" font-size="16">Goshikq Runtime</text>
+    <text x="341" y="150" text-anchor="middle" fill="#8b9aab" font-size="12">goshikq-server</text>
+    <path d="M426 132h70" stroke="#3ddc97" stroke-width="2" marker-end="url(#gk-arrow)"/>
+    <rect x="496" y="70" width="200" height="124" rx="12" fill="#141c24" stroke="#2a3846"/>
+    <text x="596" y="108" text-anchor="middle" fill="#e8eef4" font-size="15">Checkpoints</text>
+    <text x="596" y="130" text-anchor="middle" fill="#e8eef4" font-size="15">Action journal</text>
+    <text x="596" y="152" text-anchor="middle" fill="#8b9aab" font-size="12">Evidence + verify</text>
+    <path d="M696 132h70" stroke="#3ddc97" stroke-width="2" marker-end="url(#gk-arrow)"/>
+    <rect x="766" y="88" width="170" height="88" rx="12" fill="#141c24" stroke="#3ddc97"/>
+    <text x="851" y="128" text-anchor="middle" fill="#e8eef4" font-size="16">Goshikq Studio</text>
+    <text x="851" y="150" text-anchor="middle" fill="#8b9aab" font-size="12">observe persisted runs</text>
+    <defs>
+      <marker id="gk-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M0 0l10 5-10 5z" fill="#3ddc97"/>
+      </marker>
+    </defs>
+  </svg>
+  <p id="arch-alt" class="caption">Python and TypeScript SDKs talk to the Rust runtime. The runtime owns execution, checkpoints, the action journal, evidence, and outcome verification. Studio reads persisted data; it does not schedule work.</p>
+</figure>

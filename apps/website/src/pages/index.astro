@@ -1,0 +1,103 @@
+---
+import Marketing from "../layouts/Marketing.astro";
+import Shot from "../components/Shot.astro";
+import VerifyDemo from "../components/VerifyDemo.astro";
+import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
+import { SITE } from "../lib/site";
+
+const capabilities = [
+  { title: "Durable execution", status: "Available", href: "/docs/durable-execution/", body: "Checkpoints, action journal, fencing leases, and a process-crash harness. Waiting for approval or external state survives restart." },
+  { title: "Verified outcomes", status: "Available", href: "/docs/verification/", body: "Goals are predicates on authoritative snapshots. Agent text is not proof. A processor accept is not a settled refund." },
+  { title: "Evidence and revalidation", status: "Available", href: "/docs/evidence/", body: "Versioned evidence records, explicit dependency graphs, and stale-approval invalidation before writes." },
+  { title: "Multi-agent", status: "Available", href: "/docs/multi-agent/", body: "Parent/child runs and verified delegation. Child completion is not parent verification." },
+  { title: "Human approval", status: "Available", href: "/docs/human-approval/", body: "Runtime gates plus a Studio queue. Insurance payouts wait; mutated policy versions cannot ride an old approval." },
+  { title: "Workflows", status: "Available", href: "/docs/workflows/", body: "Versioned graphs executed by Rust. Studio’s React Flow editor does not schedule work." },
+  { title: "Observability", status: "Available", href: "/docs/studio/", body: "Persisted events, SSE, traces, replay (GET-only), comparison, and failure analysis in Studio." },
+  { title: "Python and TypeScript SDKs", status: "Available", href: "/docs/python-sdk/", body: "Agents, tools, goals, and workers. Install from source; PyPI and npm are unpublished." },
+  { title: "Integrations", status: "Mixed", href: "/docs/integrations/mcp/", body: "MCP stdio allowlists, A2A JSON-RPC, OTLP ingest. LangGraph traces stay UNVERIFIED. Temporal is planned." },
+  { title: "Goshikq Studio", status: "Available", href: "/studio/", body: "Developer console for executions. Tools/Goals/Evaluations remain labeled soon." },
+];
+---
+<Marketing title="Goshikq — Build Agents. Verify Outcomes." description={SITE.description} path="/">
+  <section class="hero wrap">
+    <p class="kicker"><span class="badge badge-alpha">{SITE.statusLabel} {SITE.version}</span> Open-source AI agent framework · Apache 2.0</p>
+    <h1>{SITE.headline}</h1>
+    <p class="lede">{SITE.description}</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="/quickstart/">Get started</a>
+      <a class="btn btn-secondary" href={SITE.github}>View on GitHub</a>
+      <a class="btn btn-ghost" href="/docs/">Explore documentation</a>
+    </div>
+    <pre class="install"><code>git clone {SITE.githubGit}
+python -m pip install -e sdk/python
+python examples/hello-agent/main.py
+# expect: status COMPLETED  verification VERIFIED</code></pre>
+    <Shot
+      eager
+      src="/media/studio/goshikq-studio-dashboard.webp"
+      alt="Goshikq Studio overview showing persisted execution metrics, verification rate, and framework breakdown"
+      caption="Goshikq Studio overview from a live local runtime. Planned nav items stay labeled soon."
+    />
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Completed is not verified</h2>
+      <p class="lede">A refund agent can call <code>submit_refund</code>, receive <code>accepted</code> from a processor, and still fail the goal. Goshikq waits on authoritative state: <code>order.status=refunded</code> and <code>refund.status=settled</code>.</p>
+      <div class="compare">
+        <article class="card bad">
+          <span class="badge badge-planned">Execution</span>
+          <h3>Tool succeeded</h3>
+          <p>The worker ran. The processor accepted. Studio can show COMPLETED. That is not a business outcome.</p>
+        </article>
+        <article class="card good">
+          <span class="badge badge-available">Verification</span>
+          <h3>State matches the goal</h3>
+          <p>A StateProvider snapshot is evaluated independently. never_settles ends UNVERIFIED / INCONCLUSIVE, not as a fake success.</p>
+        </article>
+      </div>
+      <p><a href="/examples/refund-verification/">Retail refund walkthrough</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <VerifyDemo />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>What is implemented</h2>
+      <p class="lede">Status labels match <a href="/docs/status/">implementation status</a>. Planned Studio catalogs are not shown as working product.</p>
+      <div class="grid">
+        {capabilities.map((c) => (
+          <article class="card">
+            <span class={`badge ${c.status === "Available" ? "badge-available" : c.status === "Mixed" ? "badge-experimental" : "badge-planned"}`}>{c.status}</span>
+            <h3><a href={c.href}>{c.title}</a></h3>
+            <p>{c.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Architecture</h2>
+      <ArchitectureDiagram />
+      <p><a href="/architecture/">Architecture details</a> · <a href="/docs/core-concepts/">Technical docs</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Engineering evidence</h2>
+      <div class="grid">
+        <article class="card"><h3><a href={SITE.github}>Source</a></h3><p>Apache 2.0 monorepo. Rust runtime, Python and TypeScript SDKs, Next.js Studio.</p></article>
+        <article class="card"><h3><a href={SITE.ciUrl}>CI</a></h3><p>GitHub Actions on main: rust, SDKs, Studio, Playwright, integration, docker-smoke, security scans.</p></article>
+        <article class="card"><h3><a href="/docs/status/">Limitations</a></h3><p>No SOC 2 / HIPAA / PCI claim. No published PyPI or npm package. v1.0 is not ready.</p></article>
+      </div>
+    </div>
+  </section>
+</Marketing>

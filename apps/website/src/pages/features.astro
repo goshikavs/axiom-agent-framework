@@ -1,0 +1,32 @@
+---
+import Marketing from "../layouts/Marketing.astro";
+import Shot from "../components/Shot.astro";
+---
+<Marketing title="Product" description="Goshikq capabilities that actually run: durable execution, verified outcomes, evidence, multi-agent, workflows, and Studio." path="/features/">
+  <section class="hero wrap">
+    <p class="kicker">Product</p>
+    <h1>An execution runtime with an independent verifier</h1>
+    <p class="lede">Goshikq is an open-source AI agent framework. The Rust runtime owns retries, checkpoints, and goal predicates. Studio is a console over persisted data, not a chatbot.</p>
+  </section>
+  <section class="section wrap">
+    <h2>Durable execution and recovery</h2>
+    <p>Versioned checkpoints, an action journal, and fencing leases. Waiting-for-approval and waiting-for-external-state survive process restart. Exactly-once external I/O is not claimed.</p>
+    <p><a href="/docs/durable-execution/">Durable execution docs</a></p>
+    <Shot src="/media/studio/goshikq-claims-execution.webp" alt="claims_agent execution paused for human approval with a recovery panel" caption="claims_agent waiting for approval. Goal stays NOT_EVALUATED until payout is authorized." />
+  </section>
+  <section class="section wrap">
+    <h2>Verified business outcomes</h2>
+    <p>Goals are functions of StateSnapshot. hello-agent is VERIFIED only if Ada was actually stored. Retail refunds require settled store state, not an accepted processor response.</p>
+    <p><a href="/docs/verification/">Verification docs</a></p>
+    <Shot src="/media/studio/goshikq-verification-report.webp" alt="Goal verification report for hello-agent showing VERIFIED against greetings-memory" caption="Independent outcome fields for a verified hello-agent run." />
+  </section>
+  <section class="section wrap">
+    <h2>Evidence, approvals, workflows, Studio</h2>
+    <p>Evidence records are explicit. Approvals are a runtime gate. Workflows are versioned graphs executed in Rust. Studio pages for Tools, Goals, Evaluations, Regression, and Benchmarks remain planned.</p>
+    <div class="grid">
+      <article class="card"><h3><a href="/studio/">Studio</a></h3><p>Explorer, graph, timeline, inspector, replay, compare.</p></article>
+      <article class="card"><h3><a href="/docs/workflows/">Workflows</a></h3><p>Publish a graph; Studio does not schedule it.</p></article>
+      <article class="card"><h3><a href="/docs/integrations/mcp/">Integrations</a></h3><p>MCP stdio, A2A, OTLP. Temporal is planned.</p></article>
+    </div>
+  </section>
+</Marketing>

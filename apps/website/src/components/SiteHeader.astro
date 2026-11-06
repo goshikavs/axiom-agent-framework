@@ -1,0 +1,36 @@
+---
+import { NAV, SITE } from "../lib/site";
+const { path = "/" } = Astro.props;
+---
+<header class="site-header" id="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img src="/mark.svg" width="28" height="28" alt="" />
+      {SITE.name}
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" id="nav-toggle">Menu</button>
+    <nav class="nav-links" id="primary-nav" aria-label="Primary">
+      {NAV.map((item) => (
+        <a href={item.href} aria-current={path === item.href ? "page" : undefined}>{item.label}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <button class="theme-btn" type="button" id="theme-toggle" aria-label="Toggle color theme">Theme</button>
+      <a class="btn btn-secondary" href={SITE.github}>GitHub</a>
+      <a class="btn btn-primary" href="/quickstart/">Get started</a>
+    </div>
+  </div>
+</header>
+<script>
+  const header = document.getElementById("site-header");
+  const toggle = document.getElementById("nav-toggle");
+  toggle?.addEventListener("click", () => {
+    const open = header?.classList.toggle("is-open");
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.getElementById("theme-toggle")?.addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem("starlight-theme", next);
+  });
+</script>

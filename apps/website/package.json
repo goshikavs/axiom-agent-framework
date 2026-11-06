@@ -1,0 +1,27 @@
+{
+  "name": "@goshikq/website",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0-alpha",
+  "description": "Public Goshikq marketing and documentation website",
+  "scripts": {
+    "prepare:content": "node scripts/prepare.mjs",
+    "dev": "node scripts/prepare.mjs && astro dev --host 127.0.0.1 --port 4321",
+    "start": "node scripts/prepare.mjs && astro dev --host 127.0.0.1 --port 4321",
+    "build": "node scripts/prepare.mjs && astro build",
+    "preview": "astro preview --host 127.0.0.1 --port 4321",
+    "check": "node scripts/prepare.mjs && astro check",
+    "test:e2e": "playwright test",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.9",
+    "astro": "^7.3.6",
+    "sharp": "^0.35.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@playwright/test": "1.55.0",
+    "typescript": "~5.9.2"
+  }
+}

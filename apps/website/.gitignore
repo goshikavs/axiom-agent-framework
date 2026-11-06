@@ -1,0 +1,10 @@
+.astro/
+dist/
+node_modules/
+test-results/
+playwright-report/
+public/media/studio/
+src/content/docs/docs/*
+!src/content/docs/docs/index.mdx
+!src/content/docs/docs/getting-started.mdx
+!src/content/docs/docs/python-sdk.mdx

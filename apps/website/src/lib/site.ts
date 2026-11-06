@@ -1,0 +1,38 @@
+export const SITE = {
+  name: "Goshikq",
+  legalName: "Goshikq",
+  tagline: "Build Agents. Verify Outcomes.",
+  headline: "Build AI Agents. Verify Real Outcomes.",
+  description:
+    "Open-source AI agent framework with a Rust runtime for durable execution, multi-agent orchestration, and evidence-backed business outcome verification. Python and TypeScript SDKs. Apache 2.0.",
+  version: "0.1.0-alpha",
+  milestone: "v0.9.1",
+  statusLabel: "Alpha",
+  github: "https://github.com/goshikavs/goshikq-agent-framework",
+  githubGit: "https://github.com/goshikavs/goshikq-agent-framework.git",
+  zipMain: "https://github.com/goshikavs/goshikq-agent-framework/archive/refs/heads/main.zip",
+  licenseUrl: "https://github.com/goshikavs/goshikq-agent-framework/blob/main/LICENSE",
+  securityUrl: "https://github.com/goshikavs/goshikq-agent-framework/blob/main/SECURITY.md",
+  contributingUrl: "https://github.com/goshikavs/goshikq-agent-framework/blob/main/CONTRIBUTING.md",
+  ciUrl: "https://github.com/goshikavs/goshikq-agent-framework/actions/workflows/ci.yml",
+  ciBadge: "https://github.com/goshikavs/goshikq-agent-framework/actions/workflows/ci.yml/badge.svg",
+  pagesDocs: "https://goshikavs.github.io/goshikq-agent-framework/",
+  maintainer: "https://github.com/goshikavs",
+  pythonPackage: "goshikq-ai",
+  pythonVersion: "0.1.0a1",
+  tsPackage: "@goshikq/sdk",
+  tsVersion: "0.1.0-alpha",
+  runtime: "goshikq-server",
+  studioPort: "http://127.0.0.1:3000",
+  runtimePort: "http://127.0.0.1:7400",
+} as const;
+
+export const NAV = [
+  { href: "/features/", label: "Product" },
+  { href: "/docs/", label: "Documentation" },
+  { href: "/quickstart/", label: "Quickstart" },
+  { href: "/examples/", label: "Examples" },
+  { href: "/architecture/", label: "Architecture" },
+  { href: "/studio/", label: "Studio" },
+  { href: "/community/", label: "Community" },
+] as const;

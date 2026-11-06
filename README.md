@@ -12,6 +12,7 @@ Source: [goshikavs/goshikq-agent-framework](https://github.com/goshikavs/goshikq
 - Runtime: `goshikq-server` on `http://127.0.0.1:7400`
 - Studio: Next.js on `http://127.0.0.1:3000`
 - Docs: [`docs/`](docs/) · Architecture: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · Status: [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md)
+- Public website (not deployed until owner approval): [`apps/website`](apps/website) · `bun run website:build`
 - Maintainer: [goshikavs](https://github.com/goshikavs)
 
 ## Why Goshikq?

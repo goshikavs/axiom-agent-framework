@@ -1,0 +1,39 @@
+---
+import { SITE } from "../lib/site";
+---
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <strong>{SITE.name}</strong>
+      <p>{SITE.tagline} Apache 2.0. Status: {SITE.statusLabel} {SITE.version} ({SITE.milestone} in tree). Not a published v1.0.</p>
+    </div>
+    <div>
+      <strong>Product</strong>
+      <ul>
+        <li><a href="/features/">Features</a></li>
+        <li><a href="/studio/">Studio</a></li>
+        <li><a href="/download/">Install</a></li>
+        <li><a href="/architecture/">Architecture</a></li>
+      </ul>
+    </div>
+    <div>
+      <strong>Docs</strong>
+      <ul>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="/docs/getting-started/">Getting started</a></li>
+        <li><a href="/docs/status/">Implementation status</a></li>
+        <li><a href="/docs/api-reference/">API</a></li>
+      </ul>
+    </div>
+    <div>
+      <strong>Trust</strong>
+      <ul>
+        <li><a href={SITE.github}>Source</a></li>
+        <li><a href={SITE.licenseUrl}>License</a></li>
+        <li><a href={SITE.securityUrl}>Security</a></li>
+        <li><a href={SITE.ciUrl}>CI</a></li>
+        <li><a href="/community/">Community</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

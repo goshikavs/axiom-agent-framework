@@ -1,0 +1,25 @@
+---
+import Marketing from "../../layouts/Marketing.astro";
+import Shot from "../../components/Shot.astro";
+---
+<Marketing title="Refund verification example" description="Goshikq retail-refund example: an accepted processor response is not a verified settlement." path="/examples/refund-verification/">
+  <section class="hero wrap prose">
+    <p class="kicker">Example</p>
+    <h1>Refund ORD-2048</h1>
+    <p>Source: <a href="https://github.com/goshikavs/goshikq-agent-framework/tree/main/examples/retail-refund">examples/retail-refund</a>.</p>
+    <pre class="install"><code>python examples/retail-refund/main.py
+python examples/retail-refund/main.py --fault never_settles
+python examples/retail-refund/main.py --fault return_changed</code></pre>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Fault</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>happy path</td><td>COMPLETED / VERIFIED · business_op=SETTLED</td></tr>
+          <tr><td>never_settles</td><td>UNVERIFIED / INCONCLUSIVE · MANUAL_RECONCILIATION_REQUIRED</td></tr>
+          <tr><td>return_changed</td><td>FAILED · submit_refund never dispatched</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <Shot src="/media/studio/goshikq-multi-agent-hierarchy.webp" alt="refund-supervisor with four verified child runs" caption="Multi-agent refund supervisor after four persisted children. Child completion is not parent verification." />
+  </section>
+</Marketing>
