@@ -17,7 +17,7 @@ test.describe("Workflow studio", () => {
     await page.goto("/workflows");
     await expect(page.getByRole("heading", { name: "Workflows" })).toBeVisible();
     await expect(page.getByTestId("workflow-canvas")).toBeVisible();
-    await page.screenshot({ path: "../../docs/assets/studio-workflows.png", fullPage: true });
+    // Docs screenshots are captured by `bun run screenshots:docs`, not CI e2e.
     await page.getByTestId("palette-agent").click();
     await page.getByTestId("wf-validate").click();
     await expect(page.getByTestId("wf-issues").or(page.getByText("No validation issues"))).toBeVisible({ timeout: 10_000 });
@@ -56,7 +56,7 @@ test.describe("Workflow studio", () => {
     await expect(page.getByTestId("workflow-nodes")).toBeVisible({ timeout: 20_000 });
     await expect(page.getByTestId("workflow-node").first()).toBeVisible();
     await expect(page.getByTestId("timeline")).toBeVisible();
-    await page.screenshot({ path: "../../docs/assets/studio-workflow-run.png", fullPage: true });
+    // Docs screenshots are captured by `bun run screenshots:docs`, not CI e2e.
     const cancel = await request.post(`${RUNTIME}/api/v1/runs/${runId}/cancel`, { data: { reason: "playwright" } });
     expect(cancel.ok() || [400, 409, 422].includes(cancel.status()), `cancel ${cancel.status()} ${await cancel.text()}`).toBeTruthy();
   });

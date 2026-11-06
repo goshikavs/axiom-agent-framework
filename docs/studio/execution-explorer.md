@@ -25,6 +25,10 @@ Tokens render as `unknown` unless `usage_known`. Cost renders as `unknown` unles
 | `sort` / `order` | whitelist; default `created_at desc` |
 | `offset` | pagination, page size 50 |
 
-Screenshot: `docs/studio/screenshots/executions.png` and `executions-langgraph.png`.
+![Goshikq Studio execution explorer](../assets/studio/goshikq-execution-explorer.webp)
+*Filtered to `hello-agent`. Native runs can be `VERIFIED` when a state provider satisfies the goal.*
+
+![Goshikq Studio LangGraph executions](../assets/studio/goshikq-execution-explorer-langgraph.webp)
+*Imported LangGraph OTLP rows stay `UNVERIFIED` / `NOT_EVALUATED`.*
 
 Imported LangGraph/OpenAI Agents rows stay **UNVERIFIED**. Native hello-agent rows can be **VERIFIED** when a state provider satisfies the goal.

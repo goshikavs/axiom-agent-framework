@@ -9,7 +9,9 @@
     "start": "next start --port 3000 --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "screenshots:docs": "bun scripts/capture-docs-screenshots.ts",
+    "screenshots:docs:seed": "python scripts/seed-docs-fixtures.py"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

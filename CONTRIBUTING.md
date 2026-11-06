@@ -9,5 +9,6 @@ Maintainer: [goshikavs](https://github.com/goshikavs).
 5. On Windows without `link.exe` on PATH, use `scripts/with-msvc.ps1`.
 6. Do not commit `.env`, credentials, or captured production traces.
 7. Third-party framework adapters must declare supported and unsupported capabilities explicitly.
+8. Recapture Studio docs screenshots from the running app (`bun run screenshots:docs`). Do not commit AI-generated UI or production traces. See `docs/guides/studio-screenshots.md`.
 
 License: Apache-2.0.

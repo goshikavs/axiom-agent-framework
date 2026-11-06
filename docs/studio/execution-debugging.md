@@ -12,4 +12,5 @@ SSE: Studio loads `GET /events` then `EventSource /events/stream?after=<seq>`. R
 
 Non-native frameworks show **Goshikq did not control this execution**. Verification availability is independent of import success.
 
-Screenshot: `docs/studio/screenshots/execution-detail.png`.
+![Goshikq Studio execution detail](../assets/studio/goshikq-execution-detail.webp)
+*hello-agent run with synchronized graph, timeline, and inspector. Status is `COMPLETED` / `VERIFIED`.*

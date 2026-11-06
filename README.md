@@ -217,15 +217,21 @@ Implemented against live API data: Overview, Executions, Execution graph/timelin
 
 Planned pages render an explicit **Planned** state (Tools catalog, Evaluations, Regression, Benchmarks). They are not fake dashboards.
 
+![Goshikq Studio overview](docs/assets/studio/goshikq-studio-dashboard.webp)
+*Overview metrics from persisted runs on a local `goshikq-server`. Zero means no matching records.*
+
 Live hierarchy panel (refund supervisor + four persisted children):
 
-![Studio multi-agent hierarchy](docs/assets/studio-hierarchy-refund.png)
+![Goshikq Studio multi-agent hierarchy](docs/assets/studio/goshikq-multi-agent-hierarchy.webp)
+*Parent `refund-supervisor` is `VERIFIED` after four child runs. Child completion is not parent verification.*
 
 Workflows: Studio → Workflows (React Flow). Graphs execute in Rust after **Publish**. Example: `examples/visual-workflow/parallel-approval.json`.
 
-![Studio workflow editor](docs/assets/studio-workflows.png)
+![Goshikq Studio workflow builder](docs/assets/studio/goshikq-workflow-builder.webp)
+*Published `parallel-approval` graph in the React Flow editor. Studio does not schedule work.*
 
-![Workflow node execution](docs/assets/studio-workflow-run.png)
+![Goshikq Studio workflow node execution](docs/assets/studio/goshikq-workflow-run.webp)
+*Node-level status for a published workflow paused at `WAITING_FOR_APPROVAL`.*
 
 ```bash
 goshikq workflows validate examples/visual-workflow/parallel-approval.json

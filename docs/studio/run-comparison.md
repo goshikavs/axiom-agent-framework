@@ -12,4 +12,5 @@ Event matching:
 
 Uncertain matches are labeled. No side effects.
 
-Screenshot: `docs/studio/screenshots/compare.png`.
+![Goshikq Studio run comparison](../assets/studio/goshikq-run-comparison.webp)
+*Side-by-side `hello-agent` and `refund-supervisor`, both `VERIFIED`. Unmatched events are labeled.*
