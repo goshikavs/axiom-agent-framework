@@ -1,0 +1,160 @@
+{
+  "captured_at": "2026-11-06T05:37:13.480Z",
+  "studio": "http://127.0.0.1:3000",
+  "runtime": "http://127.0.0.1:7400",
+  "viewport": {
+    "width": 1600,
+    "height": 1000
+  },
+  "deviceScaleFactor": 2,
+  "webpQuality": 90,
+  "hello": "01a1af57-4bd0-7219-a966-bd1e9f1f3711",
+  "supervisor": "01a1af57-553e-7287-870b-443ebba02ae8",
+  "claims": "01a1af57-6b36-7054-8aaa-de569ec5da46",
+  "shots": [
+    {
+      "name": "goshikq-studio-dashboard.webp",
+      "path": "docs/assets/studio/goshikq-studio-dashboard.webp",
+      "ok": true,
+      "pngBytes": 276776,
+      "webpBytes": 181074,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-execution-explorer.webp",
+      "path": "docs/assets/studio/goshikq-execution-explorer.webp",
+      "ok": true,
+      "pngBytes": 175434,
+      "webpBytes": 102320,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-execution-explorer-langgraph.webp",
+      "path": "docs/assets/studio/goshikq-execution-explorer-langgraph.webp",
+      "ok": true,
+      "pngBytes": 164984,
+      "webpBytes": 96088,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-execution-detail.webp",
+      "path": "docs/assets/studio/goshikq-execution-detail.webp",
+      "ok": true,
+      "pngBytes": 507990,
+      "webpBytes": 260210,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-verification-report.webp",
+      "path": "docs/assets/studio/goshikq-verification-report.webp",
+      "ok": true,
+      "pngBytes": 244488,
+      "webpBytes": 172502,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-evidence-inspector.webp",
+      "path": "docs/assets/studio/goshikq-evidence-inspector.webp",
+      "ok": true,
+      "pngBytes": 198680,
+      "webpBytes": 127926,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-multi-agent-hierarchy.webp",
+      "path": "docs/assets/studio/goshikq-multi-agent-hierarchy.webp",
+      "ok": true,
+      "pngBytes": 426254,
+      "webpBytes": 231664,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-workflow-builder.webp",
+      "path": "docs/assets/studio/goshikq-workflow-builder.webp",
+      "ok": true,
+      "pngBytes": 264157,
+      "webpBytes": 146062,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-workflow-run.webp",
+      "path": "docs/assets/studio/goshikq-workflow-run.webp",
+      "ok": true,
+      "pngBytes": 363615,
+      "webpBytes": 201380,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-approval-queue.webp",
+      "path": "docs/assets/studio/goshikq-approval-queue.webp",
+      "ok": true,
+      "pngBytes": 261422,
+      "webpBytes": 157420,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-execution-replay.webp",
+      "path": "docs/assets/studio/goshikq-execution-replay.webp",
+      "ok": true,
+      "pngBytes": 242898,
+      "webpBytes": 175472,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-run-comparison.webp",
+      "path": "docs/assets/studio/goshikq-run-comparison.webp",
+      "ok": true,
+      "pngBytes": 278905,
+      "webpBytes": 252440,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-failure-analysis.webp",
+      "path": "docs/assets/studio/goshikq-failure-analysis.webp",
+      "ok": true,
+      "pngBytes": 165119,
+      "webpBytes": 101462,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-integrations.webp",
+      "path": "docs/assets/studio/goshikq-integrations.webp",
+      "ok": true,
+      "pngBytes": 387381,
+      "webpBytes": 344992,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-models.webp",
+      "path": "docs/assets/studio/goshikq-models.webp",
+      "ok": true,
+      "pngBytes": 260827,
+      "webpBytes": 194690,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-settings.webp",
+      "path": "docs/assets/studio/goshikq-settings.webp",
+      "ok": true,
+      "pngBytes": 148556,
+      "webpBytes": 87516,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-agents.webp",
+      "path": "docs/assets/studio/goshikq-agents.webp",
+      "ok": true,
+      "pngBytes": 229483,
+      "webpBytes": 138640,
+      "axiomVisible": false
+    },
+    {
+      "name": "goshikq-claims-execution.webp",
+      "path": "docs/assets/studio/goshikq-claims-execution.webp",
+      "ok": true,
+      "pngBytes": 515832,
+      "webpBytes": 251080,
+      "axiomVisible": false
+    }
+  ]
+}

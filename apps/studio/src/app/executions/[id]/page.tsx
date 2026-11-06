@@ -127,7 +127,7 @@ export default function ExecutionDetailPage() {
           </p>
           {sdkOrigin(run.source_framework).controlsExecution ? null : (
             <p className="mt-1 text-[11px] text-amber-200">
-              Verification availability: imported run.completed is UNVERIFIED unless an Goshikq outcome verifier recorded evidence.
+              Verification availability: imported run.completed is UNVERIFIED unless a Goshikq outcome verifier recorded evidence.
               Adapter capabilities: see Integrations. Missing telemetry stays unknown.
             </p>
           )}

@@ -16,4 +16,5 @@ Playwright records requests during replay and asserts no POST/PUT/PATCH/DELETE.
 
 A controlled sandbox rerun would be a different UI with an explicit user action. That UI is not this page.
 
-Screenshot: `docs/studio/screenshots/replay.png`.
+![Goshikq Studio historical replay](../assets/studio/goshikq-execution-replay.webp)
+*GET-only replay of a persisted `hello-agent` run. This page does not re-execute tools or models.*

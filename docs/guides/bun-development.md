@@ -12,6 +12,7 @@ bun run dev          # Studio (apps/studio)
 bun test             # @goshikq/sdk tests
 bun run typecheck    # SDK tsc --noEmit
 bun run build        # SDK typecheck (no separate emit bundle in this alpha)
+bun run screenshots:docs   # recapture Studio docs images (runtime + Studio must already be up)
 ```
 
 SDK package:

@@ -102,6 +102,7 @@ export default defineConfig({
       { text: "LangGraph", link: "/integrations/langgraph.md" },
       { text: "OpenAI Agents SDK", link: "/integrations/openai-agents.md" },
       { text: "Studio", link: "/studio/overview.md" },
+      { text: "Studio screenshots", link: "/guides/studio-screenshots.md" },
       { text: "Workflow designer", link: "/guides/workflow-builder.md" },
       { text: "Workflow execution", link: "/architecture/workflow-execution.md" },
       { text: "API", link: "/api/README.md" },

@@ -17,6 +17,8 @@
     "studio": "bun --filter @goshikq/studio dev",
     "test": "bun --filter @goshikq/sdk test",
     "typecheck": "bun --filter @goshikq/sdk typecheck",
-    "build": "bun --filter @goshikq/sdk typecheck"
+    "build": "bun --filter @goshikq/sdk typecheck",
+    "screenshots:docs": "bun --filter @goshikq/studio screenshots:docs",
+    "screenshots:docs:seed": "bun --filter @goshikq/studio screenshots:docs:seed"
   }
 }

@@ -13,3 +13,9 @@ Studio → Workflows (`http://127.0.0.1:3000/workflows`).
 - Import/export is JSON (untrusted on import)
 
 Node execution status for a run is shown on the execution detail page (`data-testid=workflow-nodes`), not as a static diagram.
+
+![Goshikq Studio workflow builder](../assets/studio/goshikq-workflow-builder.webp)
+*Published `parallel-approval` graph in the React Flow editor. Studio does not schedule work.*
+
+![Goshikq Studio workflow node execution](../assets/studio/goshikq-workflow-run.webp)
+*Node-level status for a published workflow paused at `WAITING_FOR_APPROVAL`.*
