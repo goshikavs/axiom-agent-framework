@@ -1,0 +1,28 @@
+---
+title: Getting started
+description: Run Goshikq locally with the Rust runtime, a mock model, and goal verification. No paid API keys required.
+---
+
+Follow the same path as the repository README. The hello-agent example must print `verification: VERIFIED`.
+
+```bash
+git clone https://github.com/goshikavs/goshikq-agent-framework.git
+cd goshikq-agent-framework
+cp .env.example .env
+cargo run -p goshikq-server
+python -m pip install -e sdk/python
+python examples/hello-agent/main.py
+```
+
+Expected:
+
+```
+status:        COMPLETED
+verification:  VERIFIED
+```
+
+If the model only *says* Ada was greeted and never calls `record_greeting`, verification does not pass.
+
+Studio: `cd apps/studio && bun install && bun run dev` then open `http://127.0.0.1:3000`.
+
+Source: [README.md](https://github.com/goshikavs/goshikq-agent-framework/blob/main/README.md) · [examples/hello-agent](https://github.com/goshikavs/goshikq-agent-framework/tree/main/examples/hello-agent)

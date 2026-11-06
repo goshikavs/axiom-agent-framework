@@ -19,6 +19,8 @@
     "typecheck": "bun --filter @goshikq/sdk typecheck",
     "build": "bun --filter @goshikq/sdk typecheck",
     "screenshots:docs": "bun --filter @goshikq/studio screenshots:docs",
-    "screenshots:docs:seed": "bun --filter @goshikq/studio screenshots:docs:seed"
+    "screenshots:docs:seed": "bun --filter @goshikq/studio screenshots:docs:seed",
+    "website:dev": "bun --cwd apps/website run dev",
+    "website:build": "bun --cwd apps/website run build"
   }
 }

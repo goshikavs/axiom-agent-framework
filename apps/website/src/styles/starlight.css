@@ -1,0 +1,41 @@
+@import "./tokens.css";
+
+:root {
+  --sl-font: var(--gk-sans);
+  --sl-font-mono: var(--gk-mono);
+  --sl-color-accent-low: #16382c;
+  --sl-color-accent: #1aa36c;
+  --sl-color-accent-high: #3ddc97;
+  --sl-color-white: #f6f3ec;
+  --sl-color-gray-1: #e8eef4;
+  --sl-color-gray-2: #c5d0db;
+  --sl-color-gray-3: #8b9aab;
+  --sl-color-gray-4: #4a5b6c;
+  --sl-color-gray-5: #2a3846;
+  --sl-color-gray-6: #141c24;
+  --sl-color-black: #0c1116;
+  --sl-color-bg-nav: #0c1116;
+  --sl-color-bg-sidebar: #0c1116;
+}
+
+:root[data-theme="light"] {
+  --sl-color-accent-low: #d7f3e6;
+  --sl-color-accent: #0f7a52;
+  --sl-color-accent-high: #0b5c3e;
+  --sl-color-white: #1a222b;
+  --sl-color-gray-1: #243040;
+  --sl-color-gray-2: #3c4c5c;
+  --sl-color-gray-3: #5c6b7a;
+  --sl-color-gray-4: #b7c0c9;
+  --sl-color-gray-5: #d9d2c4;
+  --sl-color-gray-6: #ece7dc;
+  --sl-color-gray-7: #f6f3ec;
+  --sl-color-black: #fffdf8;
+  --sl-color-bg-nav: #f6f3ec;
+  --sl-color-bg-sidebar: #f6f3ec;
+}
+
+.site-title {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}

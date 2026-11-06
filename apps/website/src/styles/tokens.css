@@ -1,0 +1,55 @@
+:root {
+  --gk-ink: #0c1116;
+  --gk-ink-2: #141c24;
+  --gk-ink-3: #1c2732;
+  --gk-line: #2a3846;
+  --gk-muted: #8b9aab;
+  --gk-text: #e8eef4;
+  --gk-paper: #f6f3ec;
+  --gk-paper-2: #ece7dc;
+  --gk-paper-text: #1a222b;
+  --gk-paper-muted: #5c6b7a;
+  --gk-verify: #3ddc97;
+  --gk-verify-ink: #0c3d2c;
+  --gk-run: #e8b84a;
+  --gk-fail: #e8614a;
+  --gk-info: #6cb6ff;
+  --gk-accent: #3ddc97;
+  --gk-accent-2: #7dd3c0;
+  --gk-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  --gk-radius: 14px;
+  --gk-radius-sm: 8px;
+  --gk-max: 1120px;
+  --gk-sans: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --gk-mono: "Cascadia Code", "SFMono-Regular", ui-monospace, Consolas, monospace;
+  --gk-display: "Segoe UI Semibold", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --gk-ink: #f6f3ec;
+  --gk-ink-2: #fffdf8;
+  --gk-ink-3: #ece7dc;
+  --gk-line: #d9d2c4;
+  --gk-muted: #5c6b7a;
+  --gk-text: #1a222b;
+  --gk-accent: #0f7a52;
+  --gk-accent-2: #1aa36c;
+  --gk-shadow: 0 18px 40px rgba(26, 34, 43, 0.08);
+  color-scheme: light;
+}
+
+html[data-theme="light"] body {
+  background: var(--gk-ink);
+  color: var(--gk-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,15 @@
+---
+import Marketing from "../../layouts/Marketing.astro";
+import Shot from "../../components/Shot.astro";
+---
+<Marketing title="Insurance claims example" description="Goshikq insurance-claims example: payouts wait for human approval and stale policy versions cannot authorize writes." path="/examples/insurance-claims/">
+  <section class="hero wrap prose">
+    <p class="kicker">Example</p>
+    <h1>Approve the payout, then verify it</h1>
+    <p>Source: <a href="https://github.com/goshikavs/goshikq-agent-framework/tree/main/examples/insurance-claims">examples/insurance-claims</a>. The payout tool is a non-idempotent write gated on Studio <code>/approvals</code>.</p>
+    <pre class="install"><code>python examples/insurance-claims/main.py
+# approve in Studio, then the run can reach COMPLETED / VERIFIED</code></pre>
+    <p>If POL-1 mutates from v4 to v5 while approval is pending, the old approval cannot authorize the payout. <code>payout_cents</code> stays 0.</p>
+    <Shot src="/media/studio/goshikq-approval-queue.webp" alt="Studio approval queue with claims_agent authorize_payout pending" caption="Pending authorize_payout. Local actor is local-user." />
+  </section>
+</Marketing>

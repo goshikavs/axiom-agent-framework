@@ -89,6 +89,29 @@ jobs:
           bun install --frozen-lockfile
           bun run build
 
+  website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.4"
+      - name: Build public website
+        working-directory: apps/website
+        env:
+          PUBLIC_SITE_URL: http://127.0.0.1:4321
+          ASTRO_TELEMETRY_DISABLED: "1"
+        run: |
+          bun install --frozen-lockfile
+          bun run build
+      - name: Playwright
+        working-directory: apps/website
+        env:
+          PUBLIC_SITE_URL: http://127.0.0.1:4321
+        run: |
+          bunx playwright install --with-deps chromium
+          bun run test:e2e
+
   integration:
     runs-on: ubuntu-latest
     services:

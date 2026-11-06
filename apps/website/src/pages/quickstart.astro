@@ -1,0 +1,28 @@
+---
+import Marketing from "../layouts/Marketing.astro";
+---
+<Marketing title="Quickstart" description="Run Goshikq locally with the Rust runtime, a mock model, and goal verification. No paid API keys." path="/quickstart/">
+  <section class="hero wrap prose">
+    <p class="kicker">Quickstart</p>
+    <h1>Hello, verified</h1>
+    <p class="lede">No OpenAI or Anthropic key is required. The hello-agent example must print <code>verification: VERIFIED</code> and appear in Studio → Executions.</p>
+    <h2>1. Clone and environment</h2>
+    <pre class="install"><code>git clone https://github.com/goshikavs/goshikq-agent-framework.git
+cd goshikq-agent-framework
+cp .env.example .env</code></pre>
+    <h2>2. Runtime</h2>
+    <p>PostgreSQL: <code>DATABASE_URL=embedded</code> (default) or <code>docker compose up -d postgres</code>.</p>
+    <pre class="install"><code>cargo run -p goshikq-server
+# Windows without link.exe on PATH: scripts/dev-server.ps1</code></pre>
+    <p>Health: <code>GET http://127.0.0.1:7400/health</code>.</p>
+    <h2>3. Python agent</h2>
+    <pre class="install"><code>python -m pip install -e sdk/python
+python examples/hello-agent/main.py
+# expect: status COMPLETED  verification VERIFIED</code></pre>
+    <p>If the model only says Ada was greeted and never calls <code>record_greeting</code>, verification does not pass.</p>
+    <h2>4. Studio</h2>
+    <pre class="install"><code>cd apps/studio && bun install && bun run dev
+# http://127.0.0.1:3000 → Executions → hello-agent</code></pre>
+    <p><a href="/download/">Install options</a> · <a href="/docs/getting-started/">Docs getting started</a> · <a href="/docs/typescript-sdk/">TypeScript SDK</a></p>
+  </section>
+</Marketing>

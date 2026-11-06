@@ -1,0 +1,21 @@
+---
+title: Python SDK
+description: Install and use the unpublished goshikq-ai Python SDK from source.
+---
+
+The Python package is `goshikq-ai` version `0.1.0a1`. It is **not published to PyPI**.
+
+```bash
+python -m pip install -e sdk/python
+```
+
+Optional extras (experimental paid providers):
+
+```bash
+python -m pip install -e "sdk/python[openai]"
+python -m pip install -e "sdk/python[anthropic]"
+```
+
+Quickstart uses `MockModel` and does not need those extras.
+
+Source: [sdk/python](https://github.com/goshikavs/goshikq-agent-framework/tree/main/sdk/python) · [hello-agent](https://github.com/goshikavs/goshikq-agent-framework/tree/main/examples/hello-agent)

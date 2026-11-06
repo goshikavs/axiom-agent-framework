@@ -1,0 +1,21 @@
+---
+import Marketing from "../layouts/Marketing.astro";
+import { SITE } from "../lib/site";
+---
+<Marketing title="Community" description="Contribute to Goshikq on GitHub. Apache 2.0, no AI co-authors, honest implementation status." path="/community/">
+  <section class="hero wrap prose">
+    <p class="kicker">Community</p>
+    <h1>Work in the open</h1>
+    <p>Maintainer: <a href={SITE.maintainer}>goshikavs</a>. There is no Discord or Slack. GitHub issues and pull requests are the coordination channel.</p>
+    <ul>
+      <li><a href={SITE.github}>Repository</a></li>
+      <li><a href={`${SITE.github}/issues`}>Issues</a></li>
+      <li><a href={SITE.contributingUrl}>Contributing</a></li>
+      <li><a href={SITE.securityUrl}>Security policy</a></li>
+      <li><a href="/docs/status/">Implementation status</a></li>
+      <li><a href="/docs/changelog/">Changelog</a></li>
+      <li><a href="/docs/roadmap/">Roadmap</a></li>
+    </ul>
+    <p>Do not add AI assistants as authors or co-authors. Do not mark planned features as available.</p>
+  </section>
+</Marketing>

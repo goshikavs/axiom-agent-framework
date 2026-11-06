@@ -1,0 +1,51 @@
+---
+import Marketing from "../layouts/Marketing.astro";
+
+const shots = [
+  { src: "/media/studio/goshikq-studio-dashboard.webp", alt: "Studio overview metrics", caption: "Overview from persisted runs" },
+  { src: "/media/studio/goshikq-execution-explorer.webp", alt: "Execution explorer filtered to hello-agent", caption: "Execution explorer" },
+  { src: "/media/studio/goshikq-execution-detail.webp", alt: "Execution graph, timeline, and inspector", caption: "Graph, timeline, inspector" },
+  { src: "/media/studio/goshikq-workflow-builder.webp", alt: "React Flow workflow builder", caption: "Workflow designer" },
+  { src: "/media/studio/goshikq-verification-report.webp", alt: "Goal verification report", caption: "Verification" },
+  { src: "/media/studio/goshikq-evidence-inspector.webp", alt: "Evidence inspector snapshot comparison", caption: "Evidence inspector" },
+  { src: "/media/studio/goshikq-multi-agent-hierarchy.webp", alt: "Multi-agent hierarchy panel", caption: "Multi-agent hierarchy" },
+  { src: "/media/studio/goshikq-approval-queue.webp", alt: "Human approval queue", caption: "Approvals" },
+  { src: "/media/studio/goshikq-failure-analysis.webp", alt: "Failure analysis of an unverified LangGraph import", caption: "Failure diagnostics" },
+  { src: "/media/studio/goshikq-execution-replay.webp", alt: "Historical replay GET-only viewer", caption: "Replay" },
+  { src: "/media/studio/goshikq-run-comparison.webp", alt: "Side-by-side run comparison", caption: "Compare" },
+  { src: "/media/studio/goshikq-integrations.webp", alt: "Integrations capability cards", caption: "Observability / integrations" },
+];
+---
+<Marketing title="Goshikq Studio" description="Goshikq Studio is a developer console for durable agent executions, verification evidence, and multi-agent runs." path="/studio/">
+  <section class="hero wrap">
+    <p class="kicker">Studio</p>
+    <h1>See the run, not the pitch</h1>
+    <p class="lede">Screenshots below were captured from the running Next.js app against <code>goshikq-server</code>. Tools, Goals, Evaluations, Regression, and Benchmarks remain planned.</p>
+    <a class="btn btn-primary" href="/docs/studio/">Studio docs</a>
+  </section>
+  <section class="section wrap">
+    <div class="gallery">
+      {shots.map((s) => (
+        <button type="button" data-src={s.src} data-alt={s.alt}>
+          <img src={s.src} alt={s.alt} width="1600" height="1000" loading="lazy" decoding="async" />
+          <span>{s.caption}</span>
+        </button>
+      ))}
+    </div>
+    <dialog id="shot-dialog" aria-label="Screenshot">
+      <form method="dialog"><button class="btn btn-secondary" value="close">Close</button></form>
+      <img id="shot-dialog-img" alt="" width="1600" height="1000" />
+    </dialog>
+  </section>
+</Marketing>
+<script>
+  const dialog = document.getElementById("shot-dialog");
+  const img = document.getElementById("shot-dialog-img");
+  document.querySelectorAll(".gallery button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      img.src = btn.dataset.src;
+      img.alt = btn.dataset.alt;
+      dialog.showModal();
+    });
+  });
+</script>

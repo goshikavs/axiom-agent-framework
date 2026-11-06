@@ -1,0 +1,27 @@
+---
+import Marketing from "../layouts/Marketing.astro";
+import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
+---
+<Marketing title="Architecture" description="How Goshikq splits a Rust execution runtime from Python and TypeScript SDKs, with independent goal verification." path="/architecture/">
+  <section class="hero wrap">
+    <p class="kicker">Architecture</p>
+    <h1>Runtime owns the loop. SDKs declare the work.</h1>
+    <p class="lede">A model suggestion is never treated as a business result. After <code>POST /api/v1/runs</code> the SDK long-polls the worker protocol; Rust validates transitions, schemas, permissions, budgets, and verification.</p>
+  </section>
+  <section class="section wrap">
+    <ArchitectureDiagram />
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Choice</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td>Runtime</td><td>Rust, Tokio, Axum, SQLx</td><td>Transitions, retries, persistence</td></tr>
+          <tr><td>Python SDK</td><td>goshikq_ai</td><td>Agents, tools, goals, StateProvider</td></tr>
+          <tr><td>TypeScript SDK</td><td>@goshikq/sdk</td><td>Same worker protocol as Python</td></tr>
+          <tr><td>Studio</td><td>Next.js</td><td>Observe persisted runs</td></tr>
+          <tr><td>Store</td><td>PostgreSQL 16</td><td>Runs, events, evidence</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><a href="/docs/core-concepts/">Architecture docs</a> · <a href="https://github.com/goshikavs/goshikq-agent-framework/blob/main/docs/decisions/ADR-001-runtime-boundaries.md">ADR-001</a></p>
+  </section>
+</Marketing>

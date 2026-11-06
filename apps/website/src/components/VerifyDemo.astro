@@ -1,0 +1,50 @@
+---
+---
+<section class="demo" aria-labelledby="demo-title">
+  <p class="kicker">Illustrative simulation · not a live runtime</p>
+  <h2 id="demo-title">Why a successful tool call is not a verified refund</h2>
+  <p class="lede">This client-side walkthrough uses the retail-refund example semantics. It does not call <code>goshikq-server</code>.</p>
+  <div class="demo-tabs" role="tablist" aria-label="Refund scenarios">
+    <button type="button" role="tab" aria-selected="true" data-case="happy">Happy path</button>
+    <button type="button" role="tab" aria-selected="false" data-case="accepted">Processor accepted only</button>
+    <button type="button" role="tab" aria-selected="false" data-case="never">Never settles</button>
+  </div>
+  <div id="demo-live" class="steps" role="status" aria-live="polite"></div>
+</section>
+<script>
+  const cases = {
+    happy: [
+      { k: "Goal", v: "order.status=refunded and refund.status=settled" },
+      { k: "Execution", v: "submit_refund dispatched; processor accepted" },
+      { k: "Evidence", v: "authoritative store shows refunded / settled" },
+      { k: "Verification", v: "VERIFIED · business_op=SETTLED", ok: true },
+    ],
+    accepted: [
+      { k: "Goal", v: "order.status=refunded and refund.status=settled" },
+      { k: "Execution", v: "submit_refund accepted by the processor" },
+      { k: "Evidence", v: "store still refund_pending / accepted" },
+      { k: "Verification", v: "not verified — acceptance is not settlement", ok: false },
+    ],
+    never: [
+      { k: "Goal", v: "order.status=refunded and refund.status=settled" },
+      { k: "Execution", v: "tool SUCCEEDED; wait deadline expires" },
+      { k: "Evidence", v: "external id exists; settlement never observed" },
+      { k: "Verification", v: "UNVERIFIED / INCONCLUSIVE · MANUAL_RECONCILIATION_REQUIRED", ok: false },
+    ],
+  };
+
+  const live = document.getElementById("demo-live");
+  const tabs = [...document.querySelectorAll("[data-case]")];
+  function render(key) {
+    const rows = cases[key];
+    live.innerHTML = rows.map((row) => `
+      <div class="step">
+        <strong>${row.k}</strong>
+        <span>${row.v}</span>
+        <span class="badge ${row.ok === true ? "badge-available" : row.ok === false ? "badge-planned" : ""}">${row.ok === true ? "verified" : row.ok === false ? "not verified" : ""}</span>
+      </div>`).join("");
+    tabs.forEach((t) => t.setAttribute("aria-selected", t.dataset.case === key ? "true" : "false"));
+  }
+  tabs.forEach((t) => t.addEventListener("click", () => render(t.dataset.case)));
+  render("happy");
+</script>
